@@ -1,16 +1,16 @@
 {
   "name": "fiscalapi",
-  "version": "4.0.124",
-  "description": "Genera facturas CFDI válidas ante el SAT consumiento el api de https://www.fiscalapi.com",
+  "version": "1.0.0",
+  "description": "SDK de Node.js para FiscalAPI",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
-    "dist/"
+    "dist/",
+    "fiscalapi.ico",
+    "fiscalapi.png",
+    "LICENSE.txt"
   ],
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
@@ -21,6 +21,19 @@
     "lint": "eslint 'src/**/*.ts'",
     "prepare": "npm run build"
   },
+  "keywords": [
+    "fiscalapi",
+    "cfdi",
+    "factura",
+    "facturación",
+    "sat",
+    "mexico"
+  ],
+  "author": "FISCAL API S DE R.L DE C.V",
+  "license": "MPL-2.0",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
@@ -28,33 +41,12 @@
       "types": "./dist/types/index.d.ts"
     }
   },
-  "keywords": [
-    "factura",
-    "cfdi",
-    "facturacion",
-    "mexico",
-    "sat"
-  ],
-  "author": "FISCAL API S DE R.L DE C.V",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/FiscalAPI/fiscalapi-node"
   },
   "homepage": "https://www.fiscalapi.com",
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "copyright": "FISCAL API S DE R.L DE C.V © 2019",
-  "dependencies": {
-    "axios": "^1.8.4",
-    "luxon": "^3.6.0"
-  },
-  "devDependencies": {
-    "@types/luxon": "^3.4.2",
-    "@types/node": "^22.13.14",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+  "bugs": {
+    "url": "https://github.com/FiscalAPI/fiscalapi-node/issues"
   }
 }

@@ -1,94 +1,105 @@
-# FiscalAPI SDK para .NET
+# FiscalAPI SDK para Node.js
 
-[![NuGet](https://img.shields.io/nuget/v/FiscalApi.svg)](https://www.nuget.org/packages/FiscalApi/)
-[![License](https://img.shields.io/github/license/FiscalAPI/fiscalapi-net)](https://github.com/FiscalAPI/fiscalapi-net/blob/master/LICENSE.txt) 
+[![npm](https://img.shields.io/npm/v/fiscalapi.svg)](https://www.npmjs.com/package/fiscalapi)
+[![License](https://img.shields.io/github/license/FiscalAPI/fiscalapi-node)](https://github.com/FiscalAPI/fiscalapi-node/blob/master/LICENSE.txt) 
 
-**SDK oficial de FiscalAPI para .NET**, la API de facturación CFDI y otros servicios fiscales en México. Simplifica la integración con los servicios de facturación electrónica, eliminando las complejidades del SAT y facilitando la generación de facturas, notas de crédito, complementos de pago, nómina, carta porte, y más. ¡Factura sin dolor!
+**SDK oficial de FiscalAPI para Node.js**, la API de facturación CFDI y otros servicios fiscales en México. Simplifica la integración con los servicios de facturación electrónica, eliminando las complejidades del SAT y facilitando la generación de facturas, notas de crédito, complementos de pago, nómina, carta porte, y más. ¡Factura sin dolor!
 
 ## 🚀 Características
 
 - Soporte completo para **CFDI 4.0**  
-- Compatible con múltiples versiones de .NET (desde **.NET Framework 4.6.1** hasta **.NET 8**)
-- Operaciones asíncronas y sincrónicas
+- Compatible con múltiples versiones de Node.js (desde **Node.js 12.0.0**)
+- Soporte para ESM y CommonJS
+- Operaciones asíncronas con Promises
 - Dos modos de operación: **Por valores** o **Por referencias**
 - Manejo simplificado de errores
 - Búsqueda en catálogos del SAT
+- Tipos TypeScript completos
 - Documentación completa y ejemplos prácticos
 
 ## 📦 Instalación
 
-**NuGet Package Manager**:
+**npm**:
 
 ```bash
-NuGet\Install-Package Fiscalapi
+npm install fiscalapi
 ```
 
-**.NET CLI**:
+**yarn**:
 
 ```bash
-dotnet add package Fiscalapi
+yarn add fiscalapi
 ```
 
 ## ⚙️ Configuración
 
-Puedes usar el SDK tanto en aplicaciones sin inyección de dependencias (WinForms, Consolas, WPF, etc.) como en proyectos que usan DI (ASP.NET Core, Blazor, etc.). A continuación se describen ambas formas:
+Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en frameworks modernos (Express, NestJS, Next.js, etc.). A continuación se describen ambas formas:
 
-### A) Aplicaciones sin Inyección de Dependencias
+### A) Aplicaciones Node.js tradicionales
 
 1. **Crea tu objeto de configuración** con [tus credenciales](https://docs.fiscalapi.com/credentials-info):
-    ```csharp
-    var settings = new FiscalApiOptions
-    {
-        ApiUrl = "https://test.fiscalapi.com", // https://live.fiscalapi.com (producción)
-        ApiKey = "<tu_api_key>",
-        Tenant = "<tenant>"
+    ```javascript
+    // CommonJS
+    const { FiscalApiClient } = require('fiscalapi');
+
+    // o ESM
+    import { FiscalApiClient } from 'fiscalapi';
+
+    const settings = {
+        apiUrl: "https://test.fiscalapi.com", // https://live.fiscalapi.com (producción)
+        apiKey: "<tu_api_key>",
+        tenant: "<tenant>"
     };
     ```
 
 2. **Crea la instancia del cliente**:
-    ```csharp
-    var fiscalApi = FiscalApiClient.Create(settings);
+    ```javascript
+    const fiscalApi = FiscalApiClient.create(settings);
     ```
 
-Para ejemplos completos, consulta [winforms-console](https://github.com/FiscalAPI/fiscalapi-samples-net-winforms).
+Para ejemplos completos, consulta [samples-nodejs](https://github.com/FiscalAPI/fiscalapi-samples-node).
 
 ---
 
-### B) Aplicaciones con Inyección de Dependencias (ASP.NET, Blazor, etc.)
+### B) Aplicaciones con Frameworks Modernos (Express, NestJS, etc.)
 
-1. **Agrega la sección de configuración** en tu `appsettings.json`:
-    ```jsonc
-    {
-      "FiscalapiSettings": {
-        "ApiUrl": "https://test.fiscalapi.com", // https://live.fiscalapi.com (producción)
-        "ApiKey": "<YourApiKeyHere>",
-        "Tenant": "<YourTenantHere>"
-      }
-    }
+1. **Agrega la configuración** en tu archivo de variables de entorno (`.env`):
+    ```
+    FISCALAPI_URL=https://test.fiscalapi.com
+    FISCALAPI_KEY=<YourApiKeyHere>
+    FISCALAPI_TENANT=<YourTenantHere>
     ```
 
-2. **Registra los servicios** en el contenedor (por ejemplo, en `Program.cs`):
-    ```csharp
-    builder.Services.AddFiscalApi();
+2. **Crea y registra el cliente** (por ejemplo, en un servicio o módulo):
+    ```typescript
+    // services/fiscalapi.service.ts
+    import { FiscalApiClient } from 'fiscalapi';
+
+    export const createFiscalApiClient = () => {
+        return FiscalApiClient.create({
+            apiUrl: process.env.FISCALAPI_URL,
+            apiKey: process.env.FISCALAPI_KEY,
+            tenant: process.env.FISCALAPI_TENANT
+        });
+    };
     ```
 
-Posteriormente, podrás **inyectar** `IFiscalApiClient` donde lo requieras:
+En Express:
+```javascript
+// En tu controlador o router
+const fiscalApi = createFiscalApiClient();
 
-```csharp
-public class InvoicesController : Controller
-{
-    private readonly IFiscalApiClient _fiscalApi;
-
-    public InvoicesController(IFiscalApiClient fiscalApi)
-    {
-        _fiscalApi = fiscalApi;
+app.post('/invoices', async (req, res) => {
+    try {
+        const response = await fiscalApi.invoices.create(req.body);
+        res.json(response);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-    
-    // Usa _fiscalApi en tus métodos de controlador...
-}
+});
 ```
 
-Para más ejemplos, revisa [samples-asp-net](https://github.com/FiscalAPI/fiscalapi-samples-net-aspnet).
+Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-node-express).
 
 
 ## 🔄 Modos de Operación
@@ -108,231 +119,229 @@ A continuación se muestran algunos ejemplos básicos para ilustrar cómo utiliz
 
 ### 1. Crear una Persona (Emisor o Receptor)
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(Settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
-var request = new Person
-{
-    LegalName = "Persona de Prueba",
-    Email = "someone@somewhere.com",
-    Password = "YourStrongPassword123!",
+const request = {
+    legalName: "Persona de Prueba",
+    email: "someone@somewhere.com",
+    password: "YourStrongPassword123!",
 };
 
-var apiResponse = await fiscalApi.Persons.CreateAsync(request);
+try {
+    const apiResponse = await fiscalApi.persons.create(request);
+    console.log(apiResponse.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 ### 2. Subir Certificados CSD
 [Descarga certificados de prueba](https://docs.fiscalapi.com/tax-files-info)
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(Settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
-var certificadoCsd = new TaxFile
-{
-    PersonId = "984708c4-fcc0-43bd-9d30-ec017815c20e",
-    Base64File = "MIIFsDCCA5igAwIBAgI...==", // Certificado .cer codificado en Base64
-    FileType = FileType.CertificateCsd,
-    Password = "12345678a",
-    Tin = "EKU9003173C9"
+const certificadoCsd = {
+    personId: "984708c4-fcc0-43bd-9d30-ec017815c20e",
+    base64File: "MIIFsDCCA5igAwIBAgI...==", // Certificado .cer codificado en Base64
+    fileType: "CertificateCsd",
+    password: "12345678a",
+    tin: "EKU9003173C9"
 };
 
-var clavePrivadaCsd = new TaxFile
-{
-    PersonId = "984708c4-fcc0-43bd-9d30-ec017815c20e",
-    Base64File = "MIIFDjBABgkqhkiG9w0BBQ0...==", // Llave privada .key codificada en Base64
-    FileType = FileType.PrivateKeyCsd,
-    Password = "12345678a",
-    Tin = "EKU9003173C9"
+const clavePrivadaCsd = {
+    personId: "984708c4-fcc0-43bd-9d30-ec017815c20e",
+    base64File: "MIIFDjBABgkqhkiG9w0BBQ0...==", // Llave privada .key codificada en Base64
+    fileType: "PrivateKeyCsd",
+    password: "12345678a",
+    tin: "EKU9003173C9"
 };
 
-var apiResponseCer = await fiscalApi.TaxFiles.CreateAsync(certificadoCsd);
-var apiResponseKey = await fiscalApi.TaxFiles.CreateAsync(clavePrivadaCsd);
+try {
+    const apiResponseCer = await fiscalApi.taxFiles.create(certificadoCsd);
+    const apiResponseKey = await fiscalApi.taxFiles.create(clavePrivadaCsd);
+    console.log(apiResponseCer.data, apiResponseKey.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 ### 3. Crear un Producto o Servicio
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(Settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
-var request = new Product
-{
-    Description = "Servicios contables",
-    UnitPrice = 100,
-    SatUnitMeasurementId = "E48",
-    SatTaxObjectId = "02",
-    SatProductCodeId = "84111500"
+const request = {
+    description: "Servicios contables",
+    unitPrice: 100,
+    satUnitMeasurementId: "E48",
+    satTaxObjectId: "02",
+    satProductCodeId: "84111500"
 };
 
-var apiResponse = await fiscalApi.Products.CreateAsync(request);
+try {
+    const apiResponse = await fiscalApi.products.create(request);
+    console.log(apiResponse.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 ### 4. Actualizar Impuestos de un Producto
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(Settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
-var request = new Product
-{
-    Id = "310301b3-1ae9-441b-b463-51a8f9ca8ba2",
-    Description = "Servicios contables",
-    UnitPrice = 100, 
-    SatUnitMeasurementId = "E48",
-    SatTaxObjectId = "02",
-    SatProductCodeId = "84111500",
-    ProductTaxes = new List<ProductTax>
-    {
-        new ProductTax { Rate = 0.16m, TaxId = "002", TaxFlagId = "T", TaxTypeId = "Tasa" },  // IVA 16%
-        new ProductTax { Rate = 0.10m, TaxId = "001", TaxFlagId = "R", TaxTypeId = "Tasa" },  // ISR 10%
-        new ProductTax { Rate = 0.10666666666m, TaxId = "002", TaxFlagId = "R", TaxTypeId = "Tasa" } // IVA 2/3 partes
-    }
+const request = {
+    id: "310301b3-1ae9-441b-b463-51a8f9ca8ba2",
+    description: "Servicios contables",
+    unitPrice: 100, 
+    satUnitMeasurementId: "E48",
+    satTaxObjectId: "02",
+    satProductCodeId: "84111500",
+    productTaxes: [
+        { rate: 0.16, taxId: "002", taxFlagId: "T", taxTypeId: "Tasa" },  // IVA 16%
+        { rate: 0.10, taxId: "001", taxFlagId: "R", taxTypeId: "Tasa" },  // ISR 10%
+        { rate: 0.10666666666, taxId: "002", taxFlagId: "R", taxTypeId: "Tasa" } // IVA 2/3 partes
+    ]
 };
 
-var apiResponse = await fiscalApi.Products.UpdateAsync(request.Id, request);
+try {
+    const apiResponse = await fiscalApi.products.update(request.id, request);
+    console.log(apiResponse.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 ### 5. Crear una Factura de Ingreso (Por Referencias)
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(Settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
-var invoice = new Invoice
-{
-    VersionCode = "4.0",
-    Series = "SDK-F",
-    Date = DateTime.Now,
-    PaymentFormCode = "01",
-    CurrencyCode = "MXN",
-    TypeCode = "I",
-    ExpeditionZipCode = "42501",
-    Issuer = new InvoiceIssuer
-    {
-        Id = "<id-emisor-en-fiscalapi>"
+const invoice = {
+    versionCode: "4.0",
+    series: "SDK-F",
+    date: new Date(),
+    paymentFormCode: "01",
+    currencyCode: "MXN",
+    typeCode: "I",
+    expeditionZipCode: "42501",
+    issuer: {
+        id: "<id-emisor-en-fiscalapi>"
     },
-    Recipient = new InvoiceRecipient
-    {
-        Id = "<id-receptor-en-fiscalapi>"
+    recipient: {
+        id: "<id-receptor-en-fiscalapi>"
     },
-    Items = new List<InvoiceItem>
-    {
-        new InvoiceItem
+    items: [
         {
-            Id = "<id-producto-en-fiscalapi>",
-            Quantity = 1,
-            Discount = 10.85m
+            id: "<id-producto-en-fiscalapi>",
+            quantity: 1,
+            discount: 10.85
         }
-    },
-    PaymentMethodCode = "PUE",
+    ],
+    paymentMethodCode: "PUE",
 };
 
-var apiResponse = await fiscalApi.Invoices.CreateAsync(invoice);
+try {
+    const apiResponse = await fiscalApi.invoices.create(invoice);
+    console.log(apiResponse.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 ### 6. Crear la Misma Factura de Ingreso (Por Valores)
 
-```csharp
-var fiscalApi = FiscalApiClient.Create(settings);
+```javascript
+const fiscalApi = FiscalApiClient.create(settings);
 
 // Agregar sellos CSD, Emisor, Receptor, Items, etc.
-var invoice = new Invoice
-{
-    VersionCode = "4.0",
-    Series = "SDK-F",
-    Date = DateTime.Now,
-    PaymentFormCode = "01",
-    CurrencyCode = "MXN",
-    TypeCode = "I",
-    ExpeditionZipCode = "42501",
-    Issuer = new InvoiceIssuer
-    {
-        Tin = "EKU9003173C9",
-        LegalName = "ESCUELA KEMPER URGATE",
-        TaxRegimeCode = "601",
-        TaxCredentials  = new List<TaxCredential>()
-         {
-             new TaxCredential
-             {
-                 Base64File ="certificate_base64...",
-                 FileType = FileType.CertificateCsd,
-                 Password = "12345678a"
-             },
-             new TaxCredential
-             {
-                 Base64File ="private_key_base64...",
-                 FileType = FileType.PrivateKeyCsd,
-                 Password = "12345678a"
-             }
-         }
-    },
-    Recipient = new InvoiceRecipient
-    {
-        Tin = "EKU9003173C9",
-        LegalName = "ESCUELA KEMPER URGATE",
-        ZipCode = "42501",
-        TaxRegimeCode = "601",
-        CfdiUseCode = "G01",
-        Email = "someone@somewhere.com"
-    },
-    Items = new List<InvoiceItem>
-    {
-        new InvoiceItem
-        {
-            ItemCode = "01010101",
-            Quantity = 9.5m,
-            UnitOfMeasurementCode = "E48",
-            Description = "Invoicing software as a service",
-            UnitPrice = 3587.75m,
-            TaxObjectCode = "02",
-            Discount = 255.85m,
-            ItemTaxes = new List<InvoiceItemTax>
+const invoice = {
+    versionCode: "4.0",
+    series: "SDK-F",
+    date: new Date(),
+    paymentFormCode: "01",
+    currencyCode: "MXN",
+    typeCode: "I",
+    expeditionZipCode: "42501",
+    issuer: {
+        tin: "EKU9003173C9",
+        legalName: "ESCUELA KEMPER URGATE",
+        taxRegimeCode: "601",
+        taxCredentials: [
             {
-                new InvoiceItemTax
-                {
-                    TaxCode = "002", // IVA
-                    TaxTypeCode = "Tasa",
-                    TaxRate = 0.16m,
-                    TaxFlagCode = "T"
-                }
+                base64File: "certificate_base64...",
+                fileType: "CertificateCsd",
+                password: "12345678a"
+            },
+            {
+                base64File: "private_key_base64...",
+                fileType: "PrivateKeyCsd",
+                password: "12345678a"
             }
-        }
+        ]
     },
-    PaymentMethodCode = "PUE",
+    recipient: {
+        tin: "EKU9003173C9",
+        legalName: "ESCUELA KEMPER URGATE",
+        zipCode: "42501",
+        taxRegimeCode: "601",
+        cfdiUseCode: "G01",
+        email: "someone@somewhere.com"
+    },
+    items: [
+        {
+            itemCode: "01010101",
+            quantity: 9.5,
+            unitOfMeasurementCode: "E48",
+            description: "Invoicing software as a service",
+            unitPrice: 3587.75,
+            taxObjectCode: "02",
+            discount: 255.85,
+            itemTaxes: [
+                {
+                    taxCode: "002", // IVA
+                    taxTypeCode: "Tasa",
+                    taxRate: 0.16,
+                    taxFlagCode: "T"
+                }
+            ]
+        }
+    ],
+    paymentMethodCode: "PUE",
 };
 
-var apiResponse = await fiscalApi.Invoices.CreateAsync(invoice);
+try {
+    const apiResponse = await fiscalApi.invoices.create(invoice);
+    console.log(apiResponse.data);
+} catch (error) {
+    console.error(error);
+}
 ```
 
 
 ### 7. Búsqueda en Catálogos del SAT
 
-```csharp
-// Busca los registros que contengan 'inter' en el catalogo 'SatUnitMeasurements' (pagina 1, tamaño pagina 10)
-var apiResponse = await fiscalApi.Catalogs.SearchCatalogAsync("SatUnitMeasurements", "inter", 1, 10);
+```javascript
+try {
+    // Busca los registros que contengan 'inter' en el catalogo 'SatUnitMeasurements' (pagina 1, tamaño pagina 10)
+    const apiResponse = await fiscalApi.catalogs.searchCatalog("SatUnitMeasurements", "inter", 1, 10);
 
-if (apiResponse.Succeeded)
-{
-    foreach (var item in apiResponse.Data.Items)
-    {
-        Console.WriteLine($"Unidad: {item.Description}");
+    if (apiResponse.succeeded) {
+        apiResponse.data.items.forEach(item => {
+            console.log(`Unidad: ${item.description}`);
+        });
+    } else {
+        console.log(apiResponse.message);
     }
-}
-else
-{
-    Console.WriteLine(apiResponse.Message);
+} catch (error) {
+    console.error(error);
 }
 ```
 
 ---
-
-## ⏳ Operaciones Asíncronas y Sincrónicas
-
-- **Asíncrono**:
-    ```csharp
-    var apiResponse = await fiscalApi.Invoices.GetByIdAsync(<id>);
-    ```
-- **Sincrónico** (use esto solo en .NET Framework 4.X.X)
-    ```csharp
-    var apiResponse = Task.Run(async () => await fiscalApi.Invoices.GetByIdAsync(<id>)).Result;
-    ```
 
 ## 📋 Operaciones Principales
 
@@ -363,15 +372,15 @@ else
 
 ## 📄 Licencia
 
-Este proyecto está licenciado bajo la Licencia **MPL**. Consulta el archivo [LICENSE](LICENSE.txt) para más detalles.
+Este proyecto está licenciado bajo la Licencia **MPL-2.0**. Consulta el archivo [LICENSE](LICENSE.txt) para más detalles.
 
 
 ## 🔗 Enlaces Útiles
 
 - [Documentación Oficial](https://docs.fiscalapi.com)  
 - [Portal de FiscalAPI](https://fiscalapi.com)  
-- [Ejemplos WinForms/WPF/Console](https://github.com/FiscalAPI/fiscalapi-samples-net-winforms)  
-- [Ejemplos ASP.NET](https://github.com/FiscalAPI/fiscalapi-samples-net-aspnet)
+- [Ejemplos Node.js](https://github.com/FiscalAPI/fiscalapi-samples-node)  
+- [Ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-node-express)
 
 
 ---
