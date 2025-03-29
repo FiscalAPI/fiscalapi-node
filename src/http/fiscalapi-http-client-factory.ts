@@ -1,5 +1,4 @@
- 
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import https from 'https';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClient } from './fiscalapi-http-client';
@@ -15,6 +14,7 @@ export class FiscalapiHttpClientFactory {
    * Crea un nuevo cliente HTTP para FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración de FiscalAPI
    * @returns {IFiscalapiHttpClient} Instancia del cliente HTTP
+   * @throws {Error} Si la configuración es nula o indefinida
    */
   public static create(settings: FiscalapiSettings): IFiscalapiHttpClient {
     if (!settings) {
@@ -29,30 +29,40 @@ export class FiscalapiHttpClientFactory {
       return this.clients.get(clientKey)!;
     }
 
+    // Crea una instancia de Axios configurada
+    const axiosInstance = this.createAxiosInstance(settings);
+
+    // Crea y cachea el cliente
+    const client = new FiscalapiHttpClient(axiosInstance, settings);
+    this.clients.set(clientKey, client);
+
+    return client;
+  }
+
+  /**
+   * Crea una instancia de Axios configurada según los ajustes de FiscalAPI
+   * @param {FiscalapiSettings} settings - Configuración de FiscalAPI
+   * @returns {AxiosInstance} Instancia de Axios configurada
+   * @private
+   */
+  private static createAxiosInstance(settings: FiscalapiSettings): AxiosInstance {
     // Agente HTTPS que ignora la validación del certificado autofirmado si está en modo depuración
     const httpsAgent = new https.Agent({
-      rejectUnauthorized: settings.debug ? false : true
+      rejectUnauthorized: !settings.debug
     });
 
-    // Crea una nueva instancia de axios
-    const axiosInstance = axios.create({
+    // Crea y configura una nueva instancia de axios
+    return axios.create({
       baseURL: settings.apiUrl,
       timeout: 30000, // 30 segundos
       headers: {
         'X-API-KEY': settings.apiKey,
         'X-TENANT-KEY': settings.tenant,
-        'X-API-VERSION': settings.apiVersion || 'v4',
         'X-TIMEZONE': settings.timeZone || 'America/Mexico_City',
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       httpsAgent: httpsAgent
     });
-
-    // Crea y cachea el cliente
-    const client = new FiscalapiHttpClient(axiosInstance);
-    this.clients.set(clientKey, client);
-
-    return client;
   }
 }

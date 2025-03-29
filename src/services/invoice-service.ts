@@ -1,4 +1,3 @@
-
 import { 
   Invoice, 
   CancelInvoiceRequest, 
@@ -10,7 +9,7 @@ import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { ApiResponse } from '../common/api-response';
 import { FileResponse } from '../common/file-response';
 import { BaseFiscalapiService } from './base-fiscalapi-service';
-import { IInvoiceService } from '..';
+import { IInvoiceService } from '../abstractions/invoice-service.interface';
 
 /**
  * Implementación del servicio de facturas
@@ -29,20 +28,20 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    * @inheritdoc
    */
   async createPdf(request: CreatePdfRequest): Promise<ApiResponse<FileResponse>> {
-    return this.httpClient.postAsync<FileResponse>(this.buildEndpoint('pdf'), request);
+    return this.executeOperation<FileResponse, CreatePdfRequest>('pdf', request);
   }
 
   /**
    * @inheritdoc
    */
   async sendInvoice(request: SendInvoiceRequest): Promise<ApiResponse<boolean>> {
-    return this.httpClient.postAsync<boolean>(this.buildEndpoint('send'), request);
+    return this.executeOperation<boolean, SendInvoiceRequest>('send', request);
   }
 
   /**
    * @inheritdoc
    */
   async cancelInvoice(request: CancelInvoiceRequest): Promise<ApiResponse<CancelInvoiceResponse>> {
-    return this.httpClient.postAsync<CancelInvoiceResponse>(this.buildEndpoint('cancel'), request);
+    return this.executeOperation<CancelInvoiceResponse, CancelInvoiceRequest>('cancel', request);
   }
 }

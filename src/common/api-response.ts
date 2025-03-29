@@ -49,3 +49,21 @@ export interface ValidationFailure {
      */
     attemptedValue: any;
   }
+
+  /**
+   * Interfaz para los detalles de problemas según RFC 9457
+   */
+  export interface ProblemDetails {
+    /** URI de referencia que identifica el tipo de problema */
+    type: string;
+    /** Resumen breve y legible del tipo de problema */
+    title: string;
+    /** Código de estado HTTP */
+    status: number;
+    /** Explicación específica y legible de esta ocurrencia del problema */
+    detail: string;
+    /** URI de referencia que identifica la ocurrencia específica del problema */
+    instance?: string;
+    /** Propiedades adicionales extendidas */
+    [key: string]: unknown;
+  }

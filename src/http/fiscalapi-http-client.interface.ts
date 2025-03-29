@@ -1,48 +1,70 @@
-import { ApiResponse } from "../common/api-response";
+import { AxiosRequestConfig } from 'axios';
+import { ApiResponse } from '../common/api-response';
 
- 
 /**
  * Interfaz para el cliente HTTP de FiscalAPI
  */
 export interface IFiscalapiHttpClient {
-    /**
-     * Realiza una petición GET para obtener una lista de recursos
-     * @param {string} endpoint - Endpoint de la API
-     * @returns {Promise<ApiResponse<T>>} Respuesta de la API
-     * @template T
-     */
-    getAsync<T>(endpoint: string): Promise<ApiResponse<T>>;
-    
-    /**
-     * Realiza una petición GET para obtener un recurso específico por ID
-     * @param {string} endpoint - Endpoint de la API incluyendo el ID
-     * @returns {Promise<ApiResponse<T>>} Respuesta de la API
-     * @template T
-     */
-    getByIdAsync<T>(endpoint: string): Promise<ApiResponse<T>>;
-    
-    /**
-     * Realiza una petición POST para crear un nuevo recurso
-     * @param {string} endpoint - Endpoint de la API
-     * @param {any} data - Datos del recurso a crear
-     * @returns {Promise<ApiResponse<T>>} Respuesta de la API
-     * @template T
-     */
-    postAsync<T>(endpoint: string, data: any): Promise<ApiResponse<T>>;
-    
-    /**
-     * Realiza una petición PUT para actualizar un recurso existente
-     * @param {string} endpoint - Endpoint de la API incluyendo el ID
-     * @param {any} data - Datos actualizados del recurso
-     * @returns {Promise<ApiResponse<T>>} Respuesta de la API
-     * @template T
-     */
-    putAsync<T>(endpoint: string, data: any): Promise<ApiResponse<T>>;
-    
-    /**
-     * Realiza una petición DELETE para eliminar un recurso
-     * @param {string} endpoint - Endpoint de la API incluyendo el ID
-     * @returns {Promise<ApiResponse<boolean>>} Respuesta de la API
-     */
-    deleteAsync(endpoint: string): Promise<ApiResponse<boolean>>;
-  }
+  /**
+   * Realiza una petición GET a la API
+   * @param endpoint - Punto final de la API
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  getAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>>;
+
+  /**
+   * Realiza una petición GET por ID a la API
+   * @param endpoint - Punto final de la API con ID
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  getByIdAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>>;
+
+  /**
+   * Realiza una petición POST a la API
+   * @param endpoint - Punto final de la API
+   * @param data - Datos a enviar en la petición
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  postAsync<T, TData = Record<string, unknown>>(
+    endpoint: string,
+    data: TData,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>>;
+
+  /**
+   * Realiza una petición PUT a la API
+   * @param endpoint - Punto final de la API
+   * @param data - Datos a enviar en la petición
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  putAsync<T, TData = Record<string, unknown>>(
+    endpoint: string,
+    data: TData,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>>;
+
+  /**
+   * Realiza una petición DELETE a la API
+   * @param endpoint - Punto final de la API
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  deleteAsync(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<boolean>>;
+
+  /**
+   * Realiza una petición PATCH a la API
+   * @param endpoint - Punto final de la API
+   * @param data - Datos a enviar en la petición
+   * @param config - Configuración adicional para la petición
+   * @returns Respuesta de la API
+   */
+  patchAsync<T, TData = Record<string, unknown>>(
+    endpoint: string,
+    data: TData,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>>;
+}

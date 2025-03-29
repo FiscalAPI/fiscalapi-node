@@ -4,7 +4,7 @@ import { PagedList } from '../common/paged-list';
 
 /**
  * Interfaz base para todos los servicios de FiscalAPI
- * @template T
+ * @template T - Tipo de DTO que maneja el servicio
  */
 export interface IFiscalapiService<T extends BaseDto> {
   /**
@@ -44,4 +44,39 @@ export interface IFiscalapiService<T extends BaseDto> {
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
   delete(id: string): Promise<ApiResponse<boolean>>;
+  
+  /**
+   * Realiza una búsqueda en el recurso
+   * @param {Record<string, string>} searchParams - Parámetros de búsqueda
+   * @returns {Promise<ApiResponse<PagedList<T>>>} Resultados de la búsqueda
+   */
+  search(searchParams: Record<string, string>): Promise<ApiResponse<PagedList<T>>>;
+  
+  /**
+   * Ejecuta una acción personalizada en un recurso
+   * @param {string} id - ID del recurso
+   * @param {string} action - Nombre de la acción
+   * @param {TData} [data] - Datos opcionales para la acción
+   * @returns {Promise<ApiResponse<TResult>>} Resultado de la acción
+   * @template TResult - Tipo de resultado esperado
+   * @template TData - Tipo de datos de entrada
+   */
+  executeAction<TResult, TData>(
+    id: string,
+    action: string,
+    data?: TData
+  ): Promise<ApiResponse<TResult>>;
+  
+  /**
+   * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
+   * @param {string} operation - Nombre de la operación
+   * @param {TData} data - Datos para la operación
+   * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
+   * @template TResult - Tipo de resultado esperado
+   * @template TData - Tipo de datos de entrada
+   */
+  executeOperation<TResult, TData>(
+    operation: string,
+    data: TData
+  ): Promise<ApiResponse<TResult>>;
 }
