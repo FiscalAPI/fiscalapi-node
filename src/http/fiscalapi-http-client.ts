@@ -101,7 +101,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
       console.log('');
       console.log('Status:', response.status, response.statusText);
       //console.log('Headers:', response.headers);
-      console.log('Data:', response.data);
+      console.log('Data:', JSON.stringify(response.data, null, 2));
 
       console.log('');
       console.log('*************************************************************');

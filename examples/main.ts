@@ -20,13 +20,16 @@ async function main() {
     
     if (response.succeeded) {
 
-      console.log('Exito:', response);
+      console.log('Exito');
+      console.log(JSON.stringify(response.data, null, 2));
       
     } else {
-      console.log('Error:', response);
+      console.log('Error');
+      console.log(JSON.stringify(response.data, null, 2));
     }
   } catch (error) {
     console.error('Error inesperado:', error);
+    
   }
 }
 
