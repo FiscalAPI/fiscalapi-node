@@ -19,7 +19,8 @@
     "build:types": "tsc -p tsconfig.types.json",
     "test": "jest",
     "lint": "eslint 'src/**/*.ts'",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "main": "ts-node examples/main.ts"
   },
   "keywords": [
     "fiscalapi",
@@ -48,5 +49,16 @@
   "homepage": "https://www.fiscalapi.com",
   "bugs": {
     "url": "https://github.com/FiscalAPI/fiscalapi-node/issues"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "luxon": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.13.14",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }

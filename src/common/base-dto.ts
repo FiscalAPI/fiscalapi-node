@@ -1,8 +1,11 @@
- 
-const { DateTime } = require('luxon');
+import {DateTime} from 'luxon';
+import { AuditableDto } from "./auditable-dto";
 
-class BaseDto {
-
+/**
+ * Clase base para todos los DTOs de la API
+ */
+export class BaseDto extends AuditableDto {
+    id?: string;
     
   /**
    * Sobrescribe el método toJSON para:
@@ -18,7 +21,7 @@ class BaseDto {
     // Set para detectar referencias circulares
     const visited = new WeakSet();
     
-    const processValue = (value) => {
+    const processValue = (value:any):any => {
       // Si es null o undefined
       if (value === null || value === undefined) {
         return excludeFalsy ? undefined : null;
@@ -83,7 +86,7 @@ class BaseDto {
       return value;
     };
     
-    const processObject = (obj) => {
+    const processObject = (obj:any) => {
       // Verificar objeto nulo o undefined
       if (!obj) return excludeFalsy ? undefined : null;
       
@@ -126,12 +129,16 @@ class BaseDto {
             return obj.toJSON();
           }
         } catch (error) {
-          console.warn(`Error en método toJSON personalizado: ${error.message}`);
+          if (error instanceof Error) {
+            console.warn(`Error en método toJSON personalizado: ${error.message}`);
+          } else {
+            console.warn('Error en método toJSON personalizado: Error desconocido');
+          }
           // Continuamos con el procesamiento normal si falla el método toJSON
         }
       }
       
-      const result = {};
+      const result: Record<string, any> = {};
       let hasValues = false;
       
       // Iteramos sobre todas las propiedades (solo las propias)
@@ -146,7 +153,11 @@ class BaseDto {
             }
           } catch (error) {
             // Si hay un error al procesar un valor, lo omitimos y continuamos
-            console.warn(`Error al procesar la propiedad "${key}": ${error.message}`);
+            if (error instanceof Error) {
+              console.warn(`Error al procesar la propiedad "${key}": ${error.message}`);
+            } else {
+              console.warn(`Error al procesar la propiedad "${key}": Error desconocido`);
+            }
           }
         }
       }
@@ -158,7 +169,11 @@ class BaseDto {
       // Procesamos el objeto actual
       return processObject(this);
     } catch (error) {
-      console.error(`Error global en toJSON: ${error.message}`);
+      if (error instanceof Error) {
+        console.error(`Error global en toJSON: ${error.message}`);
+      } else {
+        console.error('Error global en toJSON: Error desconocido');
+      }
       // En caso de error global, devolvemos un objeto vacío o alguna información de error
       return excludeFalsy ? undefined : { error: 'Error en serialización' };
     }
