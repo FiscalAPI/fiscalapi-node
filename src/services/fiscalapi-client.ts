@@ -1,6 +1,11 @@
- 
-
-import { IFiscalapiClient, IInvoiceService, IProductService, IPersonService, IApiKeyService, ICatalogService, ITaxFileService } from '..';
+import { 
+  IFiscalapiClient,
+  IInvoiceService, 
+  IProductService, 
+  IPersonService, 
+  IApiKeyService, 
+  ICatalogService, 
+  ITaxFileService } from '..';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
 import { ApiKeyService } from './api-key-service';

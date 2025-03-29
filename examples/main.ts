@@ -1,12 +1,12 @@
 import { FiscalapiClient, FiscalapiSettings } from '../src';
 
-async function main() {
+async function main() : Promise<void> {
+  
   // Configura el cliente
   const settings: FiscalapiSettings = {
     apiUrl: 'https://localhost:7173',
     apiKey: 'sk_development_e0e47dfa_5146_40c2_b3a3_3055909a6b88',
     tenant: 'e839651d-1765-4cd0-ba7f-547a4c20580f',
-    debug: true,
   };
 
   try {
