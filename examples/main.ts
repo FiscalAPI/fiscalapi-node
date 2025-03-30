@@ -95,7 +95,7 @@ async function main() : Promise<void> {
     //     }
     //   ]
     // };
-    // const apiResponse = await client.products.update("cf792d75-7c81-446c-be28-f098f9cb601a", modelRequest);
+    // const apiResponse = await client.products.update(modelRequest);
     // console.log('apiResponse:', apiResponse);
 
 
