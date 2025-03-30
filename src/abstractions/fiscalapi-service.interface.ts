@@ -36,7 +36,7 @@ export interface IFiscalapiService<T extends BaseDto> {
    * @param {T} model - Datos actualizados del recurso
    * @returns {Promise<ApiResponse<T>>} Recurso actualizado
    */
-  update(id: string, model: T): Promise<ApiResponse<T>>;
+  update(model: T): Promise<ApiResponse<T>>;
   
   /**
    * Elimina un recurso

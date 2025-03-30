@@ -23,6 +23,39 @@ async function main() : Promise<void> {
     // Crea el cliente
     const client = FiscalapiClient.create(settings);
   
+    // Listar api keys
+    // const apiResponse = await client.apiKeys.getList(1, 2);
+    // console.log('apiResponse:', apiResponse);
+
+    // Obtiene api key por ID
+    //  const apiResponse = await client.apiKeys.getById("2be4288f-696f-4d13-bd03-d9565101ae51",true);
+    //  console.log('apiResponse:', apiResponse);
+
+    // Crear api key
+    // const modelRequest = {
+    //   description: 'Api key empresa prueba',
+    //   personId: '4162d2e2-d63b-4923-85eb-db1ed4e700c1',
+    // };
+    // const apiResponse = await client.apiKeys.create(modelRequest);
+    // console.log('apiResponse:', apiResponse);
+
+
+    // Actualizar api key
+    // const modelRequest = {
+    //   id: '2be4288f-696f-4d13-bd03-d9565101ae51',
+    //   description: 'Api key empresa prueba actualizado',
+    //   personId: '4162d2e2-d63b-4923-85eb-db1ed4e700c1',
+    //   apiKeyStatus: 0, // 0=Deshabilitado, 1=Habilitado
+    // };
+    // const apiResponse = await client.apiKeys.update(modelRequest);
+    // console.log('apiResponse:', apiResponse);
+
+
+    // Eliminar api key
+    // const apiResponse = await client.apiKeys.delete("2be4288f-696f-4d13-bd03-d9565101ae51");
+    // console.log('apiResponse:', apiResponse);
+
+
     // Listar productos
     // const apiResponse = await client.products.getList(1, 2);
     // console.log('apiResponse:', apiResponse);
@@ -71,7 +104,7 @@ async function main() : Promise<void> {
     // console.log('apiResponse:', apiResponse);
 
 
-    console.log('End Fiscalapi node...');
+    console.log('End Fiscalapi node...'); 
   } catch (error: unknown) {
     console.error('Error inesperado:', error);    
   }

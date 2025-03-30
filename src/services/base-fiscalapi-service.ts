@@ -121,9 +121,9 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
   /**
    * @inheritdoc
    */
-  async update(id: string, model: T): Promise<ApiResponse<T>> {
+  async update(model: T): Promise<ApiResponse<T>> {
     return this.httpClient.putAsync<T, T>(
-      this.buildEndpoint(id),
+      this.buildEndpoint(model.id),
       model
     );
   }
