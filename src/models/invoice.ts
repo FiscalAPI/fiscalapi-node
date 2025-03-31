@@ -64,7 +64,7 @@ export interface Invoice {
   recipient: InvoiceRecipient;
 
   /** Conceptos de la factura (productos o servicios) */
-  items: InvoiceItem[];
+  items?: InvoiceItem[];
 
   /** Informacion global. Utilizado cuando se genera una factura global */
   globalInformation?: GlobalInformation;
@@ -440,7 +440,7 @@ export interface InvoiceStatusRequest {
   invoiceTotal?: number;
 
   /** Folio fiscal factura a consultar */
-  invoiceUuid: string;
+  invoiceUuid?: string;
 
   /** Últimos ocho caracteres del sello digital del emisor */
   last8DigitsIssuerSignature?: string;

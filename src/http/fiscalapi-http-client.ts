@@ -70,7 +70,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
       console.log('Method: ',  config.method?.toUpperCase());
       console.log('BaseURL: ', config.baseURL);
       console.log('PathURL: ', config.url);
-      const resource = `${config.method?.toUpperCase() || ''}: ${config.baseURL || ''}${config.url || ''}`;
+      const resource = `${config.baseURL || ''}/${config.url || ''}`;
       console.log('FullURL: ', resource);
       
       if (config.data) {

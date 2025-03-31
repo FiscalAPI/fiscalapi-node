@@ -72,9 +72,8 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
     }
 
     return await this.executeRequest<CancelInvoiceResponse, CancelInvoiceRequest>({
-      path:this.buildEndpoint(),
       data:request,
-      method:'POST',
+      method:'DELETE',
     });
   }
 
@@ -88,7 +87,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
       throw new Error('request cannot be null');
     }
     return await this.executeRequest<FileResponse, CreatePdfRequest>({
-      path:this.buildEndpoint('pdf'),
+      path:'pdf',
       data:request,
       method:'POST',
     });
@@ -106,7 +105,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
     }
 
     return await this.executeRequest<FileResponse, string>({
-      path:this.buildEndpoint(`${id}/xml`),
+      path:`${id}/xml`,
       method: 'GET',
     });
 
@@ -119,7 +118,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   async send(request: SendInvoiceRequest): Promise<ApiResponse<boolean>> {
     return await this.executeRequest<boolean, SendInvoiceRequest>({
-      path:this.buildEndpoint('send'),
+      path:'send',
       data:request,
       method:'POST',
     });
@@ -132,7 +131,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   async getStatus(request: InvoiceStatusRequest): Promise<ApiResponse<InvoiceStatusResponse>> {
         return await this.executeRequest<InvoiceStatusResponse, InvoiceStatusRequest>({
-        path:this.buildEndpoint('status'),
+        path:'status',
         data:request,
         method:'POST',
       });
