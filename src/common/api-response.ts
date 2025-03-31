@@ -43,11 +43,7 @@ export interface ValidationFailure {
      * Mensaje de error
      */
     errorMessage: string;
-    
-    /**
-     * Valor que se intentó establecer
-     */
-    attemptedValue: any;
+  
   }
 
   /**

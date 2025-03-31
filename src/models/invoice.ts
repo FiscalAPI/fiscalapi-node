@@ -16,7 +16,7 @@ export interface Invoice {
   series: string;
 
   /** Es la fecha y hora de expedición del comprobante fiscal. Se expresa en la forma AAAA-MM-DDThh:mm:ss */
-  date: string;
+  date: DateTime | string;
 
   /** Consecutivo de facturas por cuenta. Se incrementa con cada factura generada en tu cuenta de Fiscalapi */
   consecutive?: number;
@@ -37,7 +37,7 @@ export interface Invoice {
   uuid?: string;
 
   /** Código de la forma de pago para la factura. Catálogo del SAT c_FormaPago */
-  paymentFormCode: string;
+  paymentFormCode?: string;
 
   /** Código de la moneda utilizada para expresar los montos. Default: "MXN" */
   currencyCode: string;
@@ -52,7 +52,7 @@ export interface Invoice {
   exportCode: string;
 
   /** Código de método para la factura de pago del catálogo del SAT c_MetodoPago */
-  paymentMethodCode: string;
+  paymentMethodCode?: string;
 
   /** Tipo de cambio FIX conforme a la moneda registrada en la factura. Default: 1 */
   exchangeRate?: number;
@@ -150,19 +150,19 @@ export interface InvoiceItem {
   itemCode?: string;
 
   /** Cantidad del producto o servicio */
-  quantity: number;
+  quantity: number | string;
 
   /** Cantidad monetaria del descuento aplicado al producto o servicio */
-  discount?: number;
+  discount?: number | string;
 
   /** Código de la unidad de medida del producto o servicio. Catálogo c_ClaveUnidad */
   unitOfMeasurementCode?: string;
 
   /** Descripción del producto o servicio */
-  description: string;
+  description?: string;
 
   /** Precio unitario del producto o servicio. (Sin impuestos) */
-  unitPrice?: number;
+  unitPrice?: number | string;
 
   /** Código de obligaciones de impuesto aplicables al producto o servicio. Catálogo c_ObjetoImp */
   taxObjectCode?: string;
@@ -184,12 +184,14 @@ export interface ItemTax {
   /** Tipo de factor. Catálogo del SAT c_TipoFactor */
   taxTypeCode: string;
 
-  /** Tasa del impuesto. Catálogo del SAT c_TasaOCuota */
-  taxRate: string;
+  /** Tasa del impuesto. Catálogo del SAT c_TasaOCuota  */
+  taxRate?: string | number; 
 
   /** Código que indica la naturaleza del impuesto. "T": Impuesto Traslado, "R": Impuesto Retenido */
   taxFlagCode: string;
 }
+
+
 
 /**
  * Informacion global para factura global
@@ -230,10 +232,10 @@ export interface InvoicePayment {
   currencyCode: string;
 
   /** Tipo de cambio FIX conforme a la moneda registrada en la factura. Default: 1 */
-  exchangeRate?: number;
+  exchangeRate?: number | string;
 
   /** Monto del pago */
-  amount: number;
+  amount: number | string;
 
   /** RFC del banco origen. (Rfc del banco emisor del pago) */
   sourceBankTin: string;
@@ -261,8 +263,8 @@ export interface PaidInvoice {
   /** Serie de la factura pagada */
   series: string;
 
-  /** Monto pagado de la factura */
-  amount: number;
+  /** Monto pagado pagado en la factura */
+  paymentAmount: number | string;
 
   /** Folio de la factura pagada */
   number: string;
@@ -271,22 +273,22 @@ export interface PaidInvoice {
   currencyCode: string;
 
   /** Número de parcialidad */
-  partialityNumber: number;
+  partialityNumber: number ;
 
   /** Subtotal de la factura pagada */
-  subTotal: number;
+  subTotal: number | string;
 
   /** Saldo anterior de la factura pagada */
-  previousBalance: number;
+  previousBalance: number | string;
 
   /** Saldo restante de la factura pagada */
-  remainingBalance: number;
+  remainingBalance: number | string;
 
   /** Código de obligaciones de impuesto aplicables a la factura pagada */
   taxObjectCode: string;
 
   /** Equivalencia de la moneda. Default: 1 */
-  equivalence?: number;
+  equivalence?: number | string;
 
   /** Impuestos aplicables a la factura pagada */
   paidInvoiceTaxes: PaidInvoiceTax[];
@@ -296,9 +298,7 @@ export interface PaidInvoice {
  * Impuestos aplicables a la factura pagada
  */
 export interface PaidInvoiceTax {
-  /** Base del impuesto */
-  base: number;
-
+ 
   /** Código del impuesto. Catálogo del SAT c_Impuesto */
   taxCode: string;
 
@@ -306,7 +306,7 @@ export interface PaidInvoiceTax {
   taxTypeCode: string;
 
   /** Tasa del impuesto. Catálogo del SAT c_TasaOCuota */
-  taxRate: number;
+  taxRate: number | string;
 
   /** Código que indica la naturaleza del impuesto. "T": Impuesto Traslado, "R": Impuesto Retenido */
   taxFlagCode: string;
