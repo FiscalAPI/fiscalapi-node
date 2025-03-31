@@ -1,4 +1,4 @@
-import { FiscalapiClient, FiscalapiSettings, Product } from '../src';
+import { FiscalapiClient, FiscalapiSettings, Person, Product, TaxFile } from '../src';
 import { inspect } from 'util';
 inspect.defaultOptions.depth = null; // Deshabilitar la profundidad de inspección para objetos anidados la salida de la consola
 inspect.defaultOptions.colors = true; // Habilitar colores para la salida de la consola
@@ -8,8 +8,9 @@ async function main() : Promise<void> {
   // Configura el cliente de FiscalAPI
   const settings: FiscalapiSettings = {
     apiUrl: 'https://localhost:7173',
-    apiKey: 'sk_development_e0e47dfa_5146_40c2_b3a3_3055909a6b88',
+    apiKey: 'sk_development_833a58f9_8212_43ce_b544_f2fa93b1e895',
     tenant: 'e839651d-1765-4cd0-ba7f-547a4c20580f',
+    debug:false
   };
 
   // Sellos SAT CSD del emisor para emisión de CFDI
@@ -20,7 +21,7 @@ async function main() : Promise<void> {
   try {
     console.log('Hello Fiscalapi node...');
     
-    // Crea el cliente
+    // Crea el cliente http
     const client = FiscalapiClient.create(settings);
   
     // Listar api keys
@@ -54,6 +55,105 @@ async function main() : Promise<void> {
     // Eliminar api key
     // const apiResponse = await client.apiKeys.delete("2be4288f-696f-4d13-bd03-d9565101ae51");
     // console.log('apiResponse:', apiResponse);
+
+
+    // Listar personas (emisores, receptores, clientes, empresas, usuarios)
+    // const apiResponse = await client.persons.getList(1,2);
+    // console.log(apiResponse);
+    
+    // Obtener persona (emisor, receptor, cliente, empresa, usuario) por Id
+    // const apiResponse = await client.persons.getById("1", true)
+    // console.log(apiResponse);
+
+    // Crear persona (emisor, receptor, cliente, empresa, usuario)
+     // const modelRequest: Person = {
+     //  legalName: 'EMPRESA S.A. DE C.V.',
+     //  email: 'empresa@example.com',
+     //  password: 'StrongPassword123!',
+     //  userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+     // };
+     // const apiResponse = await client.persons.create(modelRequest);
+     // console.log(apiResponse);
+
+
+    // Actualizar persona (emisor, receptor, cliente, empresa, usuario)
+    //  const modelRequest: Person = {
+    //    id: 'cce1def0-7df0-4c44-b7b8-046a7681ced6',
+    //    legalName: 'KARLA FUENTE NOLASCO',
+    //    //capitalRegime: "S.A de C.V", // Régimen de capital de la persona, solo cuando es persona moral
+    //    tin: 'FUNK671228PH6', // RFC
+    //    email: 'karla.fuentes@example.com',
+    //    userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+    //    satTaxRegimeId: '601', // General de Ley Personas Morales
+    //    satCfdiUseId: 'G03', // Gastos en general.
+    //    zipCode: '01160', // Código postal
+    //    taxPassword: '12345678a', // Contraseña de los certificados CSD
+    //    //base64Photo: 'base64Photo', // Foto de perfil en base64
+    //    //password: '12345678a', // Contraseña para acceder al dashboard
+    //    //password: '12345678a', // Contraseña para acceder al dashboard
+    //  };
+    //  const apiResponse = await client.persons.update(modelRequest);
+    //  console.log(apiResponse);
+
+
+    // Eliminar persona (emisor, receptor, cliente, empresa, usuario)
+    // const apiResponse = await client.persons.delete("cce1def0-7df0-4c44-b7b8-046a7681ced6");
+    // console.log(apiResponse);
+
+
+    // Listar certificados CSD
+    // const apiResponse = await client.taxFiles.getList(1, 2);
+    // console.log(apiResponse);  
+
+    // Obtener certificado CSD por ID
+    // const apiResponse = await client.taxFiles.getById("7626304b-47a9-4a42-82f7-43c7d4ed6081", true);
+    // console.log(apiResponse);
+
+
+    // Crear certificado CSD (subir certificado y llave privada)
+    // const certModelRequest: TaxFile = {
+    //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
+    //   tin: 'FUNK671228PH6', // RFC
+    //   base64File: base64Cert,
+    //   fileType: 0, // 0=Certificado, 1=Llave privada
+    //   password: '12345678a', // Contraseña de la llave privada0
+    // };
+
+    // const keyModelRequest: TaxFile = {
+    //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
+    //   tin: 'FUNK671228PH6', // RFC
+    //   base64File: base64Key,
+    //   fileType: 1, // 0=Certificado, 1=Llave privada
+    //   password: '12345678a', // Contraseña de la llave privada
+    // };
+
+    // const apiResponseCert = await client.taxFiles.create(certModelRequest);
+    // console.log(apiResponseCert);
+
+    // const apiResponseKey = await client.taxFiles.create(keyModelRequest);
+    // console.log(apiResponseKey); 
+
+
+    // Obtiene el último par de ids de certificados válidos y vigente de una persona. Es decir sus certificados por defecto (ids)
+    // const apiResponse = await client.taxFiles.getDefaultReferences("3f3478b4-60fd-459e-8bfc-f8239fc96257");
+    // console.log(apiResponse);
+
+    // Obtiene el último par de certificados válidos y vigente de una persona. Es decir sus certificados por defecto
+    // const apiResponse = await client.taxFiles.getDefaultValues("3f3478b4-60fd-459e-8bfc-f8239fc96257");
+    // console.log(apiResponse);
+
+
+    // Eliminar certificados por ID (Se necesita hacer dos llamadas, una para el certificado y otra para la llave privada) 
+    // const apiResponseCert = await client.taxFiles.delete("174edf2d-c1e7-4040-95f7-949e3947c192"); 
+    // console.log(apiResponseCert);
+
+    // const apiResponseKey = await client.taxFiles.delete("2c592f82-0acc-47cd-866d-1676f3b7e1ef"); 
+    // console.log(apiResponseKey);
+
+
+
+
+
 
 
     // Listar productos

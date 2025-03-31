@@ -14,6 +14,6 @@ export class PersonService extends BaseFiscalapiService<Person> implements IPers
    * @param {string} apiVersion - Versión de la API
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
-    super(httpClient, 'persons', apiVersion);
+    super(httpClient, 'people', apiVersion);
   }
 }

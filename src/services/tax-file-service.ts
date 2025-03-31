@@ -15,13 +15,33 @@ export class TaxFileService extends BaseFiscalapiService<TaxFile> implements ITa
    * @param {string} apiVersion - Versión de la API
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
-    super(httpClient, 'taxfiles', apiVersion);
+    super(httpClient, 'tax-files', apiVersion);
   }
 
-  /**
-   * @inheritdoc
-   */
-  async download(id: string): Promise<ApiResponse<FileResponse>> {
-    return this.httpClient.getAsync<FileResponse>(this.buildEndpoint(`${id}/download`));
-  }
+
+    /**
+     * Obtiene el último par de ids de certificados válidos y vigente de una persona. Es decir sus certificados por defecto (ids)
+     * 
+     * @param personId - Id de la persona propietaria de los certificados
+     * @returns Promise que resuelve en una respuesta API con una lista de un par de certificados, pero sin contenido, solo sus Ids
+     */
+    async getDefaultReferences(personId: string): Promise<ApiResponse<TaxFile[]>> {
+      // GET /api/v4/tax-files/{personId}/default-references
+      const path = `${personId}/default-references`;
+      const endpoint = this.buildEndpoint(path);
+      return this.httpClient.getAsync<TaxFile[]>(endpoint);
+    }
+
+    /**
+    * Obtiene el último par de certificados válidos y vigente de una persona. Es decir sus certificados por defecto
+    * 
+    * @param personId - Id de la persona dueña de los certificados
+    * @returns Promise que resuelve en una respuesta API con una lista de un par de certificados
+    */
+    public async getDefaultValues(personId: string): Promise<ApiResponse<TaxFile[]>> {
+      // GET /api/v4/tax-files/{personId}/default-values
+      const path = `${personId}/default-values`;
+      const endpoint = this.buildEndpoint(path);
+      return this.httpClient.getAsync<TaxFile[]>(endpoint);
+    }
 }
