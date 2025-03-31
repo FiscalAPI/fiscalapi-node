@@ -3,7 +3,7 @@ import { BaseDto } from '../common/base-dto';
 import { ApiResponse } from '../common/api-response';
 import { PagedList } from '../common/paged-list';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
-import { IFiscalapiService } from '../abstractions/fiscalapi-service.interface';
+import { IFiscalapiService, OperationOptions } from '../abstractions/fiscalapi-service.interface';
 
 /**
  * Implementación base de un servicio de FiscalAPI
@@ -138,6 +138,20 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
   }
 
   /**
+   * Delete with body
+   */
+  async deleteWithBody(id: string, body: any): Promise<ApiResponse<boolean>> {
+    return this.httpClient.deleteAsync(
+      this.buildEndpoint(id),
+      body
+    );
+  }
+ 
+
+
+
+
+  /**
    * Realiza una búsqueda en el recurso
    * @param {Record<string, string>} searchParams - Parámetros de búsqueda
    * @returns {Promise<ApiResponse<PagedList<T>>>} Resultados de la búsqueda
@@ -176,19 +190,133 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
     }
   }
   
+  // /**
+  //  * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
+  //  * @param {string} path - Nombre de la operación
+  //  * @param {TData} data - Datos para la operación
+  //  * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
+  //  * @template TResult - Tipo de resultado esperado
+  //  * @template TData - Tipo de datos de entrada
+  //  */
+  // async executeOperation<TResult, TData>(
+  //   path: string,
+  //   data: TData,
+  //   method: 'POST' | 'PUT' | 'DELETE'
+  // ): Promise<ApiResponse<TResult>> {
+  //   const endpoint = this.buildEndpoint(path);
+
+  //   if (method === 'POST') {
+  //     return this.httpClient.postAsync<TResult, TData>(endpoint, data);
+  //   } else if (method === 'PUT') {
+  //     return this.httpClient.putAsync<TResult, TData>(endpoint, data);
+  //   } else if (method === 'DELETE' && data) {
+  //     return this.httpClient.deleteWithBodyAsync<TResult, TData>(endpoint, data);
+  //   }
+
   /**
-   * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
-   * @param {string} operation - Nombre de la operación
-   * @param {TData} data - Datos para la operación
-   * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
-   * @template TResult - Tipo de resultado esperado
-   * @template TData - Tipo de datos de entrada
-   */
-  async executeOperation<TResult, TData>(
-    operation: string,
-    data: TData
-  ): Promise<ApiResponse<TResult>> {
-    const endpoint = this.buildEndpoint(operation);
-    return this.httpClient.postAsync<TResult, TData>(endpoint, data);
+ * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
+ * @param {OperationOptions<TData>} options - Opciones para la operación
+ * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
+ * @template TResult - Tipo de resultado esperado
+ * @template TData - Tipo de datos de entrada
+ */
+async executeOperation<TResult, TData = any>(
+  options: OperationOptions<TData>
+): Promise<ApiResponse<TResult>> {
+  // Establecer valores predeterminados para opciones que no se proporcionaron
+  const path = options.path;
+  const data = options.data;
+  const queryParams = options.queryParams || {};
+  const method = options.method || 'POST';
+  const config = options.config || {};
+  
+  // Construir endpoint con parámetros de consulta
+  const endpoint = this.buildEndpoint(path, queryParams);
+  
+  // Combinar configuración personalizada con la configuración predeterminada
+  const requestConfig: AxiosRequestConfig = {
+    ...config
+  };
+  
+  // Si hay parámetros de consulta, agregarlos a la configuración
+  if (config.params) {
+    requestConfig.params = {
+      ...config.params
+    };
   }
+  
+  if (Object.keys(queryParams).length > 0) {
+    if (!requestConfig.params) {
+      requestConfig.params = {};
+    }
+    
+    for (const key in queryParams) {
+      requestConfig.params[key] = queryParams[key];
+    }
+  }
+  
+  try {
+    if (method === 'GET') {
+      return await this.httpClient.getAsync<TResult>(endpoint, requestConfig);
+    }
+    
+    if (method === 'POST') {
+      return await this.httpClient.postAsync<TResult, TData>(
+        endpoint, 
+        data as TData, 
+        requestConfig
+      );
+    }
+    
+    if (method === 'PUT') {
+      return await this.httpClient.putAsync<TResult, TData>(
+        endpoint, 
+        data as TData, 
+        requestConfig
+      );
+    }
+    
+    if (method === 'PATCH') {
+      if (typeof this.httpClient.patchAsync === 'function') {
+        return await this.httpClient.patchAsync<TResult, TData>(
+          endpoint, 
+          data as TData, 
+          requestConfig
+        );
+      }
+      throw new Error('Método PATCH no implementado en el cliente HTTP');
+    }
+    
+    if (method === 'DELETE') {
+      return await this.httpClient.deleteAsync(endpoint, requestConfig) as ApiResponse<TResult>;
+    }
+    
+    throw new Error(`Método HTTP no soportado: ${method}`);
+  } catch (error) {
+    // Manejo centralizado de errores
+    console.error(`Error al ejecutar operación en '${path}':`, error);
+    
+    // Convertir el error en una respuesta de error estándar
+    if (error instanceof Error) {
+      const errorResponse: ApiResponse<TResult> = {
+        succeeded: false,
+        data: null as unknown as TResult,
+        message: `Error al ejecutar operación: ${error.message}`,
+        details: JSON.stringify({
+          code: 'OPERATION_ERROR',
+          message: error.message,
+          path: path
+        }),
+        httpStatusCode: 500
+      };
+  
+  return errorResponse;
+}
+    
+    throw error;
+  }
+}
+
+
+
 }

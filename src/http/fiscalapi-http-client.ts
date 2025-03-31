@@ -271,8 +271,16 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
     endpoint: string, 
     config?: AxiosRequestConfig
   ): Promise<ApiResponse<boolean>> {
+    if (!config) {
+      config = {
+        method: 'DELETE'
+      };
+    }
     return this.executeAsync<boolean>(this.httpClient.delete(endpoint, config));
   }
+
+
+
 
   /**
    * Realiza una petición PATCH a la API

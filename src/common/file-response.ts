@@ -1,6 +1,7 @@
  
 /**
- * File response from the API
+ * File response from the API.
+ *Por ejemplo: Modelo de respuesta de generación de PDF o recuperación de XML
  */
 export interface FileResponse {
     /**

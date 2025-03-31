@@ -1,3 +1,4 @@
+import { Addendum } from './../dist/types/models/invoice.d';
  
 // Exportar API pública
 
@@ -26,11 +27,9 @@ export {
   InvoiceItem,
   InvoiceResponse,
   TaxCredential,
-  FileType,
   RelatedInvoice,
   GlobalInformation,
-  Addendum,
-  InvoiceItemTax,
+  ItemTax,
   InvoicePayment,
   PaidInvoice,
   PaidInvoiceTax,

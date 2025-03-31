@@ -5,7 +5,9 @@ import {
   CancelInvoiceRequest, 
   CancelInvoiceResponse, 
   CreatePdfRequest, 
-  SendInvoiceRequest 
+  SendInvoiceRequest,
+  InvoiceStatusRequest,
+  InvoiceStatusResponse
 } from '../models/invoice';
 import { IFiscalapiService } from './fiscalapi-service.interface';
 
@@ -14,23 +16,37 @@ import { IFiscalapiService } from './fiscalapi-service.interface';
  */
 export interface IInvoiceService extends IFiscalapiService<Invoice> {
   /**
-   * Crea un PDF de una factura
+   * Cancela una factura
+   * @param {CancelInvoiceRequest} request - Solicitud para cancelar factura
+   * @returns {Promise<ApiResponse<CancelInvoiceResponse>>} Respuesta de la cancelación
+   */
+  cancel(request: CancelInvoiceRequest): Promise<ApiResponse<CancelInvoiceResponse>>;
+  
+  /**
+   * Obtiene el PDF de una factura
    * @param {CreatePdfRequest} request - Solicitud para crear PDF
    * @returns {Promise<ApiResponse<FileResponse>>} Respuesta con el archivo PDF
    */
-  createPdf(request: CreatePdfRequest): Promise<ApiResponse<FileResponse>>;
+  getPdf(request: CreatePdfRequest): Promise<ApiResponse<FileResponse>>;
+  
+  /**
+   * Obtiene el XML de una factura
+   * @param {string} id - ID de la factura
+   * @returns {Promise<ApiResponse<FileResponse>>} Respuesta con el archivo XML
+   */
+  getXml(id: string): Promise<ApiResponse<FileResponse>>;
   
   /**
    * Envía una factura por correo electrónico
    * @param {SendInvoiceRequest} request - Solicitud para enviar factura
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
-  sendInvoice(request: SendInvoiceRequest): Promise<ApiResponse<boolean>>;
+  send(request: SendInvoiceRequest): Promise<ApiResponse<boolean>>;
   
   /**
-   * Cancela una factura
-   * @param {CancelInvoiceRequest} request - Solicitud para cancelar factura
-   * @returns {Promise<ApiResponse<CancelInvoiceResponse>>} Respuesta de la cancelación
+   * Obtiene el estado de una factura
+   * @param {InvoiceStatusRequest} request - Solicitud para consultar estado
+   * @returns {Promise<ApiResponse<InvoiceStatusResponse>>} Respuesta con el estado de la factura
    */
-  cancelInvoice(request: CancelInvoiceRequest): Promise<ApiResponse<CancelInvoiceResponse>>;
+  getStatus(request: InvoiceStatusRequest): Promise<ApiResponse<InvoiceStatusResponse>>;
 }

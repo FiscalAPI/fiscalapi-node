@@ -55,6 +55,7 @@ export interface IFiscalapiHttpClient {
    */
   deleteAsync(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<boolean>>;
 
+
   /**
    * Realiza una petición PATCH a la API
    * @param endpoint - Punto final de la API

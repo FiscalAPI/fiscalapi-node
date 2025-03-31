@@ -1,4 +1,5 @@
-import { FiscalapiClient, FiscalapiSettings, Person, Product, TaxFile } from '../src';
+import { DateTime } from 'luxon';
+import { FiscalapiClient, FiscalapiSettings, Invoice, Person, Product, TaxFile } from '../src';
 import { inspect } from 'util';
 inspect.defaultOptions.depth = null; // Deshabilitar la profundidad de inspección para objetos anidados la salida de la consola
 inspect.defaultOptions.colors = true; // Habilitar colores para la salida de la consola
@@ -217,6 +218,79 @@ async function main() : Promise<void> {
     // console.log('apiResponse:', apiResponse);
 
  
+
+    // Listar facturas
+    // const apiResponse = await client.invoices.getList(1, 2);
+    // console.log('apiResponse:', apiResponse);
+
+    // Obtener factura por ID
+    // const apiResponse = await client.invoices.getById("7a8cce85-1592-4e3d-9621-364c82d36091", true);
+    // console.log('apiResponse:', apiResponse);
+
+
+
+    // Crear factura
+  
+    const invoice: Invoice = {
+      versionCode: "4.0",
+      series: "F",
+      date:  DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
+      paymentFormCode: "01",
+      paymentMethodCode: "PUE",
+      currencyCode: "MXN",
+      typeCode: "I",
+      expeditionZipCode: "42501",
+      exchangeRate: 1,
+      exportCode: "01",
+      issuer: {
+        tin: "FUNK671228PH6",
+        legalName: "KARLA FUENTE NOLASCO",
+        taxRegimeCode: "621",
+        taxCredentials: [
+          {
+            base64File: base64Cert,
+            fileType: 0,
+            password: password
+          },
+          {
+            base64File: base64Key,
+            fileType: 1,
+            password: password
+          }
+        ]
+      },
+      recipient: {
+        tin: "EKU9003173C9",
+        legalName: "ESCUELA KEMPER URGATE",
+        zipCode: "42501",
+        taxRegimeCode: "601",
+        cfdiUseCode: "G01",
+        email: "someone@somewhere.com"
+      },
+      items: [
+        {
+          itemCode: "01010101",
+          quantity: 9.5,
+          unitOfMeasurementCode: "E48",
+          description: "Invoicing software as a service",
+          unitPrice: 3587.75,
+          taxObjectCode: "02",
+          itemSku: "7506022301697",
+          discount: 255.85,
+          itemTaxes: [
+            {
+              taxCode: "002",
+              taxTypeCode: "Tasa",
+              taxRate: 0.160000,
+              taxFlagCode: "T"
+            }
+          ]
+        }
+      ]
+    };
+
+    const apiResponse = await client.invoices.create(invoice);
+    console.log('apiResponse:', apiResponse);
 
 
     console.log('End Fiscalapi node...'); 
