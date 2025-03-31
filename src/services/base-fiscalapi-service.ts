@@ -2,8 +2,8 @@ import { AxiosRequestConfig } from 'axios';
 import { BaseDto } from '../common/base-dto';
 import { ApiResponse } from '../common/api-response';
 import { PagedList } from '../common/paged-list';
-import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
-import { IFiscalapiService, OperationOptions } from '../abstractions/fiscalapi-service.interface';
+import { IFiscalapiHttpClient, HttpMethod } from '../http/fiscalapi-http-client.interface';
+import { IFiscalapiService, OperationOptions, RequestOptions } from '../abstractions/fiscalapi-service.interface';
 
 /**
  * Implementación base de un servicio de FiscalAPI
@@ -72,6 +72,76 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
   }
 
   /**
+   * Ejecuta una petición HTTP personalizada con máxima flexibilidad
+   * @param {RequestOptions<TData>} options - Opciones para la petición
+   * @returns {Promise<ApiResponse<TResult>>} Resultado de la petición
+   * @template TResult - Tipo de resultado esperado
+   * @template TData - Tipo de datos de entrada
+   */
+  async executeRequest<TResult, TData = any>(
+    options: RequestOptions<TData>
+  ): Promise<ApiResponse<TResult>> {
+    try {
+      // Extraer opciones
+      const { 
+        method, 
+        path = '', 
+        id, 
+        data, 
+        queryParams = {}, 
+        config = {},
+        responseTransformer
+      } = options;
+      
+      // Construir el endpoint completo
+      let endpoint = '';
+      
+      // Si se proporciona un ID, lo añadimos a la ruta
+      if (id) {
+        endpoint = this.buildEndpoint(`${path ? `${path}/` : ''}${id}`, queryParams);
+      } else if (path) {
+        endpoint = this.buildEndpoint(path, queryParams);
+      } else {
+        endpoint = this.buildEndpoint('', queryParams);
+      }
+      
+      // Ejecutar la petición a través del cliente HTTP
+      return this.httpClient.executeRequest<TResult, TData>(
+        method,
+        endpoint,
+        {
+          data,
+          config,
+          responseTransformer
+        }
+      );
+    } catch (error) {
+      // Manejo centralizado de errores
+      console.error(`Error al ejecutar petición personalizada:`, error);
+      
+      // Convertir el error en una respuesta de error estándar
+      if (error instanceof Error) {
+        const errorResponse: ApiResponse<TResult> = {
+          succeeded: false,
+          data: null as unknown as TResult,
+          message: `Error al ejecutar petición: ${error.message}`,
+          details: JSON.stringify({
+            code: 'REQUEST_ERROR',
+            message: error.message
+          }),
+          httpStatusCode: 500
+        };
+        
+        return errorResponse;
+      }
+      
+      throw error;
+    }
+  }
+  
+ 
+
+  /**
    * @inheritdoc
    */
   async getList(pageNumber: number, pageSize: number): Promise<ApiResponse<PagedList<T>>> {
@@ -80,15 +150,10 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
       PageSize: pageSize.toString()
     };
     
-    // Usamos la configuración de Axios para pasar los parámetros
-    const config: AxiosRequestConfig = {
-      params: queryParams
-    };
-    
-    return this.httpClient.getAsync<PagedList<T>>(
-      this.buildEndpoint(),
-      config
-    );
+    return this.executeRequest<PagedList<T>>({
+      method: 'GET',
+      queryParams
+    });
   }
 
   /**
@@ -97,226 +162,52 @@ export abstract class BaseFiscalapiService<T extends BaseDto> implements IFiscal
   async getById(id: string, details: boolean = false): Promise<ApiResponse<T>> {
     const queryParams = details ? { details: details.toString().toLowerCase() } : undefined;
     
-    // Usamos la configuración de Axios para pasar los parámetros
-    const config: AxiosRequestConfig = queryParams ? {
-      params: queryParams
-    } : {};
-    
-    return this.httpClient.getByIdAsync<T>(
-      this.buildEndpoint(id),
-      config
-    );
+    return this.executeRequest<T>({
+      method: 'GET',
+      id,
+      queryParams
+    });
   }
 
   /**
    * @inheritdoc
    */
   async create(model: T): Promise<ApiResponse<T>> {
-    return this.httpClient.postAsync<T, T>(
-      this.buildEndpoint(),
-      model
-    );
+    return this.executeRequest<T, T>({
+      method: 'POST',
+      data: model
+    });
   }
 
   /**
    * @inheritdoc
    */
   async update(model: T): Promise<ApiResponse<T>> {
-    return this.httpClient.putAsync<T, T>(
-      this.buildEndpoint(model.id),
-      model
-    );
+    return this.executeRequest<T, T>({
+      method: 'PUT',
+      id: model.id,
+      data: model
+    });
   }
 
   /**
    * @inheritdoc
    */
   async delete(id: string): Promise<ApiResponse<boolean>> {
-    return this.httpClient.deleteAsync(
-      this.buildEndpoint(id)
-    );
+    return this.executeRequest<boolean>({
+      method: 'DELETE',
+      id
+    });
   }
 
   /**
-   * Delete with body
-   */
-  async deleteWithBody(id: string, body: any): Promise<ApiResponse<boolean>> {
-    return this.httpClient.deleteAsync(
-      this.buildEndpoint(id),
-      body
-    );
-  }
- 
-
-
-
-
-  /**
-   * Realiza una búsqueda en el recurso
-   * @param {Record<string, string>} searchParams - Parámetros de búsqueda
-   * @returns {Promise<ApiResponse<PagedList<T>>>} Resultados de la búsqueda
+   * @inheritdoc
    */
   async search(searchParams: Record<string, string>): Promise<ApiResponse<PagedList<T>>> {
-    // Usamos la configuración de Axios para pasar los parámetros de búsqueda
-    const config: AxiosRequestConfig = {
-      params: searchParams
-    };
-    
-    return this.httpClient.getAsync<PagedList<T>>(
-      this.buildEndpoint('search'),
-      config
-    );
+    return this.executeRequest<PagedList<T>>({
+      method: 'GET',
+      path: 'search',
+      queryParams: searchParams
+    });
   }
-
-  /**
-   * Ejecuta una acción personalizada en un recurso
-   * @param {string} id - ID del recurso
-   * @param {string} action - Nombre de la acción
-   * @param {Record<string, unknown>} [data] - Datos opcionales para la acción
-   * @returns {Promise<ApiResponse<TResult>>} Resultado de la acción
-   * @template TResult - Tipo de resultado esperado
-   */
-  async executeAction<TResult, TData>(
-    id: string,
-    action: string,
-    data?: TData
-  ): Promise<ApiResponse<TResult>> {
-    const endpoint = this.buildEndpoint(`${id}/${action}`);
-    
-    if (data) {
-      return this.httpClient.postAsync<TResult, TData>(endpoint, data);
-    } else {
-      return this.httpClient.getAsync<TResult>(endpoint);
-    }
-  }
-  
-  // /**
-  //  * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
-  //  * @param {string} path - Nombre de la operación
-  //  * @param {TData} data - Datos para la operación
-  //  * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
-  //  * @template TResult - Tipo de resultado esperado
-  //  * @template TData - Tipo de datos de entrada
-  //  */
-  // async executeOperation<TResult, TData>(
-  //   path: string,
-  //   data: TData,
-  //   method: 'POST' | 'PUT' | 'DELETE'
-  // ): Promise<ApiResponse<TResult>> {
-  //   const endpoint = this.buildEndpoint(path);
-
-  //   if (method === 'POST') {
-  //     return this.httpClient.postAsync<TResult, TData>(endpoint, data);
-  //   } else if (method === 'PUT') {
-  //     return this.httpClient.putAsync<TResult, TData>(endpoint, data);
-  //   } else if (method === 'DELETE' && data) {
-  //     return this.httpClient.deleteWithBodyAsync<TResult, TData>(endpoint, data);
-  //   }
-
-  /**
- * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
- * @param {OperationOptions<TData>} options - Opciones para la operación
- * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
- * @template TResult - Tipo de resultado esperado
- * @template TData - Tipo de datos de entrada
- */
-async executeOperation<TResult, TData = any>(
-  options: OperationOptions<TData>
-): Promise<ApiResponse<TResult>> {
-  // Establecer valores predeterminados para opciones que no se proporcionaron
-  const path = options.path;
-  const data = options.data;
-  const queryParams = options.queryParams || {};
-  const method = options.method || 'POST';
-  const config = options.config || {};
-  
-  // Construir endpoint con parámetros de consulta
-  const endpoint = this.buildEndpoint(path, queryParams);
-  
-  // Combinar configuración personalizada con la configuración predeterminada
-  const requestConfig: AxiosRequestConfig = {
-    ...config
-  };
-  
-  // Si hay parámetros de consulta, agregarlos a la configuración
-  if (config.params) {
-    requestConfig.params = {
-      ...config.params
-    };
-  }
-  
-  if (Object.keys(queryParams).length > 0) {
-    if (!requestConfig.params) {
-      requestConfig.params = {};
-    }
-    
-    for (const key in queryParams) {
-      requestConfig.params[key] = queryParams[key];
-    }
-  }
-  
-  try {
-    if (method === 'GET') {
-      return await this.httpClient.getAsync<TResult>(endpoint, requestConfig);
-    }
-    
-    if (method === 'POST') {
-      return await this.httpClient.postAsync<TResult, TData>(
-        endpoint, 
-        data as TData, 
-        requestConfig
-      );
-    }
-    
-    if (method === 'PUT') {
-      return await this.httpClient.putAsync<TResult, TData>(
-        endpoint, 
-        data as TData, 
-        requestConfig
-      );
-    }
-    
-    if (method === 'PATCH') {
-      if (typeof this.httpClient.patchAsync === 'function') {
-        return await this.httpClient.patchAsync<TResult, TData>(
-          endpoint, 
-          data as TData, 
-          requestConfig
-        );
-      }
-      throw new Error('Método PATCH no implementado en el cliente HTTP');
-    }
-    
-    if (method === 'DELETE') {
-      return await this.httpClient.deleteAsync(endpoint, requestConfig) as ApiResponse<TResult>;
-    }
-    
-    throw new Error(`Método HTTP no soportado: ${method}`);
-  } catch (error) {
-    // Manejo centralizado de errores
-    console.error(`Error al ejecutar operación en '${path}':`, error);
-    
-    // Convertir el error en una respuesta de error estándar
-    if (error instanceof Error) {
-      const errorResponse: ApiResponse<TResult> = {
-        succeeded: false,
-        data: null as unknown as TResult,
-        message: `Error al ejecutar operación: ${error.message}`,
-        details: JSON.stringify({
-          code: 'OPERATION_ERROR',
-          message: error.message,
-          path: path
-        }),
-        httpStatusCode: 500
-      };
-  
-  return errorResponse;
-}
-    
-    throw error;
-  }
-}
-
-
-
 }

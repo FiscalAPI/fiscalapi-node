@@ -185,7 +185,7 @@ export interface ItemTax {
   taxTypeCode: string;
 
   /** Tasa del impuesto. Catálogo del SAT c_TasaOCuota */
-  taxRate: number;
+  taxRate: string;
 
   /** Código que indica la naturaleza del impuesto. "T": Impuesto Traslado, "R": Impuesto Retenido */
   taxFlagCode: string;

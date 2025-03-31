@@ -281,7 +281,7 @@ async function main() : Promise<void> {
             {
               taxCode: "002",
               taxTypeCode: "Tasa",
-              taxRate: 0.160000,
+              taxRate: "0.160000",
               taxFlagCode: "T"
             }
           ]

@@ -6,10 +6,8 @@ import {
   InternalAxiosRequestConfig
 } from 'axios';
 import { FiscalapiSettings } from './../common/fiscalapi-settings';
-import { IFiscalapiHttpClient } from './fiscalapi-http-client.interface';
+import { IFiscalapiHttpClient, HttpMethod, RequestOptions } from './fiscalapi-http-client.interface';
 import { ApiResponse, ProblemDetails, ValidationFailure } from '../common/api-response';
-
-
 
 /**
  * Cliente HTTP para FiscalAPI
@@ -110,99 +108,181 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
   }
 
   /**
-   * Ejecuta una petición HTTP y procesa la respuesta
-   * @param {Promise<AxiosResponse<TRaw>>} request - Promesa de la petición Axios
-   * @returns {Promise<ApiResponse<T>>} Respuesta de la API procesada
-   * @template T - Tipo de datos esperado en la respuesta
-   * @template TRaw - Tipo de datos crudo de la respuesta
-   * @private
+   * Ejecuta una petición HTTP genérica con control completo sobre los parámetros
+   * @param {HttpMethod} method - Método HTTP a utilizar
+   * @param {string} endpoint - Punto final de la API
+   * @param {RequestOptions<TData>} options - Opciones de la petición
+   * @returns {Promise<ApiResponse<TResult>>} Respuesta de la API
+   * @template TResult - Tipo de datos esperado en la respuesta
+   * @template TData - Tipo de datos a enviar en la petición (opcional)
    */
-  private async executeAsync<T, TRaw = T>(request: Promise<AxiosResponse<TRaw>>): Promise<ApiResponse<T>> {
+  async executeRequest<TResult, TData = any>(
+    method: HttpMethod,
+    endpoint: string,
+    options: RequestOptions<TData> = {}
+  ): Promise<ApiResponse<TResult>> {
     try {
-      const response = await request;
+      // Extraer opciones
+      const { data, queryParams, config = {}, responseTransformer } = options;
       
-      // Si la respuesta ya es un ApiResponse, lo retornamos con el tipo correcto
-      if (
-        response.data && 
-        typeof response.data === 'object' && 
-        'succeeded' in response.data && 
-        'data' in response.data
-      ) {
-        // La respuesta es un ApiResponse<T>
-        const apiResponse = response.data as unknown as ApiResponse<T>;
-        
-        // Aseguramos que el httpStatusCode refleje el status de la respuesta HTTP
-        return {
-          ...apiResponse,
-          httpStatusCode: response.status
-        };
-      }
-      
-      // La respuesta no es un ApiResponse, la encapsulamos
-      return {
-        data: response.data as unknown as T,
-        succeeded: true,
-        message: '',
-        details: '',
-        httpStatusCode: response.status
+      // Construir configuración de la petición
+      const requestConfig: AxiosRequestConfig = {
+        ...config,
+        method,
+        url: endpoint
       };
-    } catch (error) {
-      const axiosError = error as AxiosError;
       
-      // Extraer datos de respuesta
-      const responseData = axiosError.response?.data;
-      
-      // Revisar si es un ProblemDetails según RFC 9457
-      if (
-        responseData && 
-        typeof responseData === 'object' && 
-        'type' in responseData && 
-        'title' in responseData &&
-        'status' in responseData
-      ) {
-        const problemDetails = responseData as ProblemDetails;
-        
-        return {
-          data: {} as T,
-          succeeded: false,
-          message: problemDetails.title,
-          details: problemDetails.detail || JSON.stringify(problemDetails),
-          httpStatusCode: axiosError.response?.status || 500
+      // Añadir parámetros de consulta si existen
+      if (queryParams && Object.keys(queryParams).length > 0) {
+        requestConfig.params = {
+          ...(requestConfig.params || {}),
+          ...queryParams
         };
       }
       
-      // Revisar si es un ApiResponse<ValidationFailure[]> para errores 400
-      if (
-        axiosError.response?.status === 400 &&
-        responseData &&
-        typeof responseData === 'object' &&
-        'data' in responseData &&
-        Array.isArray(responseData.data)
-      ) {
-        const apiResponse = responseData as ApiResponse<ValidationFailure[]>;
-        
-        // Si hay errores de validación, extraer el primer mensaje
-        if (apiResponse.data && apiResponse.data.length > 0) {
-          const firstFailure = apiResponse.data[0];
+      // Ejecutar la petición según el método
+      let response: AxiosResponse;
+      
+      // Los métodos que no aceptan cuerpo en la petición
+      if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS' || method === 'DELETE') {
+        // Para DELETE podríamos querer enviar datos en el cuerpo si es necesario
+        if (method === 'DELETE' && data) {
+          // Aunque no es estándar, algunas APIs aceptan body en DELETE
+          requestConfig.data = data;
+        }
+        response = await this.httpClient.request(requestConfig);
+      } else {
+        // Métodos que aceptan cuerpo (POST, PUT, PATCH)
+        requestConfig.data = data;
+        response = await this.httpClient.request(requestConfig);
+      }
+      
+      // Procesar la respuesta
+      let processedResponse = await this.processResponse<TResult>(response);
+      
+      // Aplicar transformador personalizado si se proporciona
+      if (responseTransformer && processedResponse.succeeded) {
+        try {
+          const transformedData = responseTransformer(processedResponse.data);
+          processedResponse = {
+            ...processedResponse,
+            data: transformedData as TResult
+          };
+        } catch (transformError) {
           return {
-            data: {} as T,
+            data: {} as TResult,
             succeeded: false,
-            message: firstFailure.errorMessage,
-            details: JSON.stringify(apiResponse.data),
-            httpStatusCode: 400
+            message: `Error al transformar la respuesta: ${transformError instanceof Error ? transformError.message : 'Error desconocido'}`,
+            details: transformError instanceof Error ? transformError.stack || '' : '',
+            httpStatusCode: processedResponse.httpStatusCode
           };
         }
       }
       
-      // Respuesta de error genérica
+      return processedResponse;
+    } catch (error) {
+      return this.handleRequestError<TResult>(error);
+    }
+  }
+  
+  /**
+   * Procesa la respuesta HTTP y la convierte en ApiResponse
+   * @param {AxiosResponse} response - Respuesta HTTP original
+   * @returns {ApiResponse<T>} Respuesta procesada
+   * @template T - Tipo de datos esperado
+   * @private
+   */
+  private async processResponse<T>(response: AxiosResponse): Promise<ApiResponse<T>> {
+    // Si la respuesta ya es un ApiResponse, lo retornamos con el tipo correcto
+    if (
+      response.data && 
+      typeof response.data === 'object' && 
+      'succeeded' in response.data && 
+      'data' in response.data
+    ) {
+      // La respuesta es un ApiResponse<T>
+      const apiResponse = response.data as unknown as ApiResponse<T>;
+      
+      // Aseguramos que el httpStatusCode refleje el status de la respuesta HTTP
+      return {
+        ...apiResponse,
+        httpStatusCode: response.status
+      };
+    }
+    
+    // La respuesta no es un ApiResponse, la encapsulamos
+    return {
+      data: response.data as unknown as T,
+      succeeded: true,
+      message: '',
+      details: '',
+      httpStatusCode: response.status
+    };
+  }
+  
+  /**
+   * Maneja los errores de las peticiones HTTP
+   * @param {unknown} error - Error capturado
+   * @returns {ApiResponse<T>} Respuesta de error estandarizada
+   * @template T - Tipo de datos esperado
+   * @private
+   */
+  private handleRequestError<T>(error: unknown): ApiResponse<T> {
+    const axiosError = error as AxiosError;
+    
+    // Extraer datos de respuesta
+    const responseData = axiosError.response?.data;
+    
+    // Revisar si es un ProblemDetails según RFC 9457
+    if (
+      responseData && 
+      typeof responseData === 'object' && 
+      'type' in responseData && 
+      'title' in responseData &&
+      'status' in responseData
+    ) {
+      const problemDetails = responseData as ProblemDetails;
+      
       return {
         data: {} as T,
         succeeded: false,
-        message: axiosError.message || 'Ocurrió un error en la comunicación con el servidor',
-        details: JSON.stringify(responseData || {}),
+        message: problemDetails.title,
+        details: problemDetails.detail || JSON.stringify(problemDetails),
         httpStatusCode: axiosError.response?.status || 500
       };
     }
+    
+    // Revisar si es un ApiResponse<ValidationFailure[]> para errores 400
+    if (
+      axiosError.response?.status === 400 &&
+      responseData &&
+      typeof responseData === 'object' &&
+      'data' in responseData &&
+      Array.isArray(responseData.data)
+    ) {
+      const apiResponse = responseData as ApiResponse<ValidationFailure[]>;
+      
+      // Si hay errores de validación, extraer el primer mensaje
+      if (apiResponse.data && apiResponse.data.length > 0) {
+        const firstFailure = apiResponse.data[0];
+        return {
+          data: {} as T,
+          succeeded: false,
+          message: firstFailure.errorMessage,
+          details: JSON.stringify(apiResponse.data),
+          httpStatusCode: 400
+        };
+      }
+    }
+    
+    // Respuesta de error genérica
+    return {
+      data: {} as T,
+      succeeded: false,
+      message: axiosError.message || 'Ocurrió un error en la comunicación con el servidor',
+      details: JSON.stringify(responseData || {}),
+      httpStatusCode: axiosError.response?.status || 500
+    };
   }
 
   /**
@@ -213,7 +293,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
    * @template T - Tipo de datos esperado en la respuesta
    */
   async getAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
-    return this.executeAsync<T>(this.httpClient.get<T>(endpoint, config));
+    return this.executeRequest<T>('GET', endpoint, { config });
   }
 
   /**
@@ -224,7 +304,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
    * @template T - Tipo de datos esperado en la respuesta
    */
   async getByIdAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
-    return this.executeAsync<T>(this.httpClient.get<T>(endpoint, config));
+    return this.executeRequest<T>('GET', endpoint, { config });
   }
 
   /**
@@ -241,7 +321,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
     data: TData, 
     config?: AxiosRequestConfig
   ): Promise<ApiResponse<T>> {
-    return this.executeAsync<T>(this.httpClient.post<T>(endpoint, data, config));
+    return this.executeRequest<T, TData>('POST', endpoint, { data, config });
   }
 
   /**
@@ -258,7 +338,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
     data: TData, 
     config?: AxiosRequestConfig
   ): Promise<ApiResponse<T>> {
-    return this.executeAsync<T>(this.httpClient.put<T>(endpoint, data, config));
+    return this.executeRequest<T, TData>('PUT', endpoint, { data, config });
   }
 
   /**
@@ -271,16 +351,8 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
     endpoint: string, 
     config?: AxiosRequestConfig
   ): Promise<ApiResponse<boolean>> {
-    if (!config) {
-      config = {
-        method: 'DELETE'
-      };
-    }
-    return this.executeAsync<boolean>(this.httpClient.delete(endpoint, config));
+    return this.executeRequest<boolean>('DELETE', endpoint, { config });
   }
-
-
-
 
   /**
    * Realiza una petición PATCH a la API
@@ -296,6 +368,6 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
     data: TData, 
     config?: AxiosRequestConfig
   ): Promise<ApiResponse<T>> {
-    return this.executeAsync<T>(this.httpClient.patch<T>(endpoint, data, config));
+    return this.executeRequest<T, TData>('PATCH', endpoint, { data, config });
   }
 }

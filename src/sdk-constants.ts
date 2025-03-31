@@ -6,7 +6,7 @@ export const SdkConstants = {
     /**
      * Formato de fecha SAT (para facturas mexicanas)
      */
-    SAT_DATE_FORMAT: 'yyyy-MM-dd\'T\'HH:mm:ss',
+    SAT_DATE_FORMAT: 'yyyy-MM-ddTHH:mm:ss',
     
     /**
      * Versión predeterminada de la API

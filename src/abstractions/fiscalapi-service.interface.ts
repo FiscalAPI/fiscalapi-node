@@ -2,6 +2,45 @@ import { AxiosRequestConfig } from 'axios';
 import { ApiResponse } from '../common/api-response';
 import { BaseDto } from '../common/base-dto';
 import { PagedList } from '../common/paged-list';
+import { HttpMethod } from '../http/fiscalapi-http-client.interface';
+
+/**
+ * Opciones para ejecutar una operación
+ * @template TData - Tipo de datos de entrada
+ */
+export type OperationOptions<TData = any> = {
+  /** Ruta o nombre de la operación */
+  path: string;
+  /** Datos para la operación (opcional) */
+  data?: TData;
+  /** Parámetros de consulta (opcional) */
+  queryParams?: Record<string, string>;
+  /** Método HTTP a utilizar */
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  /** Configuración adicional para Axios (opcional) */
+  config?: AxiosRequestConfig;
+};
+
+/**
+ * Opciones para ejecutar una petición personalizada
+ * @template TData - Tipo de datos de entrada
+ */
+export type RequestOptions<TData = any> = {
+  /** Método HTTP a utilizar */
+  method: HttpMethod;
+  /** Ruta adicional (opcional) */
+  path?: string;
+  /** ID del recurso (opcional) */
+  id?: string;
+  /** Datos para la petición (opcional) */
+  data?: TData;
+  /** Parámetros de consulta (opcional) */
+  queryParams?: Record<string, string>;
+  /** Configuración adicional para Axios (opcional) */
+  config?: AxiosRequestConfig;
+  /** Transformador personalizado para la respuesta (opcional) */
+  responseTransformer?: <T>(response: any) => T;
+};
 
 /**
  * Interfaz base para todos los servicios de FiscalAPI
@@ -53,58 +92,15 @@ export interface IFiscalapiService<T extends BaseDto> {
    */
   search(searchParams: Record<string, string>): Promise<ApiResponse<PagedList<T>>>;
   
-  /**
-   * Ejecuta una acción personalizada en un recurso
-   * @param {string} id - ID del recurso
-   * @param {string} action - Nombre de la acción
-   * @param {TData} [data] - Datos opcionales para la acción
-   * @returns {Promise<ApiResponse<TResult>>} Resultado de la acción
-   * @template TResult - Tipo de resultado esperado
-   * @template TData - Tipo de datos de entrada
-   */
-  executeAction<TResult, TData>(
-    id: string,
-    action: string,
-    data?: TData
-  ): Promise<ApiResponse<TResult>>;
   
-  // /**
-  //  * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
-  //  * @param {string} operation - Nombre de la operación
-  //  * @param {TData} data - Datos para la operación
-  //  * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
-  //  * @template TResult - Tipo de resultado esperado
-  //  * @template TData - Tipo de datos de entrada
-  //  */
-  // executeOperation<TResult, TData>(
-  //   operation: string,
-  //   data: TData,
-  //   method: 'POST' | 'PUT' | 'DELETE'
-  // ): Promise<ApiResponse<TResult>>;
-
   /**
-   * Ejecuta una operación personalizada en el recurso sin necesidad de un ID específico
-   * @param {OperationOptions<TData>} options - Opciones para la operación
-   * @returns {Promise<ApiResponse<TResult>>} Resultado de la operación
+   * Ejecuta una petición HTTP personalizada con máxima flexibilidad
+   * @param {RequestOptions<TData>} options - Opciones para la petición
+   * @returns {Promise<ApiResponse<TResult>>} Resultado de la petición
    * @template TResult - Tipo de resultado esperado
    * @template TData - Tipo de datos de entrada
    */
-  executeOperation<TResult, TData = any>( options: OperationOptions<TData>): Promise<ApiResponse<TResult>>;
+  executeRequest<TResult, TData = any>(
+    options: RequestOptions<TData>
+  ): Promise<ApiResponse<TResult>>;
 }
-
-  /**
-   * Opciones para ejecutar una operación
-   * @template TData - Tipo de datos de entrada
-   */
-  export type OperationOptions<TData = any> = {
-    /** Ruta o nombre de la operación */
-    path: string;
-    /** Datos para la operación (opcional) */
-    data?: TData;
-    /** Parámetros de consulta (opcional) */
-    queryParams?: Record<string, string>;
-    /** Método HTTP a utilizar */
-    method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-    /** Configuración adicional para Axios (opcional) */
-    config?: AxiosRequestConfig;
-  }

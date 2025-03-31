@@ -1,6 +1,5 @@
-import { Addendum } from './../dist/types/models/invoice.d';
- 
-// Exportar API pública
+import { FileResponse } from './common/file-response';
+ // Exportar API pública
 
 // Cliente principal
 export { FiscalapiClient } from './services/fiscalapi-client';
@@ -35,6 +34,8 @@ export {
   PaidInvoiceTax,
   CancelInvoiceRequest,
   CancelInvoiceResponse,
+  InvoiceStatusRequest,
+  InvoiceStatusResponse,
   CreatePdfRequest,
   SendInvoiceRequest
 } from './models/invoice';

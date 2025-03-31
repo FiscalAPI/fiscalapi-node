@@ -54,7 +54,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
         throw new Error(`Unsupported invoice type: ${requestModel.typeCode}`);
     }
 
-      return await this.executeOperation<Invoice, Invoice>({
+      return await this.executeRequest<Invoice, Invoice>({
         path:endpoint,
         data:requestModel,
         method:'POST',
@@ -70,8 +70,8 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
     if (!request) {
       throw new Error('request cannot be null');
     }
-    
-    return await this.executeOperation<CancelInvoiceResponse, CancelInvoiceRequest>({
+
+    return await this.executeRequest<CancelInvoiceResponse, CancelInvoiceRequest>({
       path:this.buildEndpoint(),
       data:request,
       method:'POST',
@@ -87,8 +87,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
     if (!request) {
       throw new Error('request cannot be null');
     }
-
-    return await this.executeOperation<FileResponse, CreatePdfRequest>({
+    return await this.executeRequest<FileResponse, CreatePdfRequest>({
       path:this.buildEndpoint('pdf'),
       data:request,
       method:'POST',
@@ -106,10 +105,11 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
       throw new Error('id cannot be null or empty');
     }
 
-    return await this.executeOperation<FileResponse, string>({
+    return await this.executeRequest<FileResponse, string>({
       path:this.buildEndpoint(`${id}/xml`),
-      method:'GET',
+      method: 'GET',
     });
+
   }
 
   /**
@@ -118,7 +118,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
   async send(request: SendInvoiceRequest): Promise<ApiResponse<boolean>> {
-    return await this.executeOperation<boolean, SendInvoiceRequest>({
+    return await this.executeRequest<boolean, SendInvoiceRequest>({
       path:this.buildEndpoint('send'),
       data:request,
       method:'POST',
@@ -131,7 +131,7 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    * @returns {Promise<ApiResponse<InvoiceStatusResponse>>} Respuesta con el estado de la factura
    */
   async getStatus(request: InvoiceStatusRequest): Promise<ApiResponse<InvoiceStatusResponse>> {
-        return await this.executeOperation<InvoiceStatusResponse, InvoiceStatusRequest>({
+        return await this.executeRequest<InvoiceStatusResponse, InvoiceStatusRequest>({
         path:this.buildEndpoint('status'),
         data:request,
         method:'POST',
