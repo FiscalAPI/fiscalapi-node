@@ -10,7 +10,7 @@ async function main() : Promise<void> {
     apiUrl: 'https://localhost:7173',
     apiKey: 'sk_development_833a58f9_8212_43ce_b544_f2fa93b1e895',
     tenant: 'e839651d-1765-4cd0-ba7f-547a4c20580f',
-    debug:false
+    debug:true
   };
 
   // Sellos SAT CSD del emisor para emisión de CFDI
@@ -202,6 +202,21 @@ async function main() : Promise<void> {
     // Eliminar producto
     // const apiResponse = await client.products.delete("cf792d75-7c81-446c-be28-f098f9cb601a");
     // console.log('apiResponse:', apiResponse);
+
+
+    // Listar catálogos
+    // const apiResponse = await client.catalogs.getList(1, 100);
+    // console.log('apiResponse:', apiResponse);
+
+    // Obtener registro de catálogo por ID (Obtiene el registro '03' (Transferencia electrónica de fondos) en el catalogo de formas de pago (SatPaymentForms))
+    // const apiResponse = await client.catalogs.getRecordById("SatPaymentForms", "03");
+    // console.log('apiResponse:', apiResponse);
+
+    // Busca en un catálogo. (Busca en el catalogo de formas de pago (SatPaymentForms) los registros que contengan la palabra 'Tarjeta')
+    // const apiResponse = await client.catalogs.searchCatalog("SatPaymentForms", "Tarjeta", 1, 100);
+    // console.log('apiResponse:', apiResponse);
+
+ 
 
 
     console.log('End Fiscalapi node...'); 
