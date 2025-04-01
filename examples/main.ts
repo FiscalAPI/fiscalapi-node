@@ -1104,13 +1104,13 @@ async function main() : Promise<void> {
     //  console.log('apiResponse:', apiResponse);
 
     // Envia factura por correo pot ID  (por referencias)
-     const emailRequest: SendInvoiceRequest = {
-      "invoiceId": "96d93ff4-95c6-4381-858a-6551259d17ad",
-      "toEmail": "contacto@fiscalapi.com",
-      }
-      
-     const apiResponse = await client.invoices.send(emailRequest);
-     console.log('apiResponse:', apiResponse);
+    //  const emailRequest: SendInvoiceRequest = {
+    //   "invoiceId": "96d93ff4-95c6-4381-858a-6551259d17ad",
+    //   "toEmail": "contacto@fiscalapi.com",
+    //   }
+
+    //  const apiResponse = await client.invoices.send(emailRequest);
+    //  console.log('apiResponse:', apiResponse);
 
 
     console.log('End Fiscalapi node...'); 
