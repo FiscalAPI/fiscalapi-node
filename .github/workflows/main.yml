@@ -1,0 +1,59 @@
+name: NPM Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Tipo de liberación'
+        required: true
+        default: 'Publicación desde package.json'
+        type: choice
+        options:
+          - 'Publicación desde package.json'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org/'
+      
+      - name: Get package version
+        id: package-version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      
+      - name: Install dependencies
+        run: npm ci
+      
+
+      
+      - name: Build package
+        run: npm run build
+      
+      - name: Verify build artifacts
+        run: |
+          if [ ! -d "dist/cjs" ]; then
+            echo "CommonJS build missing"
+            exit 1
+          fi
+          if [ ! -d "dist/esm" ]; then
+            echo "ESM build missing"
+            exit 1
+          fi
+          if [ ! -d "dist/types" ]; then
+            echo "TypeScript definitions missing"
+            exit 1
+          fi
+      
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm_config_//registry.npmjs.org/:_authToken: ${{ secrets.NPM_TOKEN }}
+          npm_config_email: ${{ secrets.NPM_USER }}
