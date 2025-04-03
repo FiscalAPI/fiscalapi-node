@@ -57,7 +57,7 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
     const fiscalApi = FiscalApiClient.create(settings);
     ```
 
-Para ejemplos completos, consulta [samples-nodejs](https://github.com/FiscalAPI/fiscalapi-samples-node).
+Para ejemplos completos, consulta [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
 
 ---
 
@@ -99,7 +99,7 @@ app.post('/invoices', async (req, res) => {
 });
 ```
 
-Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-node-express).
+Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
 
 
 ## 🔄 Modos de Operación
