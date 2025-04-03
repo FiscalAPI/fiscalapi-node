@@ -40,10 +40,10 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
 1. **Crea tu objeto de configuración** con [tus credenciales](https://docs.fiscalapi.com/credentials-info):
     ```javascript
     // CommonJS
-    const { FiscalApiClient } = require('fiscalapi');
+    const { FiscalapiClient } = require('fiscalapi');
 
     // o ESM
-    import { FiscalApiClient } from 'fiscalapi';
+    import { FiscalapiClient } from 'fiscalapi';
 
     const settings = {
         apiUrl: "https://test.fiscalapi.com", // https://live.fiscalapi.com (producción)
@@ -54,10 +54,10 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
 
 2. **Crea la instancia del cliente**:
     ```javascript
-    const fiscalApi = FiscalApiClient.create(settings);
+    const fiscalApi = FiscalapiClient.create(settings);
     ```
 
-Para ejemplos completos, consulta [samples-nodejs](https://github.com/FiscalAPI/fiscalapi-samples-node).
+Para ejemplos completos, consulta [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
 
 ---
 
@@ -65,21 +65,23 @@ Para ejemplos completos, consulta [samples-nodejs](https://github.com/FiscalAPI/
 
 1. **Agrega la configuración** en tu archivo de variables de entorno (`.env`):
     ```
-    FISCALAPI_URL=https://test.fiscalapi.com
-    FISCALAPI_KEY=<YourApiKeyHere>
-    FISCALAPI_TENANT=<YourTenantHere>
+    FISCALAPI_API_KEY=<api_key>
+    FISCALAPI_TENANT=<tenant>
+    FISCALAPI_API_URL=https://test.fiscalapi.com
     ```
 
 2. **Crea y registra el cliente** (por ejemplo, en un servicio o módulo):
-    ```typescript
-    // services/fiscalapi.service.ts
-    import { FiscalApiClient } from 'fiscalapi';
 
-    export const createFiscalApiClient = () => {
-        return FiscalApiClient.create({
-            apiUrl: process.env.FISCALAPI_URL,
-            apiKey: process.env.FISCALAPI_KEY,
-            tenant: process.env.FISCALAPI_TENANT
+    ```typescript
+   // services/fiscalapi.service.ts
+    import { FiscalapiClient } from 'fiscalapi' 
+    import config from '../config/config';
+    
+    export const createFiscalApiClient = () => {    
+        return FiscalapiClient.create({
+            apiUrl: config.fiscalapiSettings.apiUrl,
+            apiKey: config.fiscalapiSettings.apiKey,
+            tenant: config.fiscalapiSettings.tenant
         });
     };
     ```
@@ -87,11 +89,13 @@ Para ejemplos completos, consulta [samples-nodejs](https://github.com/FiscalAPI/
 En Express:
 ```javascript
 // En tu controlador o router
-const fiscalApi = createFiscalApiClient();
+import { createFiscalApiClient } from '../services/fiscalapi.service';
+
+const fiscalapi = createFiscalApiClient();
 
 app.post('/invoices', async (req, res) => {
     try {
-        const response = await fiscalApi.invoices.create(req.body);
+        const response = await fiscalapi.invoices.create(req.body);
         res.json(response);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -99,7 +103,7 @@ app.post('/invoices', async (req, res) => {
 });
 ```
 
-Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-node-express).
+Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
 
 
 ## 🔄 Modos de Operación
