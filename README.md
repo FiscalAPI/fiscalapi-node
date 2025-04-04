@@ -1,6 +1,6 @@
 # FiscalAPI SDK para Node.js
 
-[![FiscalAPI](https://img.shields.io/npm/v/fiscalapi.svg?style=flat-square&label=FiscalAPI&color=green)](https://www.npmjs.com/package/fiscalapi)
+[![FiscalAPI](https://img.shields.io/npm/v/fiscalapi.svg?style=flat-square&label=FiscalAPI&color=blue)](https://www.npmjs.com/package/fiscalapi)
 [![License](https://img.shields.io/github/license/FiscalAPI/fiscalapi-node)](https://github.com/FiscalAPI/fiscalapi-node/blob/master/LICENSE.txt) 
 
 **SDK oficial de FiscalAPI para Node.js**, la API de facturación CFDI y otros servicios fiscales en México. Simplifica la integración con los servicios de facturación electrónica, eliminando las complejidades del SAT y facilitando la generación de facturas, notas de crédito, complementos de pago, nómina, carta porte, y más. ¡Factura sin dolor!
