@@ -1,6 +1,6 @@
 # FiscalAPI SDK para Node.js
 
-[![npm](https://img.shields.io/npm/v/fiscalapi.svg)](https://www.npmjs.com/package/fiscalapi)
+[![FiscalAPI](https://img.shields.io/npm/v/fiscalapi.svg?style=flat-square&label=FiscalAPI&color=blue)](https://www.npmjs.com/package/fiscalapi)
 [![License](https://img.shields.io/github/license/FiscalAPI/fiscalapi-node)](https://github.com/FiscalAPI/fiscalapi-node/blob/master/LICENSE.txt) 
 
 **SDK oficial de FiscalAPI para Node.js**, la API de facturación CFDI y otros servicios fiscales en México. Simplifica la integración con los servicios de facturación electrónica, eliminando las complejidades del SAT y facilitando la generación de facturas, notas de crédito, complementos de pago, nómina, carta porte, y más. ¡Factura sin dolor!
@@ -57,7 +57,7 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
     const fiscalApi = FiscalapiClient.create(settings);
     ```
 
-Para ejemplos completos, consulta [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
+Para ejemplos completos, consulta [ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-express), [ejemplos NestJs](https://github.com/FiscalAPI/fiscalapi-samples-nest) o [más ejemplos en NodeJs](https://github.com/FiscalAPI/fiscalapi-node/blob/main/examples/all-samples.ts).
 
 ---
 
@@ -103,7 +103,7 @@ app.post('/invoices', async (req, res) => {
 });
 ```
 
-Para más ejemplos, revisa [samples-express](https://github.com/FiscalAPI/fiscalapi-samples-express).
+Para más ejemplos, revisa [ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-express), [ejemplos NestJs](https://github.com/FiscalAPI/fiscalapi-samples-nest) o [más ejemplos en NodeJs](https://github.com/FiscalAPI/fiscalapi-node/blob/main/examples/all-samples.ts).
 
 
 ## 🔄 Modos de Operación
@@ -382,10 +382,10 @@ Este proyecto está licenciado bajo la Licencia **MPL-2.0**. Consulta el archivo
 ## 🔗 Enlaces Útiles
 
 - [Documentación Oficial](https://docs.fiscalapi.com)  
-- [Portal de FiscalAPI](https://fiscalapi.com)  
-- [Ejemplos Node.js](https://github.com/FiscalAPI/fiscalapi-samples-node)  
-- [Ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-node-express)
-
+- [Pagina de FiscalAPI](https://fiscalapi.com)
+- [Ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-express)
+- [Ejemplos NestJs](https://github.com/FiscalAPI/fiscalapi-samples-nest)
+- [Más Ejemplos en NodeJs](https://github.com/FiscalAPI/fiscalapi-node/blob/main/examples/all-samples.ts)  
 
 ---
 
