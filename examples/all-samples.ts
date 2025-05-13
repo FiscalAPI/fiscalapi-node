@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { CancelInvoiceRequest, CreatePdfRequest, FiscalapiClient, FiscalapiSettings, Invoice, InvoiceStatusRequest, Person, Product, SendInvoiceRequest, TaxFile } from '../src';
+import { CancelInvoiceRequest, CreatePdfRequest, GlobalInformation,FiscalapiClient, FiscalapiSettings, Invoice, InvoiceStatusRequest, Person, Product, SendInvoiceRequest, TaxFile } from '../src';
 import { inspect } from 'util';
 inspect.defaultOptions.depth = null; // Deshabilitar la profundidad de inspección para objetos anidados la salida de la consola
 inspect.defaultOptions.colors = true; // Habilitar colores para la salida de la consola
@@ -10,19 +10,14 @@ async function main() : Promise<void> {
   // Visita https://docs.fiscalapi.com/credentials-info para obtener tus credenciales.
   // Visita https://docs.fiscalapi.com/environments para obtener las url de los ambientes.
 
-  // const settings: FiscalapiSettings = {
-  //   apiUrl: 'https://test.fiscalapi.com', // https://live.fiscalapi.com 
-  //   apiKey: '<api-key>', // API key de FiscalAPI
-  //   tenant: '<tenant>', // Tenant de FiscalAPI
-  //   debug:true // true, imprime raw request y response en consola, util durante el desarrollo de la integración. 
-  // };
-
   const settings: FiscalapiSettings = {
     apiUrl: 'https://test.fiscalapi.com', // https://live.fiscalapi.com 
-    apiKey: 'sk_test_391b8980_42d0_4341_8e37_50475128d086', // API key de FiscalAPI
-    tenant: '102e5f13-e114-41dd-bea7-507fce177281', // Tenant de FiscalAPI
+    apiKey: '<api-key>', // API key de FiscalAPI
+    tenant: '<tenant>', // Tenant de FiscalAPI
     debug:true // true, imprime raw request y response en consola, util durante el desarrollo de la integración. 
   };
+
+ 
 
   
   // Sellos SAT de prueba (KARLA FUENTE NOLASCO FUNK671228PH6) 
