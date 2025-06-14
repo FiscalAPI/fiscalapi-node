@@ -492,51 +492,51 @@ async function main() : Promise<void> {
 
 
     // Crear factura global por referencias (Node.js)
-    const globalInvoiceByReferences: Invoice = {
-      versionCode: "4.0",
-      series: "F",
-      exportCode: "01",
-      date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
-      paymentFormCode: "01",
-      paymentMethodCode: "PUE",
-      currencyCode: "MXN",
-      typeCode: "I",
-      expeditionZipCode: "01160",
-      exchangeRate: 1,
-      globalInformation: {
-        periodicityCode: "01",
-        monthCode: "05",
-        year: 2025
-      },
-      issuer: {
-        id: "78d380fd-1b69-4e3c-8bc0-4f57737f7d5f"
-      },
-      recipient: {
-        id: "4e7ba2d7-2302-42f1-9fe4-6b75069f0fc9"
-      },
-      items: [
-        {
-          itemCode: "01010101",
-          quantity: 1,
-          unitOfMeasurementCode: "ACT",
-          description: "Venta",
-          unitPrice: 1230.00,
-          taxObjectCode: "02",
-          itemSku: "venta0001",
-          itemTaxes: [
-            {
-              taxCode: "002",  // IVA
-              taxTypeCode: "Tasa",
-              taxRate: "0.160000",  // 16%
-              taxFlagCode: "T"  // Traslado
-            }
-          ]
-        }
-      ]
-    };
+    // const globalInvoiceByReferences: Invoice = {
+    //   versionCode: "4.0",
+    //   series: "F",
+    //   exportCode: "01",
+    //   date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
+    //   paymentFormCode: "01",
+    //   paymentMethodCode: "PUE",
+    //   currencyCode: "MXN",
+    //   typeCode: "I",
+    //   expeditionZipCode: "01160",
+    //   exchangeRate: 1,
+    //   globalInformation: {
+    //     periodicityCode: "01",
+    //     monthCode: "05",
+    //     year: 2025
+    //   },
+    //   issuer: {
+    //     id: "78d380fd-1b69-4e3c-8bc0-4f57737f7d5f"
+    //   },
+    //   recipient: {
+    //     id: "4e7ba2d7-2302-42f1-9fe4-6b75069f0fc9"
+    //   },
+    //   items: [
+    //     {
+    //       itemCode: "01010101",
+    //       quantity: 1,
+    //       unitOfMeasurementCode: "ACT",
+    //       description: "Venta",
+    //       unitPrice: 1230.00,
+    //       taxObjectCode: "02",
+    //       itemSku: "venta0001",
+    //       itemTaxes: [
+    //         {
+    //           taxCode: "002",  // IVA
+    //           taxTypeCode: "Tasa",
+    //           taxRate: "0.160000",  // 16%
+    //           taxFlagCode: "T"  // Traslado
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // };
 
-    const apiResponse = await client.invoices.create(globalInvoiceByReferences);
-    console.log('apiResponse:', apiResponse);
+    // const apiResponse = await client.invoices.create(globalInvoiceByReferences);
+    // console.log('apiResponse:', apiResponse);
 
 
 
@@ -569,6 +569,38 @@ async function main() : Promise<void> {
       //         id: "114a4be5-fb65-40b2-a762-ff0c55c6ebfa", // ID del producto/servicio
       //         quantity: 2, // Solo es necesario especificar la cantidad
       //         discount: 255.85 // Y opcionalmente el descuento
+      //       }
+      //     ]
+      // };
+
+      // const apiResponse = await client.invoices.create(invoiceByReferences);
+      // console.log('apiResponse:', apiResponse);
+
+      // Crear factura de ingreso con precios dinamicos
+      // const invoiceByReferences: Invoice = {
+      //     versionCode: "4.0",
+      //     series: "F",
+      //     date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"), 
+      //     paymentFormCode: "01",
+      //     currencyCode: "MXN",
+      //     typeCode: "I",
+      //     expeditionZipCode: "42501",
+      //     paymentMethodCode: "PUE",
+      //     exchangeRate: 1,
+      //     exportCode: "01",
+      //     issuer: {
+      //       id: "3f3478b4-60fd-459e-8bfc-f8239fc96257"
+      //       // No es necesario incluir otros datos del emisor al usar el ID
+      //     },
+      //     recipient: {
+      //       id: "96b46762-d246-4a67-a562-510a25dbafa9"
+      //       // No es necesario incluir otros datos del receptor al usar el ID
+      //     },
+      //     items: [
+      //       {
+      //         id: "114a4be5-fb65-40b2-a762-ff0c55c6ebfa", // ID del producto/servicio
+      //         quantity: 1, // Solo es necesario especificar la cantidad
+      //         unitPrice: 200, // precio dinámico
       //       }
       //     ]
       // };
@@ -677,6 +709,45 @@ async function main() : Promise<void> {
         //     {
         //       id: "114a4be5-fb65-40b2-a762-ff0c55c6ebfa", // ID del producto/servicio
         //       quantity: 0.5 // La cantidad que se está acreditando/devolviendo
+        //     }
+        //   ]
+        // };
+
+        // const apiResponse = await client.invoices.create(creditNoteByReferences);
+        // console.log('apiResponse:', apiResponse);
+
+
+
+        // Crear nota de crédito por referencias con precios dinamicos
+        // const creditNoteByReferences: Invoice = {
+        //   versionCode: "4.0",
+        //   series: "CN",
+        //   date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"), 
+        //   paymentFormCode: "03",
+        //   currencyCode: "MXN",
+        //   typeCode: "E", // Tipo E para notas de crédito (Egreso)
+        //   expeditionZipCode: "01160",
+        //   paymentMethodCode: "PUE",
+        //   exchangeRate: 1,
+        //   exportCode: "01",
+        //   issuer: {
+        //     id: "3f3478b4-60fd-459e-8bfc-f8239fc96257" // Solo se necesita el ID del emisor
+        //   },
+        //   recipient: {
+        //     id: "96b46762-d246-4a67-a562-510a25dbafa9" // Solo se necesita el ID del receptor
+        //   },
+        //   // Importante: Las facturas relacionadas siempre son necesarias para notas de crédito
+        //   relatedInvoices: [
+        //     {
+        //       uuid: "5FB2822E-396D-4725-8521-CDC4BDD20CCF",
+        //       relationshipTypeCode: "01" // 01 - Nota de crédito de los documentos relacionados
+        //     }
+        //   ],
+        //   items: [
+        //     {
+        //       id: "114a4be5-fb65-40b2-a762-ff0c55c6ebfa", // ID del producto/servicio
+        //       quantity: 0.5, // La cantidad que se está acreditando/devolviendo
+        //       unitPrice: 250, // precio dinámico
         //     }
         //   ]
         // };
