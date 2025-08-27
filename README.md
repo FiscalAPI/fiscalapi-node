@@ -80,7 +80,7 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
 
     // o ESM
     import { FiscalapiClient } from 'fiscalapi';
-
+    
     const settings = {
         apiUrl: "https://test.fiscalapi.com", // https://live.fiscalapi.com (producción)
         apiKey: "<tu_api_key>",
