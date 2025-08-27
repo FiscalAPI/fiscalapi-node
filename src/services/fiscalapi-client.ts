@@ -1,19 +1,26 @@
-import { 
-  IFiscalapiClient,
-  IInvoiceService, 
-  IProductService, 
-  IPersonService, 
-  IApiKeyService, 
-  ICatalogService, 
-  ITaxFileService } from '..';
+
+
+import { IFiscalapiClient } from '../abstractions/fiscalapi-client.interface';
+import { IInvoiceService } from '../abstractions/invoice-service.interface';
+import { IProductService } from '../abstractions/product-service.interface';
+import { IPersonService } from '../abstractions/person-service.interface';
+import { IApiKeyService } from '../abstractions/api-key-service.interface';
+import { ICatalogService } from '../abstractions/catalog-service.interface';
+import { ITaxFileService } from '../abstractions/tax-file-service.interface';
+import { IDownloadCatalogService } from '../abstractions/download-catalog.inteface';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
 import { ApiKeyService } from './api-key-service';
 import { CatalogService } from './catalog-service';
+import { DownloadCatalogService } from './download-catalog.service';
 import { InvoiceService } from './invoice-service';
 import { PersonService } from './person-service';
 import { ProductService } from './product-service';
 import { TaxFileService } from './tax-file-service';
+import { DownloadRuleService } from './download-rule.service';
+import { IDownloadRuleService } from '../abstractions/download-rule.service.inteface';
+import { DownloadRequestService } from './download-request.service';
+import { IDownloadRequestService } from '../abstractions/download-request.service.interface';
 
 /**
  * Cliente principal para FiscalAPI
@@ -50,6 +57,21 @@ export class FiscalapiClient implements IFiscalapiClient {
   readonly taxFiles: ITaxFileService;
 
   /**
+   * Servicio de catálogos de descarga masiva
+   */
+  readonly downloadCatalogs: IDownloadCatalogService;
+
+  /**
+   * Servicio de reglas de descarga masiva
+   */
+  readonly downloadRules: IDownloadRuleService;
+
+  /**
+   * Servicio de solicitudes de descarga masiva
+   */
+  readonly downloadRequests: IDownloadRequestService;
+
+  /**
    * Crea una nueva instancia del cliente de FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración
    * @private
@@ -66,6 +88,9 @@ export class FiscalapiClient implements IFiscalapiClient {
     this.apiKeys = new ApiKeyService(httpClient, apiVersion);
     this.catalogs = new CatalogService(httpClient, apiVersion);
     this.taxFiles = new TaxFileService(httpClient, apiVersion);
+    this.downloadCatalogs = new DownloadCatalogService(httpClient, apiVersion);
+    this.downloadRules = new DownloadRuleService(httpClient, apiVersion);
+    this.downloadRequests = new DownloadRequestService(httpClient, apiVersion);
   }
 
   /**

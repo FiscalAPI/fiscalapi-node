@@ -1,12 +1,13 @@
 {
   "name": "fiscalapi",
-  "version": "4.0.142",
-  "description": "SDK de Node.js para FiscalAPI",
+  "version": "4.0.270",
+  "description": "SDK de Node.js para Fiscalapi",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist/",
+    "README.md",
     "fiscalapi.ico",
     "fiscalapi.png",
     "LICENSE.txt"
