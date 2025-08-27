@@ -1,70 +1,75 @@
-import { FileResponse } from './common/file-response';
- // Exportar API pública
+//Export public API
 
-// Cliente principal
 export { FiscalapiClient } from './services/fiscalapi-client';
+export type { IFiscalapiClient } from './abstractions/fiscalapi-client.interface';
 
-// Interfaces
-export { IFiscalapiClient } from './abstractions/fiscalapi-client.interface';
-export { IFiscalapiService } from './abstractions/fiscalapi-service.interface';
-export { IApiKeyService } from './abstractions/api-key-service.interface';
-export { ICatalogService } from './abstractions/catalog-service.interface';
-export { IInvoiceService } from './abstractions/invoice-service.interface';
-export { IPersonService } from './abstractions/person-service.interface';
-export { IProductService } from './abstractions/product-service.interface';
-export { ITaxFileService } from './abstractions/tax-file-service.interface';
+export type { IFiscalapiService } from './abstractions/fiscalapi-service.interface';
+export type { IApiKeyService } from './abstractions/api-key-service.interface';
+export type { ICatalogService } from './abstractions/catalog-service.interface';
+export type { IInvoiceService } from './abstractions/invoice-service.interface';
+export type { IPersonService } from './abstractions/person-service.interface';
+export type { IProductService } from './abstractions/product-service.interface';
+export type { ITaxFileService } from './abstractions/tax-file-service.interface';
+export type { IDownloadCatalogService } from './abstractions/download-catalog.inteface';
 
-// Modelos
-export { ApiKey } from './models/api-key';
-export { Person } from './models/person';
-export { Product, ProductTax } from './models/product';
-export { TaxFile } from './models/tax-file';
-export {
+// Models types
+export type { ApiKey } from './models/api-key';
+export type { Person } from './models/person';
+export type { Product, ProductTax } from './models/product';
+export type { TaxFile } from './models/tax-file';
+export type {
   Invoice,
   InvoiceIssuer,
+  TaxCredential,
   InvoiceRecipient,
   InvoiceItem,
-  InvoiceResponse,
-  TaxCredential,
-  RelatedInvoice,
-  GlobalInformation,
   ItemTax,
+  GlobalInformation,
+  RelatedInvoice,
+  InvoiceResponse,
+  //Payments
   InvoicePayment,
   PaidInvoice,
   PaidInvoiceTax,
   CancelInvoiceRequest,
   CancelInvoiceResponse,
+  CreatePdfRequest,
+  SendInvoiceRequest,
   InvoiceStatusRequest,
   InvoiceStatusResponse,
-  CreatePdfRequest,
-  SendInvoiceRequest
+
 } from './models/invoice';
 
-// Común
-export { FiscalapiSettings } from './common/fiscalapi-settings';
-export { ApiResponse, ValidationFailure } from './common/api-response';
-export { PagedList } from './common/paged-list';
-export { FileResponse } from './common/file-response';
-export { BaseDto } from './common/base-dto';
+export type {
+  DownloadRule,
+  DownloadRequest,
+  MetadataItem,
+  Xml,
+  XmlGlobalInformation,
+  XmlIssuer,
+  XmlItemCustomsInformation,
+  XmlItem,
+  XmlItemPropertyAccount,
+  XmlItemTax,
+  XmlRecipient,
+  XmlRelated,
+  XmlTax,
+  XmlComplement
+} from './models/download';
+
+
+// Common types
+export type { FiscalapiSettings } from './common/fiscalapi-settings';
+export type { ApiResponse, ValidationFailure, ProblemDetails } from './common/api-response';
+export type { FileResponse } from './common/file-response';
+
+
+//Values
+export  { PagedList } from './common/paged-list';
+export  { BaseDto } from './common/base-dto';
 export { AuditableDto } from './common/auditable-dto';
 export { SerializableDto } from './common/serializable-dto';
 export { CatalogDto } from './common/catalog-dto';
-
-// Utilidades
-export {
-  formatSatDate,
-  parseSatDate,
-  SAT_DATE_FORMAT
-} from './utils/date-utils';
-
-export {
-  encodeToBase64,
-  decodeFromBase64
-} from './utils/encoding-utils';
-
-export {
-  isNullOrUndefined,
-  isNullOrEmpty,
-  isArrayNullOrEmpty,
-  isObjectEmpty
-} from './utils/validation-utils';
+export { formatSatDate, parseSatDate, SAT_DATE_FORMAT } from './utils/date-utils';
+export { encodeToBase64, decodeFromBase64 } from './utils/encoding-utils';
+export { isNullOrUndefined, isNullOrEmpty, isArrayNullOrEmpty, isObjectEmpty } from './utils/validation-utils';

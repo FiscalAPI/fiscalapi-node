@@ -1,5 +1,6 @@
+import { DownloadCatalogService } from './../src/services/download-catalog.service';
 import { DateTime } from 'luxon';
-import { CancelInvoiceRequest, CreatePdfRequest, GlobalInformation,FiscalapiClient, FiscalapiSettings, Invoice, InvoiceStatusRequest, Person, Product, SendInvoiceRequest, TaxFile } from '../src';
+import { CancelInvoiceRequest, CreatePdfRequest, GlobalInformation,FiscalapiClient, FiscalapiSettings, Invoice, InvoiceStatusRequest, Person, Product, SendInvoiceRequest, TaxFile, DownloadRule, DownloadRequest } from '../src';
 import { inspect } from 'util';
 inspect.defaultOptions.depth = null; // Deshabilitar la profundidad de inspección para objetos anidados la salida de la consola
 inspect.defaultOptions.colors = true; // Habilitar colores para la salida de la consola
@@ -17,7 +18,9 @@ async function main() : Promise<void> {
     debug:true // true, imprime raw request y response en consola, util durante el desarrollo de la integración. 
   };
 
- 
+    settings.apiUrl="http://localhost:5001";
+    settings.apiKey="sk_development_3e94867a_959a_4140_a2e7_420f435aa8fc";
+    settings.tenant="102e5f13-e114-41dd-bea7-507fce177281";
 
   
   // Sellos SAT de prueba (KARLA FUENTE NOLASCO FUNK671228PH6) 
@@ -540,10 +543,6 @@ async function main() : Promise<void> {
 
 
 
-
-
-
-
       // Crear factura de ingreso por referencias (solo IDs)
       // const invoiceByReferences: Invoice = {
       //     versionCode: "4.0",
@@ -557,18 +556,18 @@ async function main() : Promise<void> {
       //     exchangeRate: 1,
       //     exportCode: "01",
       //     issuer: {
-      //       id: "3f3478b4-60fd-459e-8bfc-f8239fc96257"
+      //       id: "78d380fd-1b69-4e3c-8bc0-4f57737f7d5f"
       //       // No es necesario incluir otros datos del emisor al usar el ID
       //     },
       //     recipient: {
-      //       id: "96b46762-d246-4a67-a562-510a25dbafa9"
+      //       id: "2b5dadc5-7e55-41b2-888b-dd844ae5058e"
       //       // No es necesario incluir otros datos del receptor al usar el ID
       //     },
       //     items: [
       //       {
-      //         id: "114a4be5-fb65-40b2-a762-ff0c55c6ebfa", // ID del producto/servicio
+      //         id: "27808326-1824-4f3c-87fb-03ace1066f16", // ID del producto/servicio
       //         quantity: 2, // Solo es necesario especificar la cantidad
-      //         discount: 255.85 // Y opcionalmente el descuento
+      //         //discount: 255.85 // Y opcionalmente el descuento
       //       }
       //     ]
       // };
@@ -1313,6 +1312,128 @@ async function main() : Promise<void> {
 
     //  const apiResponse = await client.invoices.send(emailRequest);
     //  console.log('apiResponse:', apiResponse);
+
+
+    /*******DESCARGA MASIVA**********/
+
+    
+    //Obtener todos los catálogos de descarga masiva disponibles
+    //const apiResponse = await client.downloadCatalogs.getList();
+    //console.log('apiResponse:', apiResponse);
+
+    // Listar los registros del catálogo 'SatInvoiceStatuses' de descarga masiva.
+    // const apiResponse = await client.downloadCatalogs.listCatalog("SatInvoiceStatuses");
+    // console.log('apiResponse:', apiResponse);
+
+   /**********REGLA DE DESCARGA MASIVA**********/
+   
+   // Obtener lista paginada de reglas de descarga masiva
+  //  const apiResponse = await client.downloadRules.getList(1,2);
+  //  console.log('apiResponse:', apiResponse);
+   
+   // Obtener regla de descarga masiva por ID
+   // const apiResponse = await client.downloadRules.getById("80314e76-fb8b-42c3-89e2-82195a3dfd36");
+   // console.log('apiResponse:', apiResponse);
+
+    // Crear una regla de descarga masiva
+    //  var request: DownloadRule = 
+    //  {
+    //     personId: "b0c1cf6c-153a-464e-99df-5741f45d6695", //Persona que recibió los CFDI
+    //     description: "Regla descarga demo ...",
+    //     satQueryTypeId: "CFDI",
+    //     downloadTypeId: "Recibidos",
+    //     satInvoiceStatusId : "Vigente",
+    //  };
+    //  const apiResponse = await client.downloadRules.create(request);
+    //  console.log('apiResponse:', apiResponse);
+
+    // Crear una regla de descarga masiva de prueba
+    // const apiResponse = await client.downloadRules.createTestRule();
+    // console.log('apiResponse:', apiResponse);
+
+
+
+    // Actualizar una regla de descarga masiva (descripción)
+    // var request: DownloadRule = 
+    // {
+    //     id: "465873fb-d2b6-4cb9-8c4d-1e6eb4b2ff28",
+    //     description: "Regla descarga actualizada",
+    // };
+    // const apiResponse = await client.downloadRules.update(request);
+    // console.log('apiResponse:', apiResponse);
+
+
+    // Eliminar una regla de descarga masiva
+    // const apiResponse = await client.downloadRules.delete("465873fb-d2b6-4cb9-8c4d-1e6eb4b2ff28");
+    // console.log('apiResponse:', apiResponse);
+
+
+
+    /* **********SOLICITUD DE DESCARGA MASIVA**********/
+
+    // LISTAR SOLICITUDES DE DESCARGA MASIVA
+    // Obtener lista paginada de solicitudes de descarga masiva
+    // const apiResponse = await client.downloadRequests.getList(1, 2);
+    // console.log('apiResponse:', apiResponse);
+
+
+    // OBTENER SOLICITUD POR ID
+    // const apiResponse = await client.downloadRequests.getById("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // LISTAR XMLS POR SOLICITUD ID
+    // Obtener lista paginada de xmls descargados asociados a una solicitud de descarga.
+    // const apiResponse = await client.downloadRequests.getXmlsAsync("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // LISTAR META-ITEMS POR SOLICITUD ID
+    // Obtener lista paginada de metadatos descargados asociados a una solicitud de descarga.
+    // const apiResponse = await client.downloadRequests.getMetadataItemsAsync("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // DESCARGAR PAQUETE POR SOLICITUD ID
+    // Descargar paquete (.zip file) de una solicitud de descarga masiva.
+    // const apiResponse = await client.downloadRequests.downloadPackageAsync("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // OBTENER SAT REQUEST POR SOLICITUD ID
+    // Descargar SAT request (.xml file) de una solicitud de descarga masiva. (debug/testing)
+    // const apiResponse = await client.downloadRequests.downloadSatRequestAsync("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // OBTENER SAT RESPONSE POR SOLICITUD ID
+    // Descargar SAT response (.xml file) de una solicitud de descarga masiva. (debug/testing)
+    // const apiResponse = await client.downloadRequests.downloadSatResponseAsync("bddef7bf-ae7a-488f-9dba-5435d24f51d6");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // CREAR SOLICITUD DE DESCARGA MASIVA
+    // Crear solicitud para descargar facturas de los últimos 5 días.
+    // const request: DownloadRequest = {
+    //   downloadRuleId: "14eb6460-a90a-46a8-afaa-d673cc3e38cd",
+    //   downloadRequestTypeId: "Manual",
+    //   startDate: DateTime.now().minus({ days: 5 }), // 5 días atrás
+    //   endDate: DateTime.now()
+    // };
+    // const apiResponse = await client.downloadRequests.create(request);
+    // console.log('apiResponse:', apiResponse);
+
+
+    // ELIMINAR SOLICITUD DE DESCARGA MASIVA
+    // const apiResponse = await client.downloadRequests.delete("5e677807-3959-4d64-9c56-89451e9b81d4");
+    // console.log('apiResponse:', apiResponse);
+
+
+    // BUSCAR SOLICITUD POR FECHA DE CREACIÓN
+    // const apiResponse = await client.downloadRequests.searchAsync(new Date());
+    // console.log('apiResponse:', apiResponse);
+    
+
 
 
     console.log('End Fiscalapi node...'); 

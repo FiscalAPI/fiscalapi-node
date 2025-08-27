@@ -1,5 +1,8 @@
 import { IApiKeyService } from './api-key-service.interface';
 import { ICatalogService } from './catalog-service.interface';
+import { IDownloadCatalogService } from './download-catalog.inteface';
+import { IDownloadRequestService } from './download-request.service.interface';
+import { IDownloadRuleService } from './download-rule.service.inteface';
 import { IInvoiceService } from './invoice-service.interface';
 import { IPersonService } from './person-service.interface';
 import { IProductService } from './product-service.interface';
@@ -38,4 +41,19 @@ export interface IFiscalapiClient {
    * Servicio de archivos fiscales
    */
   taxFiles: ITaxFileService;
+
+  /**
+   * Servicio de descarga masiva
+   */
+  downloadCatalogs: IDownloadCatalogService;
+
+  /**
+   * Servicio de reglas de descarga masiva
+   */
+  downloadRules: IDownloadRuleService;
+
+  /**
+   * Servicio de solicitudes de descarga masiva
+   */
+  downloadRequests: IDownloadRequestService;
 }
