@@ -18,10 +18,6 @@ async function main() : Promise<void> {
     debug:true // true, imprime raw request y response en consola, util durante el desarrollo de la integración. 
   };
 
-    settings.apiUrl="http://localhost:5001";
-    settings.apiKey="sk_development_3e94867a_959a_4140_a2e7_420f435aa8fc";
-    settings.tenant="102e5f13-e114-41dd-bea7-507fce177281";
-
   
   // Sellos SAT de prueba (KARLA FUENTE NOLASCO FUNK671228PH6) 
    // Visita https://docs.fiscalapi.com/tax-files-info#codificacion-de-fiel-o-csd-en-base64 para leer como convertir tus sellos CSD en base 64
