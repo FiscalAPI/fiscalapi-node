@@ -21,7 +21,8 @@
     "test": "jest",
     "lint": "eslint 'src/**/*.ts'",
     "prepare": "npm run build",
-    "main": "ts-node examples/main.ts"
+    "main": "ts-node examples/main.ts",
+    "dev": "ts-node examples/all-samples.ts"
   },
   "keywords": [
     "fiscalapi",
