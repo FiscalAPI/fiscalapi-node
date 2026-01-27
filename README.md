@@ -389,10 +389,13 @@ try {
 
 ## 📂 Más Ejemplos
 
-- [Gestión de Timbres](examples/ejemplo-timbres.ts) - Transferencias y retiros de timbres
-- [Datos Empleador/Empleado](examples/ejemplo-datos-empleado-empleador.ts) - Configuración para nómina
-- [Facturas de Nómina (Por Valores)](examples/ejemplos-factura-nomina-valores.ts) - 13 ejemplos completos
-- [Facturas de Nómina (Por Referencias)](examples/ejemplos-factura-nomina-referencias.ts) - 13 ejemplos completos
+- [Gestión de Timbres](examples/ejemplo-timbres.ts)
+- [Datos Empleador/Empleado](examples/ejemplo-datos-empleado-empleador.ts)
+- [Facturas de Nómina (Por Valores)](examples/ejemplos-factura-nomina-valores.ts)
+- [Facturas de Nómina (Por Referencias)](examples/ejemplos-factura-nomina-referencias.ts) 
+- [Facturas de Impuestos Locales (Por Referencias)](examples/ejemplos-factura-impuestos-locales-referencias.ts) 
+- [Facturas de Impuestos Locales (Por Valores)](examples/ejemplos-factura-impuestos-locales-valores.ts) 
+
 
 ---
 
