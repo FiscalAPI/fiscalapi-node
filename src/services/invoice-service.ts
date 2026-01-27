@@ -17,9 +17,6 @@ import {
  * Implementación del servicio de facturas
  */
 export class InvoiceService extends BaseFiscalapiService<Invoice> implements IInvoiceService {
-  private readonly INCOME_ENDPOINT = 'income';
-  private readonly CREDIT_NOTE_ENDPOINT = 'credit-note';
-  private readonly PAYMENT_ENDPOINT = 'payment';
 
   /**
    * Crea una nueva instancia del servicio de facturas
@@ -28,37 +25,6 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
     super(httpClient, 'invoices', apiVersion);
-  }
-
-  /**
-   * @inheritdoc
-   */
-   override async create(requestModel: Invoice): Promise<ApiResponse<Invoice>> {
-    if (!requestModel) {
-      throw new Error('requestModel cannot be null');
-    }
-
-    let endpoint: string;
-
-    switch (requestModel.typeCode) {
-      case 'I':
-        endpoint = this.INCOME_ENDPOINT;
-        break;
-      case 'E':
-        endpoint = this.CREDIT_NOTE_ENDPOINT;
-        break;
-      case 'P':
-        endpoint = this.PAYMENT_ENDPOINT;
-        break;
-      default:
-        throw new Error(`Unsupported invoice type: ${requestModel.typeCode}`);
-    }
-
-    return await this.executeRequest<Invoice, Invoice>({
-      path: endpoint,
-      data: requestModel,
-      method: 'POST',
-    });
   }
 
   /**

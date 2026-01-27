@@ -691,14 +691,38 @@ Implememt following changes as follows:
 - Change invoice enpoint to the unified version for all methods
 - Update the invoice request model to the unified version
 - creare a new file named ejemplos-factura-nomina.ts con una funcion para cada caso de uso un comentario y 
-un una funcion principal para que invoque todas las funciones de los casos de uso.
+un una funcion principal para que invoque todas las funciones de los casos de uso, asegurate de agregar el sufijo 'ByValues' al nombre del metodo, todos estos metodos son por valores, signifca que todo los datos se pasan en la peticion http. 
 
-# ============================================================================
-# 1. NOMINA ORDINARIA (Facturación por valores)
-# ============================================================================
-nominaOrdinariaByValues(){
-    //implementation
-}
+    // ============================================================================
+    // 1. NOMINA ORDINARIA (Facturación por valores)
+    // ============================================================================
+    nominaOrdinariaByValues(){
+        //implementation
+    }
+
+- Use this names for the models and make sure the any complement is property modeled. becarefull with payment complement that alrredy exist, only need to be moved from invoice.payments?: InvoicePayment[]; to Complement.PaymentComplement:
+Models names to use.
+* Invoice
+* Complement
+* Complement.LocalTaxesComplement (Invoice.complement.localTaxes)
+* Complement.LocalTaxesComplement.LocalTax
+* Complement.PaymentComplement (Invoice.complement.payments)
+* Complement.PaymentComplement.PaidInvoice
+* Complement.PaymentComplement.PaidInvoice.PaidInvoiceTax
+* Complement.PayrollComplement (Invoice.complement.payroll)
+* Complement.PayrollComplement.Earnings
+* Complement.PayrollComplement.Earnings.Earning
+* Complement.PayrollComplement.Earnings.Earning.StockOptions
+* Complement.PayrollComplement.Earnings.Earning.Overtime
+* Complement.PayrollComplement.Earnings.OtherPayment
+* Complement.PayrollComplement.Earnings.OtherPayment.BalanceCompensation
+* Complement.PayrollComplement.Earnings.Retirement
+* Complement.PayrollComplement.Earnings.Severance
+* Complement.PayrollComplement.Deduction
+* Complement.PayrollComplement.Disability
+* Complement.LadingComplement (Invoice.Complement.landing)
+- Make sure all existing models are updated or new models are acreated. 
+
 
 ## Unified Invoice Endpoint and model
 

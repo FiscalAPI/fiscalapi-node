@@ -37,7 +37,7 @@ export type {
   GlobalInformation,
   RelatedInvoice,
   InvoiceResponse,
-  //Payments
+  // Payments (legacy)
   InvoicePayment,
   PaidInvoice,
   PaidInvoiceTax,
@@ -47,7 +47,28 @@ export type {
   SendInvoiceRequest,
   InvoiceStatusRequest,
   InvoiceStatusResponse,
-
+  // Inline data types for payroll (ByValues)
+  InvoiceIssuerEmployerData,
+  InvoiceRecipientEmployeeData,
+  // Complement types
+  Complement,
+  LocalTaxesComplement,
+  LocalTax,
+  PaymentComplement,
+  PaymentPaidInvoice,
+  PaymentPaidInvoiceTax,
+  PayrollComplement,
+  PayrollEarnings,
+  PayrollEarning,
+  PayrollStockOptions,
+  PayrollOvertime,
+  PayrollOtherPayment,
+  PayrollBalanceCompensation,
+  PayrollRetirement,
+  PayrollSeverance,
+  PayrollDeduction,
+  PayrollDisability,
+  LadingComplement,
 } from './models/invoice';
 
 export type {

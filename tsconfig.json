@@ -3,5 +3,12 @@
   "compilerOptions": {
     "module": "ESNext",
     "outDir": "./dist"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "rootDir": "."
+    },
+    "include": ["src/**/*", "examples/**/*"]
   }
 }
