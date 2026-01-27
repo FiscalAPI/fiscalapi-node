@@ -6,6 +6,7 @@ import { IDownloadRuleService } from './download-rule.service.inteface';
 import { IInvoiceService } from './invoice-service.interface';
 import { IPersonService } from './person-service.interface';
 import { IProductService } from './product-service.interface';
+import { IStampService } from './stamp-service.interface';
 import { ITaxFileService } from './tax-file-service.interface';
 
 /**
@@ -56,4 +57,9 @@ export interface IFiscalapiClient {
    * Servicio de solicitudes de descarga masiva
    */
   downloadRequests: IDownloadRequestService;
+
+  /**
+   * Servicio de timbres fiscales
+   */
+  stamps: IStampService;
 }

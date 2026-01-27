@@ -13,6 +13,7 @@ export type { ITaxFileService } from './abstractions/tax-file-service.interface'
 export type { IDownloadCatalogService } from './abstractions/download-catalog.inteface';
 export type { IDownloadRequestService } from './abstractions/download-request.service.interface';
 export type { IDownloadRuleService } from './abstractions/download-rule.service.inteface';
+export type { IStampService } from './abstractions/stamp-service.interface';
 
 // HTTP types
 export type { HttpMethod } from './http/fiscalapi-http-client.interface';
@@ -61,6 +62,17 @@ export type {
   XmlTax,
   XmlComplement
 } from './models/download';
+
+export type {
+  StampTransaction,
+  StampTransactionParams,
+  UserLookupDto
+} from './models/stamp';
+
+export {
+  StampTransactionType,
+  StampTransactionStatus
+} from './models/stamp';
 
 
 // Common types
