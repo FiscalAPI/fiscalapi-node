@@ -1,9 +1,7 @@
-
 import { CatalogDto } from '../common/catalog-dto';
 import { ApiResponse } from '../common/api-response';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
-import { IDownloadCatalogService } from '../abstractions/download-catalog.inteface';
-
+import { IDownloadCatalogService } from '../abstractions/download-catalog.interface';
 
 /**
  * Implementación del servicio de catálogos de descarga masiva
@@ -18,7 +16,6 @@ export class DownloadCatalogService implements IDownloadCatalogService {
     this.apiVersion = apiVersion;
     this.baseEndpoint = `api/${apiVersion}/download-catalogs`;
   }
-   
 
   /**
    * Construye el endpoint completo para las peticiones
@@ -46,6 +43,4 @@ export class DownloadCatalogService implements IDownloadCatalogService {
     const endpoint = this.buildEndpoint(catalogName);
     return this.httpClient.getAsync<CatalogDto[]>(endpoint);
   }
-
 }
-

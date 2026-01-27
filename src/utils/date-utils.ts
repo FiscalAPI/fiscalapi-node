@@ -1,4 +1,3 @@
- 
 import { DateTime } from 'luxon';
 
 
@@ -30,6 +29,5 @@ export function formatSatDate(date: Date | string | DateTime): string {
  * @returns {DateTime} Objeto DateTime
  */
 export function parseSatDate(dateStr: string): DateTime {
-    return DateTime.fromFormat(dateStr, SAT_DATE_FORMAT);
-  }
-  
+  return DateTime.fromFormat(dateStr, SAT_DATE_FORMAT);
+}

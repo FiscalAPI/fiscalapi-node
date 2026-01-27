@@ -1,8 +1,8 @@
 import { IApiKeyService } from './api-key-service.interface';
 import { ICatalogService } from './catalog-service.interface';
-import { IDownloadCatalogService } from './download-catalog.inteface';
+import { IDownloadCatalogService } from './download-catalog.interface';
 import { IDownloadRequestService } from './download-request.service.interface';
-import { IDownloadRuleService } from './download-rule.service.inteface';
+import { IDownloadRuleService } from './download-rule.service.interface';
 import { IInvoiceService } from './invoice-service.interface';
 import { IPersonService } from './person-service.interface';
 import { IProductService } from './product-service.interface';

@@ -46,10 +46,9 @@ export class FiscalapiHttpClientFactory {
    * @private
    */
   private static createAxiosInstance(settings: FiscalapiSettings): AxiosInstance {
-    // Agente HTTPS que ignora la validación del certificado autofirmado si está en modo depuración
+    // Agente HTTPS que ignora la validación del certificado solo en modo debug
     const httpsAgent = new https.Agent({
-      //rejectUnauthorized: !settings.debug
-      rejectUnauthorized: false, // Cambiado a true para producción
+      rejectUnauthorized: !settings.debug,
     });
 
     // Crea y configura una nueva instancia de axios
