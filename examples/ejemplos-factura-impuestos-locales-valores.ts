@@ -12,13 +12,9 @@ inspect.defaultOptions.colors = true;
 
 // Configuración de FiscalAPI
 const settings: FiscalapiSettings = {
-    // apiUrl: 'https://test.fiscalapi.com',
-    // apiKey: '<API_KEY>',
-    // tenant: '<TENANT_ID>',
-    // debug: true
-    apiUrl: "http://localhost:5001",
-    apiKey: "sk_development_b470ea83_3c0f_4209_b933_85223b960d91",
-    tenant: "102e5f13-e114-41dd-bea7-507fce177281",
+    apiUrl: 'https://test.fiscalapi.com',
+    apiKey: '<API_KEY>',
+    tenant: '<TENANT_ID>',
     debug: true
 };
 
