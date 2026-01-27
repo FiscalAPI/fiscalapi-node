@@ -2515,7 +2515,10 @@ For each of the 13 use cases, you must generate **two distinct operations**:
 2. **Invoice Generation (Execution):** Create the payroll invoice request using the IDs defined above (referencing the objects created in step 1).
 * *Note:* The "Payroll Complement" data (amounts, perceptions, deductions) must remain identical to the original examples.
 
-3. Example 
+3. Add those samples to the main function to be executable uncommeting them as needed, follow the same patter that the by values version.
+
+
+Example 
 
 // ============================================================================
 // 1. NOMINA ORDINARIA (Facturación por referencias)

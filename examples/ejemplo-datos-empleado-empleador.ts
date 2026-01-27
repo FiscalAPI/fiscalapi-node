@@ -11,6 +11,7 @@ async function main(): Promise<void> {
     apiUrl: 'https://test.fisalapi.com',
     apiKey: '<API_KEY>',
     tenant: '<TENANT_ID>',
+    debug: true
   };
 
   const client = FiscalapiClient.create(settings);
