@@ -126,11 +126,11 @@ export interface LocalTax {
   /** Nombre del impuesto local */
   taxName?: string;
 
-  /** Tasa del impuesto local */
-  taxRate?: number;
+  /** Tasa del impuesto local (debe tener 2 posiciones decimales) */
+  taxRate?: number | string;
 
-  /** Monto del impuesto local */
-  taxAmount?: number;
+  /** Monto del impuesto local (debe tener 2 posiciones decimales) */
+  taxAmount?: number | string;
 
   /** Código que indica la naturaleza del impuesto. "T": Traslado, "R": Retenido */
   taxFlagCode?: string;
