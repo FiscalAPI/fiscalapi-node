@@ -1,7 +1,7 @@
 import { CatalogDto } from '../common/catalog-dto';
 import { ApiResponse } from '../common/api-response';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
-import { IDownloadCatalogService } from '../abstractions/download-catalog.interface';
+import { IDownloadCatalogService } from '../abstractions/download-catalog-service.interface';
 
 /**
  * Implementación del servicio de catálogos de descarga masiva

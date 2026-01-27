@@ -12,10 +12,10 @@ inspect.defaultOptions.colors = true;
 
 // Configuración de FiscalAPI
 const settings: FiscalapiSettings = {
-  apiUrl: 'https://test.fisalapi.com',
-  apiKey: '<API_KEY>',
-  tenant: '<TENANT_ID>',
-  debug: true
+    apiUrl: 'https://test.fisalapi.com',
+    apiKey: '<API_KEY>',
+    tenant: '<TENANT_ID>',
+    debug: true
 };
 
 // Sellos SAT de prueba 
@@ -1103,19 +1103,19 @@ async function main(): Promise<void> {
   try {
     // Descomentar el caso de uso que se desea ejecutar
 
-    // await nominaOrdinariaByValues(client);
+     await nominaOrdinariaByValues(client);
     // await nominaAsimiladosByValues(client);
     // await nominaConBonosFondoAhorroByValues(client);
     // await nominaConHorasExtraByValues(client);
     // await nominaConIncapacidadesByValues(client);
-     await nominaConSNCFByValues(client);
+    // await nominaConSNCFByValues(client);
     // await nominaExtraordinariaByValues(client);
     // await nominaSeparacionIndemnizacionByValues(client);
     // await nominaJubilacionPensionRetiroByValues(client);
     // await nominaSinDeduccionesByValues(client);
     // await nominaSubsidioCausadoByValues(client);
     // await nominaViaticosByValues(client);
-     await nominaGeneralByValues(client);
+    // await nominaGeneralByValues(client);
 
     console.log('\nEjecución completada.');
   } catch (error) {

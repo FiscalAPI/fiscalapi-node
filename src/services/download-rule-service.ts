@@ -1,7 +1,7 @@
 import { DownloadRequest, DownloadRule } from '../models/download';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { BaseFiscalapiService } from './base-fiscalapi-service';
-import { IDownloadRuleService } from '../abstractions/download-rule.service.interface';
+import { IDownloadRuleService } from '../abstractions/download-rule-service.interface';
 import { ApiResponse } from '../common/api-response';
 
 /**

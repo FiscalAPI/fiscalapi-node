@@ -1,7 +1,7 @@
 import { DownloadRequest, Xml, MetadataItem } from '../models/download';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { BaseFiscalapiService } from './base-fiscalapi-service';
-import { IDownloadRequestService } from '../abstractions/download-request.service.interface';
+import { IDownloadRequestService } from '../abstractions/download-request-service.interface';
 import { ApiResponse } from '../common/api-response';
 import { PagedList } from '../common/paged-list';
 import { FileResponse } from '../common/file-response';

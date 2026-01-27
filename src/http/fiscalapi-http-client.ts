@@ -228,21 +228,42 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
    * @private
    */
   private handleRequestError<T>(error: unknown): ApiResponse<T> {
+    // Verificar si es un error de Axios usando type guard
+    if (!(error instanceof Error)) {
+      return {
+        data: {} as T,
+        succeeded: false,
+        message: 'Error desconocido en la comunicación con el servidor',
+        details: String(error),
+        httpStatusCode: 500
+      };
+    }
+
+    // Verificar si es un AxiosError (tiene la propiedad isAxiosError)
+    const isAxiosError = 'isAxiosError' in error && error.isAxiosError === true;
+    if (!isAxiosError) {
+      return {
+        data: {} as T,
+        succeeded: false,
+        message: error.message || 'Error en la comunicación con el servidor',
+        details: error.stack || '',
+        httpStatusCode: 500
+      };
+    }
+
     const axiosError = error as AxiosError;
-    
-    // Extraer datos de respuesta
     const responseData = axiosError.response?.data;
-    
+
     // Revisar si es un ProblemDetails según RFC 9457
     if (
-      responseData && 
-      typeof responseData === 'object' && 
-      'type' in responseData && 
+      responseData &&
+      typeof responseData === 'object' &&
+      'type' in responseData &&
       'title' in responseData &&
       'status' in responseData
     ) {
       const problemDetails = responseData as ProblemDetails;
-      
+
       return {
         data: {} as T,
         succeeded: false,
@@ -251,17 +272,17 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
         httpStatusCode: axiosError.response?.status || 500
       };
     }
-    
+
     // Revisar si es un ApiResponse<ValidationFailure[]> para errores 400
     if (
       axiosError.response?.status === 400 &&
       responseData &&
       typeof responseData === 'object' &&
       'data' in responseData &&
-      Array.isArray(responseData.data)
+      Array.isArray((responseData as { data: unknown }).data)
     ) {
       const apiResponse = responseData as ApiResponse<ValidationFailure[]>;
-      
+
       // Si hay errores de validación, extraer el primer mensaje
       if (apiResponse.data && apiResponse.data.length > 0) {
         const firstFailure = apiResponse.data[0];
@@ -274,8 +295,8 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
         };
       }
     }
-    
-    // Respuesta de error genérica
+
+    // Respuesta de error genérica para AxiosError
     return {
       data: {} as T,
       succeeded: false,
@@ -293,17 +314,6 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
    * @template T - Tipo de datos esperado en la respuesta
    */
   async getAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
-    return this.executeRequest<T>('GET', endpoint, { config });
-  }
-
-  /**
-   * Realiza una petición GET por ID a la API
-   * @param {string} endpoint - Punto final de la API con ID
-   * @param {AxiosRequestConfig} [config] - Configuración adicional para la petición
-   * @returns {Promise<ApiResponse<T>>} Respuesta de la API
-   * @template T - Tipo de datos esperado en la respuesta
-   */
-  async getByIdAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
     return this.executeRequest<T>('GET', endpoint, { config });
   }
 

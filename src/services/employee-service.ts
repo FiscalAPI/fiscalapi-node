@@ -20,7 +20,7 @@ export class EmployeeService implements IEmployeeService {
   }
 
   async getById(id: string): Promise<ApiResponse<EmployeeData>> {
-    return this.httpClient.getByIdAsync<EmployeeData>(this.buildEndpoint(id));
+    return this.httpClient.getAsync<EmployeeData>(this.buildEndpoint(id));
   }
 
   async create(requestModel: CreateEmployeeRequest): Promise<ApiResponse<EmployeeData>> {

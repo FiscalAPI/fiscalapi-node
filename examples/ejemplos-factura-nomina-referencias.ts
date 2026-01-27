@@ -18,10 +18,12 @@ inspect.defaultOptions.colors = true;
 
 // Configuración de FiscalAPI
 const settings: FiscalapiSettings = {
-  apiUrl: 'https://test.fisalapi.com',
+    apiUrl: 'https://test.fisalapi.com',
     apiKey: '<API_KEY>',
     tenant: '<TENANT_ID>',
     debug: true
+
+   
 };
 
 // ============================================================================
@@ -1218,8 +1220,8 @@ async function main(): Promise<void> {
     // IMPORTANTE: Ejecutar primero la función de setup, luego la de factura
 
     // 1. Nómina Ordinaria
-    // await nominaOrdinariaByReferencesSetupData(client);
-    // await nominaOrdinariaByReferences(client);
+     await nominaOrdinariaByReferencesSetupData(client);
+     await nominaOrdinariaByReferences(client);
 
     // 2. Nómina Asimilados
     // await nominaAsimiladosByReferencesSetupData(client);

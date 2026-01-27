@@ -20,7 +20,7 @@ export class EmployerService implements IEmployerService {
   }
 
   async getById(id: string): Promise<ApiResponse<EmployerData>> {
-    return this.httpClient.getByIdAsync<EmployerData>(this.buildEndpoint(id));
+    return this.httpClient.getAsync<EmployerData>(this.buildEndpoint(id));
   }
 
   async create(requestModel: CreateEmployerRequest): Promise<ApiResponse<EmployerData>> {
