@@ -22,8 +22,7 @@ const settings: FiscalapiSettings = {
     apiKey: '<API_KEY>',
     tenant: '<TENANT_ID>',
     debug: true
-
-   
+ 
 };
 
 // ============================================================================
