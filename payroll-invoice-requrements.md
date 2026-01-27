@@ -2483,3 +2483,100 @@ curl --location 'http://localhost:5001/api/v4/invoices' \
 
 
 
+
+
+
+## Facturas de nomina por referencias.
+
+Analyze the existing **13 value-based payroll invoice examples** (where all data is sent via the request body) on @ejemplos-factura-nomina.ts file
+
+**Task:**
+Recreate these 13 examples using a **reference-based approach**. In this approach, the Issuer (*Emisor*) and Receiver (*Receptor*) are referenced by their Object IDs rather than embedding their full details in the invoice payload.
+
+**Constants:**
+Map the entities to the following UUIDs:
+
+```typescript
+const escuelaKemperUrgateId = "2e7b988f-3a2a-4f67-86e9-3f931dd48581";
+const karlaFuenteNolascoId = "109f4d94-63ea-4a21-ab15-20c8b87d8ee9";
+const organicosNavezOsorioId = "f645e146-f80e-40fa-953f-fd1bd06d4e9f";
+const xochiltCasasChavezId = "e3b4edaa-e4d9-4794-9c5b-3dd5b7e372aa";
+const ingridXodarJimenezId = "9367249f-f0ee-43f4-b771-da2fff3f185f";
+
+```
+
+**Requirements:**
+For each of the 13 use cases, you must generate **two distinct operations**:
+
+1. **Configuration (Setup):** Create the code to configure/save the Employee and Employer objects first.
+* *Crucial:* You must extract the specific attributes (name, RFC, fiscal regime, etc.) from the original value-based example to populate these objects correctly.
+
+
+2. **Invoice Generation (Execution):** Create the payroll invoice request using the IDs defined above (referencing the objects created in step 1).
+* *Note:* The "Payroll Complement" data (amounts, perceptions, deductions) must remain identical to the original examples.
+
+3. Example 
+
+// ============================================================================
+// 1. NOMINA ORDINARIA (Facturación por referencias)
+// ============================================================================
+async function nominaOrdinariaByReferencesSetupData(client: FiscalapiClient): Promise<void> {
+    // fiscalapiClient.persons.employer.delete(<id>)
+    // fiscalapiClient.persons.employer.create({...})
+    // fiscalapiClient.persons.employee.delete(<id>)
+    // fiscalapiClient.persons.employee.create({...})
+}
+async function nominaOrdinariaByReferences(client: FiscalapiClient): Promise<void> {
+  console.log('\n=== Nómina Ordinaria ByReferences ===\n');
+
+  const invoice: Invoice = {
+    versionCode: '4.0',
+    series: 'F',
+    date: currentDate,
+    paymentMethodCode: 'PUE',
+    currencyCode: 'MXN',
+    typeCode: 'N',
+    expeditionZipCode: '20000',
+    exportCode: '01',
+    issuer: {
+      id: escuelaKemperUrgateId, //legalName: 'ESCUELA KEMPER URGATE',
+    },
+    recipient: {
+      id: karlaFuenteNolascoId // legalName: 'KARLA FUENTE NOLASCO',
+    },
+    complement: {
+      payroll: {
+        version: '1.2',
+        payrollTypeCode: 'O',
+        paymentDate: '2025-08-30',
+        initialPaymentDate: '2025-07-31',
+        finalPaymentDate: '2025-08-30',
+        daysPaid: 30,
+        earnings: {
+          earnings: [
+            { earningTypeCode: '001', code: '1003', concept: 'Sueldo Nominal', taxedAmount: 95030.00, exemptAmount: 0.00 },
+            { earningTypeCode: '005', code: '5913', concept: 'Fondo de Ahorro Aportación Patrón', taxedAmount: 0.00, exemptAmount: 4412.46 },
+            { earningTypeCode: '038', code: '1885', concept: 'Bono Ingles', taxedAmount: 14254.50, exemptAmount: 0.00 },
+            { earningTypeCode: '029', code: '1941', concept: 'Vales Despensa', taxedAmount: 0.00, exemptAmount: 3439.00 },
+            { earningTypeCode: '038', code: '1824', concept: 'Herramientas Teletrabajo (telecom y prop. electri)', taxedAmount: 273.00, exemptAmount: 0.00 }
+          ],
+          otherPayments: [
+            { otherPaymentTypeCode: '002', code: '5050', concept: 'Exceso de subsidio al empleo', amount: 0.00, subsidyCaused: 0.00 }
+          ]
+        },
+        deductions: [
+          { deductionTypeCode: '002', code: '5003', concept: 'ISR Causado', amount: 27645.52 },
+          { deductionTypeCode: '004', code: '5910', concept: 'Fondo de ahorro Empleado Inversión', amount: 4412.46 },
+          { deductionTypeCode: '004', code: '5914', concept: 'Fondo de Ahorro Patrón Inversión', amount: 4412.46 },
+          { deductionTypeCode: '004', code: '1966', concept: 'Contribución póliza exceso GMM', amount: 519.91 },
+          { deductionTypeCode: '004', code: '1934', concept: 'Descuento Vales Despensa', amount: 1.00 },
+          { deductionTypeCode: '004', code: '1942', concept: 'Vales Despensa Electrónico', amount: 3439.00 },
+          { deductionTypeCode: '001', code: '1895', concept: 'IMSS', amount: 2391.13 }
+        ]
+      }
+    }
+  };
+
+  const response = await client.invoices.create(invoice);
+  console.log('Response:', response);
+}
