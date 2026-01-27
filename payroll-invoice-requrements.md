@@ -249,27 +249,27 @@ add payroll invoice support to the existing code base following best practices.
 
 Implememt following changes as follows:
 
-interface IEmployeeFacade {
-  getById(id: string): Promise<ApiResponse<Employee>>
-  create(requestModel: CreateEmployeeRequest): Promise<ApiResponse<Employee>>
-  update(requestModel: UpdateEmployeeRequest): Promise<ApiResponse<Employee>>
+interface IEmployeeService {
+  getById(id: string): Promise<ApiResponse<EmployeeData>>
+  create(requestModel: CreateEmployeeRequest): Promise<ApiResponse<EmployeeData>>
+  update(requestModel: UpdateEmployeeRequest): Promise<ApiResponse<EmployeeData>>
   delete(personId: string): Promise<ApiResponse<void>>
 }
 
-interface IEmployerFacade {
-  getById(id: string): Promise<ApiResponse<Employer>>
-  create(requestModel: CreateEmployerRequest): Promise<ApiResponse<Employer>>
-  update(requestModel: UpdateEmployerRequest): Promise<ApiResponse<Employer>>
+interface IEmployerService {
+  getById(id: string): Promise<ApiResponse<EmployerData>>
+  create(requestModel: CreateEmployerRequest): Promise<ApiResponse<EmployerData>>
+  update(requestModel: UpdateEmployerRequest): Promise<ApiResponse<EmployerData>>
   delete(personId: string): Promise<ApiResponse<void>>
 }
 
 interface PersonService {
-  employee: IEmployeeFacade
-  employer: IEmployerFacade
+  employee: IEmployeeService
+  employer: IEmployerService
 }
 
 interface FiscalapiClient {
-  persons: PersonsFacade
+  persons: PersonsService
 }
 
 
@@ -278,6 +278,30 @@ curl --location 'http://localhost:5001/api/v4/people/bef56254-0892-4558-95c3-f9c
 --header 'X-TENANT-KEY: 102e5f13-e114-41dd-bea7-507fce177281' \
 --header 'X-TIME-ZONE: America/Mexico_City' \
 --header 'X-API-KEY: sk_development_b470ea83_3c0f_4209_b933_85223b960d91'
+
+response
+{
+    "data": {
+        "personId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employerRegistration": "A1230768108",
+        "originEmployerTin": "ARE180429TM6",
+        "satFundSource": {
+            "id": "IP",
+            "description": "Ingresos propios.",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "ownResourceAmount": 1500,
+        "id": "23f0b555-68bc-48fd-bb90-deb36ed25ef6",
+        "createdAt": "2025-09-18T20:17:44.175",
+        "updatedAt": "2025-09-18T20:17:48.489"
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
 
 ### Crear datos de empleador
 curl --location 'http://localhost:5001/api/v4/people/bef56254-0892-4558-95c3-f9c8729e4b0e/employer' \
@@ -294,6 +318,24 @@ curl --location 'http://localhost:5001/api/v4/people/bef56254-0892-4558-95c3-f9c
 }
 '
 
+Response
+{
+    "data": {
+        "personId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employerRegistration": "B5510768108",
+        "originEmployerTin": "URE180429TM6",
+        "satFundSource": null,
+        "ownResourceAmount": null,
+        "id": "23f0b555-68bc-48fd-bb90-deb36ed25ef6",
+        "createdAt": "2025-09-18T20:17:44.175",
+        "updatedAt": "2025-09-18T20:17:44.175"
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
 ### Actualizar datos de empleador
 
 curl --location --request PUT 'http://localhost:5001/api/v4/people/bef56254-0892-4558-95c3-f9c8729e4b0e/employer' \
@@ -309,6 +351,24 @@ curl --location --request PUT 'http://localhost:5001/api/v4/people/bef56254-0892
   "ownResourceAmount": null
 }'
 
+Response
+{
+    "data": {
+        "personId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employerRegistration": "A1230768108",
+        "originEmployerTin": "ARE180429TM6",
+        "satFundSource": null,
+        "ownResourceAmount": null,
+        "id": "23f0b555-68bc-48fd-bb90-deb36ed25ef6",
+        "createdAt": "2025-09-18T20:17:44.175",
+        "updatedAt": "2025-09-18T20:19:20.569"
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
 ### Eliminar datos de empleador
 
 curl --location --request DELETE 'http://localhost:5001/api/v4/people/bef56254-0892-4558-95c3-f9c8729e4b0e/employer' \
@@ -317,6 +377,15 @@ curl --location --request DELETE 'http://localhost:5001/api/v4/people/bef56254-0
 --header 'X-API-KEY: sk_development_b470ea83_3c0f_4209_b933_85223b960d91' \
 --data ''
 
+Response
+{
+    "data": true,
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
 
 ### Obtener datos de empleado
 curl --location 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-0574d63341e2/employee' \
@@ -324,6 +393,62 @@ curl --location 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-057
 --header 'X-TIME-ZONE: America/Mexico_City' \
 --header 'X-API-KEY: sk_development_b470ea83_3c0f_4209_b933_85223b960d91' \
 --data ''
+
+Response
+{
+    "data": {
+        "employerPersonId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employeePersonId": "54fc14ae-c88f-4afc-996b-0574d63341e2",
+        "employeeNumber": "123456789",
+        "socialSecurityNumber": "0101010101",
+        "laborRelationStartDate": "2020-01-12T00:00:00.000",
+        "satContractType": {
+            "id": "01",
+            "description": "Contrato de trabajo por tiempo indeterminado",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satTaxRegimeType": {
+            "id": "02",
+            "description": "Sueldos (Incluye ingresos art. 94 LISR)",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satWorkdayType": null,
+        "satJobRisk": {
+            "id": "1",
+            "description": "Clase I",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satPaymentPeriodicity": {
+            "id": "04",
+            "description": "Quincenal",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satBank": null,
+        "satPayrollState": {
+            "id": "JAL",
+            "description": "Jalisco",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satUnionizedStatus": null,
+        "department": null,
+        "position": null,
+        "seniority": "P1Y5M15D",
+        "bankAccount": null,
+        "baseSalaryForContributions": 520,
+        "integratedDailySalary": 186,
+        "subcontractorRfc": null,
+        "timePercentage": 0
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
 
 ### Crear datos de empleado
 curl --location 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-0574d63341e2/employee' \
@@ -356,6 +481,76 @@ curl --location 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-057
   "timePercentage": null
 }'
 
+Response:
+{
+    "data": {
+        "employerPersonId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employeePersonId": "54fc14ae-c88f-4afc-996b-0574d63341e2",
+        "employeeNumber": "12345",
+        "socialSecurityNumber": "123456789012345",
+        "laborRelationStartDate": "2023-01-15T00:00:00.000",
+        "satContractType": {
+            "id": "01",
+            "description": "Contrato de trabajo por tiempo indeterminado",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satTaxRegimeType": {
+            "id": "02",
+            "description": "Sueldos (Incluye ingresos señalados en la fraccion I del articulo 94 de LISR)",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satWorkdayType": {
+            "id": "01",
+            "description": "Diurna",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satJobRisk": {
+            "id": "1",
+            "description": "Clase I",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satPaymentPeriodicity": {
+            "id": "04",
+            "description": "Quincenal",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satBank": {
+            "id": "002",
+            "description": "BANAMEX",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satPayrollState": {
+            "id": "JAL",
+            "description": "Jalisco",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satUnionizedStatus": {
+            "id": "No",
+            "description": "NO",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "department": "Recursos Humanos",
+        "position": "Analista de Nóminas",
+        "bankAccount": "12345678901234567890",
+        "baseSalaryForContributions": 490.22,
+        "integratedDailySalary": 146.47,
+        "subcontractorRfc": null,
+        "timePercentage": 0
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
 ### Actualizar datos de empleado
 curl --location --request PUT 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-0574d63341e2/employee' \
 --header 'X-TENANT-KEY: 102e5f13-e114-41dd-bea7-507fce177281' \
@@ -387,6 +582,77 @@ curl --location --request PUT 'http://localhost:5001/api/v4/people/54fc14ae-c88f
   "timePercentage": null
 }'
 
+Response:
+{
+    "data": {
+        "employerPersonId": "bef56254-0892-4558-95c3-f9c8729e4b0e",
+        "employeePersonId": "54fc14ae-c88f-4afc-996b-0574d63341e2",
+        "employeeNumber": "12345ABC",
+        "socialSecurityNumber": "123456789012345",
+        "laborRelationStartDate": "2022-01-15T00:00:00.000",
+        "satContractType": {
+            "id": "02",
+            "description": "Contrato de trabajo para obra determinada",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satTaxRegimeType": {
+            "id": "02",
+            "description": "Sueldos (Incluye ingresos señalados en la fraccion I del articulo 94 de LISR)",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satWorkdayType": {
+            "id": "01",
+            "description": "Diurna",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satJobRisk": {
+            "id": "2",
+            "description": "Clase II",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satPaymentPeriodicity": {
+            "id": "02",
+            "description": "Semanal",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satBank": {
+            "id": "012",
+            "description": "BBVA BANCOMER",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satPayrollState": {
+            "id": "AGU",
+            "description": "Aguascalientes",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "satUnionizedStatus": {
+            "id": "Sí",
+            "description": "SI",
+            "createdAt": "2024-08-10T15:46:30.373",
+            "updatedAt": null
+        },
+        "department": "Sistemas",
+        "position": "Programador Jr.",
+        "bankAccount": "12345678901234567890",
+        "baseSalaryForContributions": 290.22,
+        "integratedDailySalary": 46.47,
+        "subcontractorRfc": null,
+        "timePercentage": 0
+    },
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
+
+
 ### Eliminar datos de empleado
 curl --location --request DELETE 'http://localhost:5001/api/v4/people/54fc14ae-c88f-4afc-996b-0574d63341e2/employee' \
 --header 'X-TENANT-KEY: 102e5f13-e114-41dd-bea7-507fce177281' \
@@ -399,7 +665,14 @@ curl --location --request DELETE 'http://localhost:5001/api/v4/people/54fc14ae-c
   "password": "UserPass123!"
 }'
 
-
+Response:
+{
+    "data": true,
+    "succeeded": true,
+    "message": "",
+    "details": "",
+    "httpStatusCode": 200
+}
 
 ---
 You are a senior Node.js engineer specializing in TypeScript, module systems, and mexican payroll cdfi invoicing. Your task is to 

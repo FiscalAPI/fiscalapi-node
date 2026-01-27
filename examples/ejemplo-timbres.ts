@@ -1,6 +1,7 @@
 import { FiscalapiClient, FiscalapiSettings } from '../src/index';
 
 async function main(): Promise<void> {
+  
   const settings: FiscalapiSettings = {
     apiUrl: 'https://test.fisalapi.com',
     apiKey: '<API_KEY>',

@@ -8,7 +8,7 @@ import { BaseDto } from '../common/base-dto';
  * Contiene toda la información de una factura, como datos del emisor, receptor, 
  * productos/servicios, importes, método de pago, el tipo de factura, entre otros.
  */
-export interface Invoice {
+export interface Invoice extends BaseDto {
   /** Código de la versión de la facura. Default: "4.0" */
   versionCode?: string;
 
