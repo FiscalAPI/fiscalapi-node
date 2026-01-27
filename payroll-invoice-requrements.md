@@ -10,10 +10,10 @@ OSCAR_KALA_HAAK = "5fd9f48c-a6a2-474f-944b-88a01751d432"
 
 
 apiUrl: http://localhost:5001
-productId: 69d0aec0-5dbb-4db0-a908-61fe5c8e7d75
 apikey: sk_development_b470ea83_3c0f_4209_b933_85223b960d91
 tenant: 102e5f13-e114-41dd-bea7-507fce177281
 
+productId: 69d0aec0-5dbb-4db0-a908-61fe5c8e7d75
 
 
 ----
