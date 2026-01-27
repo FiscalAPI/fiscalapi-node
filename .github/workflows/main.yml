@@ -46,10 +46,19 @@ jobs:
             echo "ESM build missing"
             exit 1
           fi
-          if [ ! -d "dist/types" ]; then
+          if [ ! -f "dist/cjs/index.d.ts" ]; then
             echo "TypeScript definitions missing"
             exit 1
           fi
+          if [ ! -f "dist/cjs/package.json" ]; then
+            echo "CJS package.json missing"
+            exit 1
+          fi
+          if [ ! -f "dist/esm/package.json" ]; then
+            echo "ESM package.json missing"
+            exit 1
+          fi
+          echo "Build artifacts verified successfully"
       
       - name: Publish to NPM
         run: npm publish --access public
