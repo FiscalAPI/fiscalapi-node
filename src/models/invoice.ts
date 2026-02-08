@@ -1,14 +1,473 @@
 import { DateTime } from 'luxon';
- 
+
 // src/models/invoice.ts
 import { BaseDto } from '../common/base-dto';
+
+// ============================================================================
+// Inline Data Types for Payroll (ByValues)
+// ============================================================================
+
+/**
+ * Datos del empleador para facturas de nómina (inline en issuer)
+ */
+export interface InvoiceIssuerEmployerData {
+  /** CURP del empleador */
+  curp?: string;
+
+  /** Registro patronal del empleador */
+  employerRegistration?: string;
+
+  /** RFC del empleador origen (para subcontratación) */
+  originEmployerTin?: string;
+
+  /** ID del origen de los recursos (catálogo SAT c_OrigenRecurso) */
+  satFundSourceId?: string;
+
+  /** Monto de recursos propios */
+  ownResourceAmount?: number;
+}
+
+/**
+ * Datos del empleado para facturas de nómina (inline en recipient)
+ */
+export interface InvoiceRecipientEmployeeData {
+  /** CURP del empleado */
+  curp?: string;
+
+  /** Número de seguridad social del empleado */
+  socialSecurityNumber?: string;
+
+  /** Fecha de inicio de la relación laboral */
+  laborRelationStartDate?: string;
+
+  /** Antigüedad del empleado en formato ISO 8601 duration (ej: P1Y5M15D) */
+  seniority?: string;
+
+  /** ID del tipo de contrato (catálogo SAT c_TipoContrato) */
+  satContractTypeId?: string;
+
+  /** ID del estatus de sindicalización (catálogo SAT c_TipoSindicalizado) */
+  satUnionizedStatusId?: string;
+
+  /** ID del tipo de jornada laboral (catálogo SAT c_TipoJornada) */
+  satWorkdayTypeId?: string;
+
+  /** ID del tipo de régimen fiscal del empleado (catálogo SAT c_TipoRegimen) */
+  satTaxRegimeTypeId?: string;
+
+  /** Número de empleado */
+  employeeNumber?: string;
+
+  /** Departamento del empleado */
+  department?: string;
+
+  /** Puesto del empleado */
+  position?: string;
+
+  /** ID del riesgo del puesto (catálogo SAT c_RiesgosPuesto) */
+  satJobRiskId?: string;
+
+  /** ID de la periodicidad de pago (catálogo SAT c_PeriodicidadPago) */
+  satPaymentPeriodicityId?: string;
+
+  /** ID del banco (catálogo SAT c_Banco) */
+  satBankId?: string;
+
+  /** Cuenta bancaria del empleado */
+  bankAccount?: string;
+
+  /** Salario base de cotización */
+  baseSalaryForContributions?: number;
+
+  /** Salario diario integrado */
+  integratedDailySalary?: number;
+
+  /** ID del estado donde se presta el servicio (catálogo SAT c_Estado) */
+  satPayrollStateId?: string;
+}
+
+// ============================================================================
+// Complement Types
+// ============================================================================
+
+/**
+ * Contenedor principal de complementos de factura
+ */
+export interface Complement {
+  /** Complemento de impuestos locales */
+  localTaxes?: LocalTaxesComplement;
+
+  /** Complemento de pago */
+  payment?: PaymentComplement;
+
+  /** Complemento de nómina */
+  payroll?: PayrollComplement;
+
+  /** Complemento de carta porte */
+  lading?: LadingComplement;
+}
+
+// ============================================================================
+// Local Taxes Complement
+// ============================================================================
+
+/**
+ * Complemento de impuestos locales
+ */
+export interface LocalTaxesComplement {
+  /** Lista de impuestos locales */
+  taxes?: LocalTax[];
+}
+
+/**
+ * Impuesto local
+ */
+export interface LocalTax {
+  /** Nombre del impuesto local */
+  taxName?: string;
+
+  /** Tasa del impuesto local (debe tener 2 posiciones decimales) */
+  taxRate?: number | string;
+
+  /** Monto del impuesto local (debe tener 2 posiciones decimales) */
+  taxAmount?: number | string;
+
+  /** Código que indica la naturaleza del impuesto. "T": Traslado, "R": Retenido */
+  taxFlagCode?: string;
+}
+
+// ============================================================================
+// Payment Complement
+// ============================================================================
+
+/**
+ * Complemento de pago
+ */
+export interface PaymentComplement {
+  /** Fecha de pago. Se expresa en la forma AAAA-MM-DDThh:mm:ss */
+  paymentDate: string;
+
+  /** Código de la forma de pago del pago recibido. Catálogo del SAT c_FormaPago */
+  paymentFormCode: string;
+
+  /** Código de la moneda utilizada en el pago. Catálogo del SAT c_Moneda. Default: "MXN" */
+  currencyCode: string;
+
+  /** Tipo de cambio FIX conforme a la moneda registrada en la factura. Default: 1 */
+  exchangeRate?: number | string;
+
+  /** Monto del pago */
+  amount: number | string;
+
+  /** Número de operación asignado por el banco */
+  operationNumber?: string;
+
+  /** RFC del banco origen. (Rfc del banco emisor del pago) */
+  sourceBankTin?: string;
+
+  /** Cuenta bancaria origen. (Cuenta bancaria del banco emisor del pago) */
+  sourceBankAccount?: string;
+
+  /** RFC del banco destino. (Rfc del banco receptor del pago) */
+  targetBankTin?: string;
+
+  /** Cuenta bancaria destino (Cuenta bancaria del banco receptor del pago) */
+  targetBankAccount?: string;
+
+  /** Facturas pagadas con el pago recibido */
+  paidInvoices: PaymentPaidInvoice[];
+}
+
+/**
+ * Factura pagada en el complemento de pago
+ */
+export interface PaymentPaidInvoice {
+  /** UUID de la factura pagada */
+  uuid: string;
+
+  /** Serie de la factura pagada */
+  series: string;
+
+  /** Folio de la factura pagada */
+  number: string;
+
+  /** Monto pagado en la factura */
+  paymentAmount: number | string;
+
+  /** Código de la moneda utilizada en la factura pagada. Default: "MXN" */
+  currencyCode: string;
+
+  /** Número de parcialidad */
+  partialityNumber: number;
+
+  /** Subtotal de la factura pagada */
+  subTotal: number | string;
+
+  /** Saldo anterior de la factura pagada */
+  previousBalance: number | string;
+
+  /** Saldo restante de la factura pagada */
+  remainingBalance: number | string;
+
+  /** Código de obligaciones de impuesto aplicables a la factura pagada */
+  taxObjectCode: string;
+
+  /** Equivalencia de la moneda. Default: 1 */
+  equivalence?: number | string;
+
+  /** Impuestos aplicables a la factura pagada */
+  paidInvoiceTaxes?: PaymentPaidInvoiceTax[];
+}
+
+/**
+ * Impuesto de factura pagada en el complemento de pago
+ */
+export interface PaymentPaidInvoiceTax {
+  /** Código del impuesto. Catálogo del SAT c_Impuesto */
+  taxCode: string;
+
+  /** Tipo de factor. Catálogo del SAT c_TipoFactor */
+  taxTypeCode: string;
+
+  /** Tasa del impuesto. Catálogo del SAT c_TasaOCuota */
+  taxRate: number | string;
+
+  /** Código que indica la naturaleza del impuesto. "T": Impuesto Traslado, "R": Impuesto Retenido */
+  taxFlagCode: string;
+}
+
+// ============================================================================
+// Payroll Complement
+// ============================================================================
+
+/**
+ * Complemento de nómina
+ */
+export interface PayrollComplement {
+  /** Versión del complemento de nómina. Default: "1.2" */
+  version?: string;
+
+  /** Código del tipo de nómina. "O": Ordinaria, "E": Extraordinaria */
+  payrollTypeCode: string;
+
+  /** Fecha de pago de la nómina */
+  paymentDate: string;
+
+  /** Fecha inicial del periodo de pago */
+  initialPaymentDate: string;
+
+  /** Fecha final del periodo de pago */
+  finalPaymentDate: string;
+
+  /** Número de días pagados */
+  daysPaid: number;
+
+  /** Percepciones del empleado */
+  earnings?: PayrollEarnings;
+
+  /** Deducciones del empleado */
+  deductions?: PayrollDeduction[];
+
+  /** Incapacidades del empleado */
+  disabilities?: PayrollDisability[];
+}
+
+/**
+ * Contenedor de percepciones de nómina
+ */
+export interface PayrollEarnings {
+  /** Lista de percepciones */
+  earnings?: PayrollEarning[];
+
+  /** Lista de otros pagos */
+  otherPayments?: PayrollOtherPayment[];
+
+  /** Información de jubilación, pensión o retiro */
+  retirement?: PayrollRetirement;
+
+  /** Información de separación o indemnización */
+  severance?: PayrollSeverance;
+}
+
+/**
+ * Percepción de nómina
+ */
+export interface PayrollEarning {
+  /** Código del tipo de percepción. Catálogo SAT c_TipoPercepcion */
+  earningTypeCode: string;
+
+  /** Clave de control interno de la percepción */
+  code: string;
+
+  /** Concepto de la percepción */
+  concept: string;
+
+  /** Monto gravado de la percepción */
+  taxedAmount: number;
+
+  /** Monto exento de la percepción */
+  exemptAmount: number;
+
+  /** Horas extra trabajadas */
+  overtime?: PayrollOvertime[];
+
+  /** Opciones de acciones */
+  stockOptions?: PayrollStockOptions;
+}
+
+/**
+ * Opciones de acciones en percepción
+ */
+export interface PayrollStockOptions {
+  /** Precio de mercado de la acción */
+  marketPrice: number;
+
+  /** Precio de ejercicio de la acción */
+  grantPrice: number;
+}
+
+/**
+ * Horas extra en percepción
+ */
+export interface PayrollOvertime {
+  /** Número de días con horas extra */
+  days: number;
+
+  /** Código del tipo de horas. "01": Dobles, "02": Triples */
+  hoursTypeCode: string;
+
+  /** Número de horas extra trabajadas */
+  extraHours: number;
+
+  /** Monto pagado por las horas extra */
+  amountPaid: number;
+}
+
+/**
+ * Otros pagos de nómina
+ */
+export interface PayrollOtherPayment {
+  /** Código del tipo de otro pago. Catálogo SAT c_TipoOtroPago */
+  otherPaymentTypeCode: string;
+
+  /** Clave de control interno del otro pago */
+  code: string;
+
+  /** Concepto del otro pago */
+  concept: string;
+
+  /** Monto del otro pago */
+  amount: number;
+
+  /** Subsidio causado (para tipo 002) */
+  subsidyCaused?: number;
+
+  /** Compensación de saldos a favor */
+  balanceCompensation?: PayrollBalanceCompensation;
+}
+
+/**
+ * Compensación de saldos a favor en otros pagos
+ */
+export interface PayrollBalanceCompensation {
+  /** Saldo a favor */
+  favorableBalance: number;
+
+  /** Año del saldo a favor */
+  year: number;
+
+  /** Saldo a favor remanente */
+  remainingFavorableBalance: number;
+}
+
+/**
+ * Información de jubilación, pensión o retiro
+ */
+export interface PayrollRetirement {
+  /** Total de pago único */
+  totalOneTime?: number;
+
+  /** Total de parcialidades */
+  totalInstallments?: number;
+
+  /** Monto diario */
+  dailyAmount?: number;
+
+  /** Ingreso acumulable */
+  accumulableIncome?: number;
+
+  /** Ingreso no acumulable */
+  nonAccumulableIncome?: number;
+}
+
+/**
+ * Información de separación o indemnización
+ */
+export interface PayrollSeverance {
+  /** Total pagado */
+  totalPaid: number;
+
+  /** Años de servicio */
+  yearsOfService: number;
+
+  /** Último sueldo mensual ordinario */
+  lastMonthlySalary: number;
+
+  /** Ingreso acumulable */
+  accumulableIncome: number;
+
+  /** Ingreso no acumulable */
+  nonAccumulableIncome: number;
+}
+
+/**
+ * Deducción de nómina
+ */
+export interface PayrollDeduction {
+  /** Código del tipo de deducción. Catálogo SAT c_TipoDeduccion */
+  deductionTypeCode: string;
+
+  /** Clave de control interno de la deducción */
+  code: string;
+
+  /** Concepto de la deducción */
+  concept: string;
+
+  /** Monto de la deducción */
+  amount: number;
+}
+
+/**
+ * Incapacidad de nómina
+ */
+export interface PayrollDisability {
+  /** Número de días de incapacidad */
+  disabilityDays: number;
+
+  /** Código del tipo de incapacidad. Catálogo SAT c_TipoIncapacidad */
+  disabilityTypeCode: string;
+
+  /** Monto monetario de la incapacidad */
+  monetaryAmount?: number;
+}
+
+// ============================================================================
+// Lading Complement (Carta Porte)
+// ============================================================================
+
+/**
+ * Complemento de carta porte (placeholder para futura implementación)
+ */
+export interface LadingComplement {
+  // Carta Porte complement - to be implemented
+}
 
 /**
  * Modelo factura
  * Contiene toda la información de una factura, como datos del emisor, receptor, 
  * productos/servicios, importes, método de pago, el tipo de factura, entre otros.
  */
-export interface Invoice {
+export interface Invoice extends BaseDto {
   /** Código de la versión de la facura. Default: "4.0" */
   versionCode?: string;
 
@@ -72,8 +531,14 @@ export interface Invoice {
   /** Facturas relacionadas */
   relatedInvoices?: RelatedInvoice[];
 
-  /** Pago o pagos recibidos para liquidar parcial o totalmente una factura de ingreso emitida previamente */
+  /**
+   * Pago o pagos recibidos para liquidar parcial o totalmente una factura de ingreso emitida previamente
+   * @deprecated Use complement.payment instead
+   */
   payments?: InvoicePayment[];
+
+  /** Complementos de la factura (nómina, pago, impuestos locales, carta porte) */
+  complement?: Complement;
 
   /** Respuesta del SAT. Contiene la información del timbrado. (Sólo lectura) */
   responses?: InvoiceResponse[];
@@ -94,6 +559,9 @@ export interface InvoiceIssuer {
 
   /** Código del régimen fiscal del emisor. Catálogo del SAT c_RegimenFiscal */
   taxRegimeCode?: string;
+
+  /** Datos del empleador para facturas de nómina (inline, modo ByValues) */
+  employerData?: InvoiceIssuerEmployerData;
 
   /** Sellos del emisor (archivos .cer y .key) */
   taxCredentials?: TaxCredential[];
@@ -137,6 +605,9 @@ export interface InvoiceRecipient {
 
   /** Correo electrónico del receptor. Para enviar la factura desde el dasborard */
   email?: string;
+
+  /** Datos del empleado para facturas de nómina (inline, modo ByValues) */
+  employeeData?: InvoiceRecipientEmployeeData;
 }
 
 /**

@@ -1,5 +1,3 @@
-
-
 import { IFiscalapiClient } from '../abstractions/fiscalapi-client.interface';
 import { IInvoiceService } from '../abstractions/invoice-service.interface';
 import { IProductService } from '../abstractions/product-service.interface';
@@ -7,20 +5,22 @@ import { IPersonService } from '../abstractions/person-service.interface';
 import { IApiKeyService } from '../abstractions/api-key-service.interface';
 import { ICatalogService } from '../abstractions/catalog-service.interface';
 import { ITaxFileService } from '../abstractions/tax-file-service.interface';
-import { IDownloadCatalogService } from '../abstractions/download-catalog.inteface';
+import { IDownloadCatalogService } from '../abstractions/download-catalog-service.interface';
+import { IDownloadRuleService } from '../abstractions/download-rule-service.interface';
+import { IDownloadRequestService } from '../abstractions/download-request-service.interface';
+import { IStampService } from '../abstractions/stamp-service.interface';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
 import { ApiKeyService } from './api-key-service';
 import { CatalogService } from './catalog-service';
-import { DownloadCatalogService } from './download-catalog.service';
+import { DownloadCatalogService } from './download-catalog-service';
+import { DownloadRuleService } from './download-rule-service';
+import { DownloadRequestService } from './download-request-service';
 import { InvoiceService } from './invoice-service';
 import { PersonService } from './person-service';
 import { ProductService } from './product-service';
+import { StampService } from './stamp-service';
 import { TaxFileService } from './tax-file-service';
-import { DownloadRuleService } from './download-rule.service';
-import { IDownloadRuleService } from '../abstractions/download-rule.service.inteface';
-import { DownloadRequestService } from './download-request.service';
-import { IDownloadRequestService } from '../abstractions/download-request.service.interface';
 
 /**
  * Cliente principal para FiscalAPI
@@ -72,6 +72,11 @@ export class FiscalapiClient implements IFiscalapiClient {
   readonly downloadRequests: IDownloadRequestService;
 
   /**
+   * Servicio de timbres fiscales
+   */
+  readonly stamps: IStampService;
+
+  /**
    * Crea una nueva instancia del cliente de FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración
    * @private
@@ -91,6 +96,7 @@ export class FiscalapiClient implements IFiscalapiClient {
     this.downloadCatalogs = new DownloadCatalogService(httpClient, apiVersion);
     this.downloadRules = new DownloadRuleService(httpClient, apiVersion);
     this.downloadRequests = new DownloadRequestService(httpClient, apiVersion);
+    this.stamps = new StampService(httpClient, apiVersion);
   }
 
   /**

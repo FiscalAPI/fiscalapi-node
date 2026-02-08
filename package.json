@@ -4,7 +4,7 @@
   "description": "SDK de Node.js para Fiscalapi",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/cjs/index.d.ts",
   "files": [
     "dist/",
     "README.md",
@@ -14,10 +14,10 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:package-json",
+    "build:esm": "tsc -p tsconfig.esm.json && node scripts/fix-esm-imports.js",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:types": "tsc -p tsconfig.types.json",
+    "build:package-json": "node -e \"require('fs').writeFileSync('dist/cjs/package.json','{\\\"type\\\":\\\"commonjs\\\"}');require('fs').writeFileSync('dist/esm/package.json','{\\\"type\\\":\\\"module\\\"}')\"",
     "test": "jest",
     "lint": "eslint 'src/**/*.ts'",
     "prepare": "npm run build",
@@ -38,9 +38,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/cjs/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
+      "require": "./dist/cjs/index.js"
     }
   },
   "repository": {
@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+    "form-data": "^4.0.4",
     "luxon": "^3.6.0"
   },
   "devDependencies": {

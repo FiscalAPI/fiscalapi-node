@@ -34,14 +34,6 @@ export interface IFiscalapiHttpClient {
   getAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>>;
 
   /**
-   * Realiza una petición GET por ID a la API
-   * @param endpoint - Punto final de la API con ID
-   * @param config - Configuración adicional para la petición
-   * @returns Respuesta de la API
-   */
-  getByIdAsync<T>(endpoint: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>>;
-
-  /**
    * Realiza una petición POST a la API
    * @param endpoint - Punto final de la API
    * @param data - Datos a enviar en la petición

@@ -1,7 +1,7 @@
 import { DownloadRequest, DownloadRule } from '../models/download';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { BaseFiscalapiService } from './base-fiscalapi-service';
-import { IDownloadRuleService } from '../abstractions/download-rule.service.inteface';
+import { IDownloadRuleService } from '../abstractions/download-rule-service.interface';
 import { ApiResponse } from '../common/api-response';
 
 /**
@@ -9,7 +9,7 @@ import { ApiResponse } from '../common/api-response';
  */
 export class DownloadRuleService extends BaseFiscalapiService<DownloadRule> implements IDownloadRuleService {
   /**
-* Crea una nueva instancia del servicio de reglas de descarga masiva
+   * Crea una nueva instancia del servicio de reglas de descarga masiva
    * @param {IFiscalapiHttpClient} httpClient - Cliente HTTP
    * @param {string} apiVersion - Versión de la API
    */
@@ -23,9 +23,9 @@ export class DownloadRuleService extends BaseFiscalapiService<DownloadRule> impl
    * @returns solicitud de descarga masiva de prueba
    */   
   createTestRule(): Promise<ApiResponse<DownloadRequest>> {
-    // GET /api/v4/download-rules/test
-    var path = "test";
-    var endpoint = this.buildEndpoint(path);
+    // POST /api/v4/download-rules/test
+    const path = 'test';
+    const endpoint = this.buildEndpoint(path);
     return this.httpClient.postAsync<DownloadRequest>(endpoint, {});
   }
 }

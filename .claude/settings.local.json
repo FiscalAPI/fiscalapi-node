@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm test)",
+      "Bash(npx ts-node:*)",
+      "Bash(findstr:*)"
+    ],
+    "defaultMode": "bypassPermissions"
+  }
+}

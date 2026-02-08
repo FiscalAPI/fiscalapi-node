@@ -17,9 +17,6 @@ import {
  * Implementación del servicio de facturas
  */
 export class InvoiceService extends BaseFiscalapiService<Invoice> implements IInvoiceService {
-  private readonly INCOME_ENDPOINT = 'income';
-  private readonly CREDIT_NOTE_ENDPOINT = 'credit-note';
-  private readonly PAYMENT_ENDPOINT = 'payment';
 
   /**
    * Crea una nueva instancia del servicio de facturas
@@ -28,37 +25,6 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
     super(httpClient, 'invoices', apiVersion);
-  }
-
-  /**
-   * @inheritdoc
-   */
-   override async create(requestModel: Invoice): Promise<ApiResponse<Invoice>> {
-    if (!requestModel) {
-      throw new Error('requestModel cannot be null');
-    }
-
-    let endpoint: string;
-
-    switch (requestModel.typeCode) {
-      case 'I':
-        endpoint = this.INCOME_ENDPOINT;
-        break;
-      case 'E':
-        endpoint = this.CREDIT_NOTE_ENDPOINT;
-        break;
-      case 'P':
-        endpoint = this.PAYMENT_ENDPOINT;
-        break;
-      default:
-        throw new Error(`Unsupported invoice type: ${requestModel.typeCode}`);
-    }
-
-      return await this.executeRequest<Invoice, Invoice>({
-        path:endpoint,
-        data:requestModel,
-        method:'POST',
-      });
   }
 
   /**
@@ -72,8 +38,8 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
     }
 
     return await this.executeRequest<CancelInvoiceResponse, CancelInvoiceRequest>({
-      data:request,
-      method:'DELETE',
+      data: request,
+      method: 'DELETE',
     });
   }
 
@@ -87,9 +53,9 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
       throw new Error('request cannot be null');
     }
     return await this.executeRequest<FileResponse, CreatePdfRequest>({
-      path:'pdf',
-      data:request,
-      method:'POST',
+      path: 'pdf',
+      data: request,
+      method: 'POST',
     });
   }
 
@@ -118,9 +84,9 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   async send(request: SendInvoiceRequest): Promise<ApiResponse<boolean>> {
     return await this.executeRequest<boolean, SendInvoiceRequest>({
-      path:'send',
-      data:request,
-      method:'POST',
+      path: 'send',
+      data: request,
+      method: 'POST',
     });
   }
 
@@ -130,10 +96,10 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    * @returns {Promise<ApiResponse<InvoiceStatusResponse>>} Respuesta con el estado de la factura
    */
   async getStatus(request: InvoiceStatusRequest): Promise<ApiResponse<InvoiceStatusResponse>> {
-        return await this.executeRequest<InvoiceStatusResponse, InvoiceStatusRequest>({
-        path:'status',
-        data:request,
-        method:'POST',
-      });
+    return await this.executeRequest<InvoiceStatusResponse, InvoiceStatusRequest>({
+      path: 'status',
+      data: request,
+      method: 'POST',
+    });
   }
 }
