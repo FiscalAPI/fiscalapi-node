@@ -65,11 +65,11 @@ async function facturaIngresoAutotransporteNacional(client: FiscalapiClient): Pr
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 1,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         ubicaciones: [
           {
             tipoUbicacion: 'Origen',
@@ -218,11 +218,11 @@ async function facturaIngresoAutotransporteNacionalConImpuestos(client: Fiscalap
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 1,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         ubicaciones: [
           {
             tipoUbicacion: 'Origen',
@@ -365,17 +365,17 @@ async function facturaIngresoAutotransporteExtranjero(client: FiscalapiClient): 
     ],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '01',
         totalDistRec: 1,
         pesoNetoTotal: 1,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         regimenAduaneros: [
           { regimenAduaneroId: 'EXD' }
         ],
@@ -519,17 +519,17 @@ async function facturaIngresoAutotransporteInternacionalAduanero(client: Fiscala
     ],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '01',
         totalDistRec: 1,
         pesoNetoTotal: 1,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         regimenAduaneros: [
           { regimenAduaneroId: 'IMD' }
         ],
@@ -671,7 +671,7 @@ async function facturaIngresoTransporteFerroviarioNacional(client: FiscalapiClie
         transpInternacId: 'No',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -756,13 +756,13 @@ async function facturaIngresoTransporteFerroviarioExtranjero(client: FiscalapiCl
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '04',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -851,13 +851,13 @@ async function facturaIngresoTransporteFerroviarioInternacionalAduanero(client: 
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '04',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -1079,7 +1079,7 @@ async function facturaIngresoTransporteAereoExtranjero(client: FiscalapiClient):
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '03',
@@ -1193,7 +1193,7 @@ async function facturaIngresoTransporteAereoInternacionalAduanero(client: Fiscal
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '03',
@@ -1427,7 +1427,7 @@ async function facturaIngresoTransporteMAritimoExtranjero(client: FiscalapiClien
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '02',
@@ -1550,14 +1550,14 @@ async function facturaIngresoTransporteMAritimoInternacionalAduanero(client: Fis
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '01',
         totalDistRec: 0,
         unidadPesoId: 'XBX',
         pesoNetoTotal: 1,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         regimenAduaneros: [
@@ -1704,11 +1704,11 @@ async function facturaTrasladoAutotransporteNacional(client: FiscalapiClient): P
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 0,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         ubicaciones: [
           {
             tipoUbicacion: 'Origen',
@@ -1822,17 +1822,17 @@ async function facturaTrasladoAutotransporteExtranjero(client: FiscalapiClient):
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '01',
         totalDistRec: 1,
         pesoNetoTotal: 0,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         regimenAduaneros: [
           { regimenAduaneroId: 'EXD' }
         ],
@@ -1962,17 +1962,17 @@ async function facturaTrasladoAutotransporteInternacionalAduanero(client: Fiscal
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '01',
         totalDistRec: 1,
         pesoNetoTotal: 0,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
-        logisticaInversaRecoleccionDevolucionId: 'S�',
+        logisticaInversaRecoleccionDevolucionId: 'Sí',
         regimenAduaneros: [
           { regimenAduaneroId: 'IMD' }
         ],
@@ -2108,7 +2108,7 @@ async function facturaTrasladoTransporteFerroviarioNacional(client: FiscalapiCli
         transpInternacId: 'No',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -2191,13 +2191,13 @@ async function facturaTrasladoTransporteFerroviarioExtranjero(client: FiscalapiC
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '04',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -2284,13 +2284,13 @@ async function facturaTrasladoTransporteFerroviarioInternacionalAduanero(client:
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '04',
         totalDistRec: 500,
         pesoNetoTotal: 10,
-        registroISTMOId: 'S�',
+        registroISTMOId: 'Sí',
         ubicacionPoloOrigenId: '01',
         ubicacionPoloDestinoId: '01',
         unidadPesoId: 'XBX',
@@ -2486,7 +2486,7 @@ async function facturaTrasladoTransporteAereoExtranjero(client: FiscalapiClient)
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '03',
@@ -2598,7 +2598,7 @@ async function facturaTrasladoTransporteAereoInternacionalAduanero(client: Fisca
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '03',
@@ -2828,7 +2828,7 @@ async function facturaTrasladoTransporteMAritimoExtranjero(client: FiscalapiClie
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
         viaEntradaSalidaId: '02',
@@ -2949,7 +2949,7 @@ async function facturaTrasladoTransporteMAritimoInternacionalAduanero(client: Fi
     items: [makeStandardItem()],
     complement: {
       lading: {
-        transpInternacId: 'S�',
+        transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
         viaEntradaSalidaId: '02',
