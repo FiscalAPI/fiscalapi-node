@@ -589,7 +589,7 @@ export interface LadingGuideIdentification {
   /** Descripción de la guía de identificación */
   descripGuiaIdentificacion: string;
 
-  /** Peso de la guía de identificación */
+  /** Peso de la guía de identificación en kg */
   pesoGuiaIdentificacion: number;
 }
 
@@ -635,7 +635,7 @@ export interface LadingMerchandise {
   /** Dimensiones de la mercancía */
   dimensiones?: string;
 
-  /** Indica si es material peligroso. Catálogo SAT c_MaterialPeligroso (inline) */
+  /** Indica si es material peligroso (inline). Catálogo SAT c_MaterialPeligroso */
   materialPeligrosoId?: string;
 
   /** Clave de material peligroso. Catálogo SAT c_MaterialPeligroso */
