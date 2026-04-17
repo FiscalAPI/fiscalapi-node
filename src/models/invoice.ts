@@ -464,9 +464,44 @@ export interface LadingCustomsRegime {
 }
 
 /**
- * Domicilio de una ubicación o figura de transporte
+ * Domicilio de una ubicación en carta porte (CartaPorteUbicacionDomicilioRequest)
  */
-export interface LadingDomicilio {
+export interface LadingLocationAddress {
+  /** Calle */
+  calle?: string;
+
+  /** Número exterior */
+  numeroExterior?: string;
+
+  /** Número interior */
+  numeroInterior?: string;
+
+  /** Clave de colonia. Catálogo SAT c_Colonia */
+  coloniaId?: string;
+
+  /** Clave de localidad. Catálogo SAT c_Localidad */
+  localidadId?: string;
+
+  /** Referencia adicional */
+  referencia?: string;
+
+  /** Clave de municipio. Catálogo SAT c_Municipio */
+  municipioId?: string;
+
+  /** Clave de estado. Catálogo SAT c_Estado */
+  estadoId: string;
+
+  /** Clave de país. Catálogo SAT c_Pais */
+  paisId: string;
+
+  /** Código postal. Catálogo SAT c_CodigoPostal */
+  codigoPostalId: string;
+}
+
+/**
+ * Domicilio de una figura de transporte en carta porte (CartaPorteTiposFiguraDomicilioRequest)
+ */
+export interface LadingFigureAddress {
   /** Calle */
   calle?: string;
 
@@ -539,7 +574,7 @@ export interface LadingLocation {
   distanciaRecorrida?: number;
 
   /** Domicilio de la ubicación */
-  domicilio?: LadingDomicilio;
+  domicilio?: LadingLocationAddress;
 }
 
 /**
@@ -954,7 +989,7 @@ export interface LadingAirTransport {
 /**
  * Contenedor ferroviario
  */
-export interface LadingRailContainer {
+export interface LadingContainerCar {
   /** Clave del tipo de contenedor. Catálogo SAT c_Contenedor */
   tipoContenedorId: string;
 
@@ -968,7 +1003,7 @@ export interface LadingRailContainer {
 /**
  * Carro ferroviario
  */
-export interface LadingRailcar {
+export interface LadingCar {
   /** Clave del tipo de carro. Catálogo SAT c_TipoCarro */
   tipoCarroId: string;
 
@@ -982,7 +1017,7 @@ export interface LadingRailcar {
   toneladasNetasCarro: number;
   
   /** Contenedores ferroviarios */
-  contenedores?: LadingRailContainer[];
+  contenedores?: LadingContainerCar[];
 }
 
 /**
@@ -1016,7 +1051,7 @@ export interface LadingRailTransport {
   derechosDePaso?: LadingRailRightOfWay[];
 
   /** Carros ferroviarios */
-  carros: LadingRailcar[];
+  carros: LadingCar[];
 }
 
 /**
@@ -1053,7 +1088,7 @@ export interface LadingFigure {
   partesTransporte?: LadingTransportPart[];
 
   /** Domicilio de la figura */
-  domicilio?: LadingDomicilio;
+  domicilio?: LadingFigureAddress;
 }
 
 /**
