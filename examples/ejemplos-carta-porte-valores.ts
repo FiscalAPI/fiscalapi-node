@@ -3155,8 +3155,6 @@ function makeMaritimeTransport() {
         idCCPRelacionado: 'CCCBCD94-870A-4332-A52A-A52AA52AA52A',
         placaVMCCP: 'JNG7683',
         fechaCertificacionCCP: '2024-06-20T11:11:00',
-        pesoContenedorVacio: 0,
-        pesoNetoMercancia: 1,
         remolquesCCP: [
           { subTipoRemCCPId: 'CTR001', placaCCP: 'JNG7636' }
         ]

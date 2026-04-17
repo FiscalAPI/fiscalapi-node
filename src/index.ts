@@ -74,6 +74,7 @@ export type {
   LadingLocation,
   LadingMerchandiseDetail,
   LadingCustomsDocument,
+  LadingGuideIdentification,
   LadingQuantityTransported,
   LadingMerchandise,
   LadingTrailer,
