@@ -641,7 +641,7 @@ export interface LadingQuantityTransported {
   /** Identificador de ubicación de destino */
   idDestino: string;
 
-  /** Clave de transporte. Catálogo SAT c_CvesTransporte */
+  /** Clave de transporte. Catálogo SAT c_CveTransporte */
   cvesTransporteId?: string;
 }
 
@@ -1104,7 +1104,7 @@ export interface LadingComplement {
   /** Clave del país de origen o destino. Catálogo SAT c_Pais */
   paisOrigenDestinoId?: string;
 
-  /** Clave de vía de entrada/salida. Catálogo SAT c_ViaEntradaSalida */
+  /** Clave de vía de entrada/salida. Catálogo SAT c_CveTransporte */
   viaEntradaSalidaId?: string;
 
   /** Total de distancia recorrida en km */
