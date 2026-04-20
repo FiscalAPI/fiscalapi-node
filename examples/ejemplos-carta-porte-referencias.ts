@@ -1,6 +1,6 @@
 /**
  * Ejemplos de facturas con complemento Carta Porte (CFDI 4.0) usando el SDK de FiscalAPI
- * Todos los m�todos usan el modo "ByReference"
+ * Todos los métodos usan el modo "ByReference"
  */
 
 import { FiscalapiClient, FiscalapiSettings, Invoice } from '../src/index';
@@ -114,7 +114,7 @@ async function facturaIngresoAutotransporteNacional(client: FiscalapiClient): Pr
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -267,7 +267,7 @@ async function facturaIngresoAutotransporteNacionalConImpuestos(client: Fiscalap
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -328,10 +328,10 @@ async function facturaIngresoAutotransporteNacionalConImpuestos(client: Fiscalap
 }
 
 // ============================================================================
-// 3. FACTURA INGRESO - AUTOTRANSPORTE EXTRANJERO / EXPORTACI�N (ByReference)
+// 3. FACTURA INGRESO - AUTOTRANSPORTE EXTRANJERO / EXPORTACIÓN (ByReference)
 // ============================================================================
 async function facturaIngresoAutotransporteExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Autotransporte Extranjero - Exportaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Autotransporte Extranjero - Exportación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -421,7 +421,7 @@ async function facturaIngresoAutotransporteExtranjero(client: FiscalapiClient): 
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -482,10 +482,10 @@ async function facturaIngresoAutotransporteExtranjero(client: FiscalapiClient): 
 }
 
 // ============================================================================
-// 4. FACTURA INGRESO - AUTOTRANSPORTE INTERNACIONAL ADUANERO / IMPORTACI�N (ByReference)
+// 4. FACTURA INGRESO - AUTOTRANSPORTE INTERNACIONAL ADUANERO / IMPORTACIÓN (ByReference)
 // ============================================================================
 async function facturaIngresoAutotransporteInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Autotransporte Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Autotransporte Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -575,7 +575,7 @@ async function facturaIngresoAutotransporteInternacionalAduanero(client: Fiscala
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -704,7 +704,7 @@ async function facturaIngresoTransporteFerroviarioNacional(client: FiscalapiClie
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -734,7 +734,7 @@ async function facturaIngresoTransporteFerroviarioNacional(client: FiscalapiClie
 // 6. FACTURA INGRESO - TRANSPORTE FERROVIARIO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteFerroviarioExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte Ferroviario Extranjero - Exportaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Ferroviario Extranjero - Exportación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -797,7 +797,7 @@ async function facturaIngresoTransporteFerroviarioExtranjero(client: FiscalapiCl
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -829,7 +829,7 @@ async function facturaIngresoTransporteFerroviarioExtranjero(client: FiscalapiCl
 // 7. FACTURA INGRESO - TRANSPORTE FERROVIARIO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteFerroviarioInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte Ferroviario Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Ferroviario Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -893,7 +893,7 @@ async function facturaIngresoTransporteFerroviarioInternacionalAduanero(client: 
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -929,10 +929,10 @@ async function facturaIngresoTransporteFerroviarioInternacionalAduanero(client: 
 }
 
 // ============================================================================
-// 8. FACTURA INGRESO - TRANSPORTE A�REO NACIONAL (ByReference)
+// 8. FACTURA INGRESO - TRANSPORTE AÉREO NACIONAL (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteAereoNacional(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte A�reo Nacional (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Aéreo Nacional (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1007,7 +1007,7 @@ async function facturaIngresoTransporteAereoNacional(client: FiscalapiClient): P
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1054,10 +1054,10 @@ async function facturaIngresoTransporteAereoNacional(client: FiscalapiClient): P
 }
 
 // ============================================================================
-// 9. FACTURA INGRESO - TRANSPORTE A�REO EXTRANJERO (ByReference)
+// 9. FACTURA INGRESO - TRANSPORTE AÉREO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteAereoExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte A�reo Extranjero (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Aéreo Extranjero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1137,7 +1137,7 @@ async function facturaIngresoTransporteAereoExtranjero(client: FiscalapiClient):
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1168,10 +1168,10 @@ async function facturaIngresoTransporteAereoExtranjero(client: FiscalapiClient):
 }
 
 // ============================================================================
-// 10. FACTURA INGRESO - TRANSPORTE A�REO INTERNACIONAL ADUANERO (ByReference)
+// 10. FACTURA INGRESO - TRANSPORTE AÉREO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteAereoInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte A�reo Internacional Aduanero (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Aéreo Internacional Aduanero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1252,7 +1252,7 @@ async function facturaIngresoTransporteAereoInternacionalAduanero(client: Fiscal
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1286,10 +1286,10 @@ async function facturaIngresoTransporteAereoInternacionalAduanero(client: Fiscal
 }
 
 // ============================================================================
-// 11. FACTURA INGRESO - TRANSPORTE MAR�TIMO NACIONAL (ByReference)
+// 11. FACTURA INGRESO - TRANSPORTE MARÍTIMO NACIONAL (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteMAritimoNacional(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte Mar�timo Nacional (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Marítimo Nacional (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1366,7 +1366,7 @@ async function facturaIngresoTransporteMAritimoNacional(client: FiscalapiClient)
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1402,10 +1402,10 @@ async function facturaIngresoTransporteMAritimoNacional(client: FiscalapiClient)
 }
 
 // ============================================================================
-// 12. FACTURA INGRESO - TRANSPORTE MAR�TIMO EXTRANJERO (ByReference)
+// 12. FACTURA INGRESO - TRANSPORTE MARÍTIMO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteMAritimoExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte Mar�timo Extranjero (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Marítimo Extranjero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1487,7 +1487,7 @@ async function facturaIngresoTransporteMAritimoExtranjero(client: FiscalapiClien
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1525,10 +1525,10 @@ async function facturaIngresoTransporteMAritimoExtranjero(client: FiscalapiClien
 }
 
 // ============================================================================
-// 13. FACTURA INGRESO - TRANSPORTE MAR�TIMO INTERNACIONAL ADUANERO (ByReference)
+// 13. FACTURA INGRESO - TRANSPORTE MARÍTIMO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaIngresoTransporteMAritimoInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Ingreso Transporte Mar�timo Internacional Aduanero (ByReference) ===\n');
+  console.log('\n=== Factura Ingreso Transporte Marítimo Internacional Aduanero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1615,7 +1615,7 @@ async function facturaIngresoTransporteMAritimoInternacionalAduanero(client: Fis
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1753,7 +1753,7 @@ async function facturaTrasladoAutotransporteNacional(client: FiscalapiClient): P
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1802,7 +1802,7 @@ async function facturaTrasladoAutotransporteNacional(client: FiscalapiClient): P
 // 15. FACTURA TRASLADO - AUTOTRANSPORTE EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaTrasladoAutotransporteExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Autotransporte Extranjero - Exportaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Autotransporte Extranjero - Exportación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -1878,7 +1878,7 @@ async function facturaTrasladoAutotransporteExtranjero(client: FiscalapiClient):
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -1942,7 +1942,7 @@ async function facturaTrasladoAutotransporteExtranjero(client: FiscalapiClient):
 // 16. FACTURA TRASLADO - AUTOTRANSPORTE INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaTrasladoAutotransporteInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Autotransporte Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Autotransporte Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2018,7 +2018,7 @@ async function facturaTrasladoAutotransporteInternacionalAduanero(client: Fiscal
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2141,7 +2141,7 @@ async function facturaTrasladoTransporteFerroviarioNacional(client: FiscalapiCli
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2171,7 +2171,7 @@ async function facturaTrasladoTransporteFerroviarioNacional(client: FiscalapiCli
 // 18. FACTURA TRASLADO - TRANSPORTE FERROVIARIO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteFerroviarioExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte Ferroviario Extranjero - Exportaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Ferroviario Extranjero - Exportación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2232,7 +2232,7 @@ async function facturaTrasladoTransporteFerroviarioExtranjero(client: FiscalapiC
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2264,7 +2264,7 @@ async function facturaTrasladoTransporteFerroviarioExtranjero(client: FiscalapiC
 // 19. FACTURA TRASLADO - TRANSPORTE FERROVIARIO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteFerroviarioInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte Ferroviario Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Ferroviario Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2326,7 +2326,7 @@ async function facturaTrasladoTransporteFerroviarioInternacionalAduanero(client:
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2358,10 +2358,10 @@ async function facturaTrasladoTransporteFerroviarioInternacionalAduanero(client:
 }
 
 // ============================================================================
-// 20. FACTURA TRASLADO - TRANSPORTE A�REO NACIONAL (ByReference)
+// 20. FACTURA TRASLADO - TRANSPORTE AÉREO NACIONAL (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteAereoNacional(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte A�reo Nacional (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Aéreo Nacional (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2434,7 +2434,7 @@ async function facturaTrasladoTransporteAereoNacional(client: FiscalapiClient): 
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2463,10 +2463,10 @@ async function facturaTrasladoTransporteAereoNacional(client: FiscalapiClient): 
 }
 
 // ============================================================================
-// 21. FACTURA TRASLADO - TRANSPORTE A�REO EXTRANJERO (ByReference)
+// 21. FACTURA TRASLADO - TRANSPORTE AÉREO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteAereoExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte A�reo Extranjero (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Aéreo Extranjero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2544,7 +2544,7 @@ async function facturaTrasladoTransporteAereoExtranjero(client: FiscalapiClient)
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2575,10 +2575,10 @@ async function facturaTrasladoTransporteAereoExtranjero(client: FiscalapiClient)
 }
 
 // ============================================================================
-// 22. FACTURA TRASLADO - TRANSPORTE A�REO INTERNACIONAL ADUANERO (ByReference)
+// 22. FACTURA TRASLADO - TRANSPORTE AÉREO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteAereoInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte A�reo Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Aéreo Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2657,7 +2657,7 @@ async function facturaTrasladoTransporteAereoInternacionalAduanero(client: Fisca
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2691,10 +2691,10 @@ async function facturaTrasladoTransporteAereoInternacionalAduanero(client: Fisca
 }
 
 // ============================================================================
-// 23. FACTURA TRASLADO - TRANSPORTE MAR�TIMO NACIONAL (ByReference)
+// 23. FACTURA TRASLADO - TRANSPORTE MARÍTIMO NACIONAL (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteMAritimoNacional(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte Mar�timo Nacional (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Marítimo Nacional (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2769,7 +2769,7 @@ async function facturaTrasladoTransporteMAritimoNacional(client: FiscalapiClient
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2805,10 +2805,10 @@ async function facturaTrasladoTransporteMAritimoNacional(client: FiscalapiClient
 }
 
 // ============================================================================
-// 24. FACTURA TRASLADO - TRANSPORTE MAR�TIMO EXTRANJERO (ByReference)
+// 24. FACTURA TRASLADO - TRANSPORTE MARÍTIMO EXTRANJERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteMAritimoExtranjero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte Mar�timo Extranjero (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Marítimo Extranjero (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -2888,7 +2888,7 @@ async function facturaTrasladoTransporteMAritimoExtranjero(client: FiscalapiClie
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -2926,10 +2926,10 @@ async function facturaTrasladoTransporteMAritimoExtranjero(client: FiscalapiClie
 }
 
 // ============================================================================
-// 25. FACTURA TRASLADO - TRANSPORTE MAR�TIMO INTERNACIONAL ADUANERO (ByReference)
+// 25. FACTURA TRASLADO - TRANSPORTE MARÍTIMO INTERNACIONAL ADUANERO (ByReference)
 // ============================================================================
 async function facturaTrasladoTransporteMAritimoInternacionalAduanero(client: FiscalapiClient): Promise<void> {
-  console.log('\n=== Factura Traslado Transporte Mar�timo Internacional Aduanero - Importaci�n (ByReference) ===\n');
+  console.log('\n=== Factura Traslado Transporte Marítimo Internacional Aduanero - Importación (ByReference) ===\n');
 
   const invoice: Invoice = {
     versionCode: '4.0',
@@ -3011,7 +3011,7 @@ async function facturaTrasladoTransporteMAritimoInternacionalAduanero(client: Fi
         mercancias: [
           {
             bienesTranspId: '11121900',
-            descripcion: 'Accesorios de equipo de telefon�a',
+            descripcion: 'Accesorios de equipo de telefonía',
             cantidad: 1.0,
             claveUnidadId: 'XBX',
             materialPeligrosoId: 'No',
@@ -3052,7 +3052,7 @@ async function facturaTrasladoTransporteMAritimoInternacionalAduanero(client: Fi
 }
 
 // ============================================================================
-// HELPERS COMPARTIDOS (Ferroviario / A�reo)
+// HELPERS COMPARTIDOS (Ferroviario / Aéreo)
 // ============================================================================
 
 function makeStandardItem() {
@@ -3297,12 +3297,12 @@ async function main(): Promise<void> {
     // await facturaTrasladoTransporteMAritimoExtranjero(client);
     // await facturaTrasladoTransporteMAritimoInternacionalAduanero(client);
 
-    console.log('\nEjecuci�n completada.');
+    console.log('\nEjecución completada.');
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-// Ejecutar funci�n principal
+// Ejecutar función principal
 main();
 
