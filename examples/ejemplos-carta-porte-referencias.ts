@@ -61,7 +61,7 @@ async function facturaIngresoAutotransporteNacional(client: FiscalapiClient): Pr
       }
     ],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 1,
@@ -214,7 +214,7 @@ async function facturaIngresoAutotransporteNacionalConImpuestos(client: Fiscalap
       }
     ],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 1,
@@ -364,7 +364,7 @@ async function facturaIngresoAutotransporteExtranjero(client: FiscalapiClient): 
       }
     ],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -518,7 +518,7 @@ async function facturaIngresoAutotransporteInternacionalAduanero(client: Fiscala
       }
     ],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'USA',
@@ -667,7 +667,7 @@ async function facturaIngresoTransporteFerroviarioNacional(client: FiscalapiClie
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 500,
         pesoNetoTotal: 10,
@@ -755,7 +755,7 @@ async function facturaIngresoTransporteFerroviarioExtranjero(client: FiscalapiCl
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -850,7 +850,7 @@ async function facturaIngresoTransporteFerroviarioInternacionalAduanero(client: 
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -953,7 +953,7 @@ async function facturaIngresoTransporteAereoNacional(client: FiscalapiClient): P
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 0,
         pesoNetoTotal: 10,
@@ -1078,7 +1078,7 @@ async function facturaIngresoTransporteAereoExtranjero(client: FiscalapiClient):
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -1192,7 +1192,7 @@ async function facturaIngresoTransporteAereoInternacionalAduanero(client: Fiscal
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -1310,7 +1310,7 @@ async function facturaIngresoTransporteMAritimoNacional(client: FiscalapiClient)
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 0,
         unidadPesoId: 'XBX',
@@ -1426,7 +1426,7 @@ async function facturaIngresoTransporteMAritimoExtranjero(client: FiscalapiClien
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -1549,7 +1549,7 @@ async function facturaIngresoTransporteMAritimoInternacionalAduanero(client: Fis
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -1700,7 +1700,7 @@ async function facturaTrasladoAutotransporteNacional(client: FiscalapiClient): P
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 1,
         pesoNetoTotal: 0,
@@ -1821,7 +1821,7 @@ async function facturaTrasladoAutotransporteExtranjero(client: FiscalapiClient):
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -1961,7 +1961,7 @@ async function facturaTrasladoAutotransporteInternacionalAduanero(client: Fiscal
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'USA',
@@ -2104,7 +2104,7 @@ async function facturaTrasladoTransporteFerroviarioNacional(client: FiscalapiCli
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 500,
         pesoNetoTotal: 10,
@@ -2190,7 +2190,7 @@ async function facturaTrasladoTransporteFerroviarioExtranjero(client: FiscalapiC
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -2283,7 +2283,7 @@ async function facturaTrasladoTransporteFerroviarioInternacionalAduanero(client:
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -2380,7 +2380,7 @@ async function facturaTrasladoTransporteAereoNacional(client: FiscalapiClient): 
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 0,
         unidadPesoId: 'XBX',
@@ -2485,7 +2485,7 @@ async function facturaTrasladoTransporteAereoExtranjero(client: FiscalapiClient)
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -2597,7 +2597,7 @@ async function facturaTrasladoTransporteAereoInternacionalAduanero(client: Fisca
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -2713,7 +2713,7 @@ async function facturaTrasladoTransporteMAritimoNacional(client: FiscalapiClient
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'No',
         totalDistRec: 0,
         unidadPesoId: 'XBX',
@@ -2827,7 +2827,7 @@ async function facturaTrasladoTransporteMAritimoExtranjero(client: FiscalapiClie
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Salida',
         paisOrigenDestinoId: 'USA',
@@ -2948,7 +2948,7 @@ async function facturaTrasladoTransporteMAritimoInternacionalAduanero(client: Fi
     },
     items: [makeStandardItem()],
     complement: {
-      lading: {
+      cartaPorte: {
         transpInternacId: 'Sí',
         entradaSalidaMercId: 'Entrada',
         paisOrigenDestinoId: 'AFG',
@@ -3272,30 +3272,30 @@ async function main(): Promise<void> {
     // Descomentar el caso de uso que se desea ejecutar
 
     await facturaIngresoAutotransporteNacional(client);
-    // await facturaIngresoAutotransporteNacionalConImpuestos(client);
-    // await facturaIngresoAutotransporteExtranjero(client);
-    // await facturaIngresoAutotransporteInternacionalAduanero(client);
-    // await facturaIngresoTransporteFerroviarioNacional(client);
-    // await facturaIngresoTransporteFerroviarioExtranjero(client);
-    // await facturaIngresoTransporteFerroviarioInternacionalAduanero(client);
-    // await facturaIngresoTransporteAereoNacional(client);
-    // await facturaIngresoTransporteAereoExtranjero(client);
-    // await facturaIngresoTransporteAereoInternacionalAduanero(client);
-    // await facturaIngresoTransporteMAritimoNacional(client);
-    // await facturaIngresoTransporteMAritimoExtranjero(client);
-    // await facturaIngresoTransporteMAritimoInternacionalAduanero(client);
-    // await facturaTrasladoAutotransporteNacional(client);
-    // await facturaTrasladoAutotransporteExtranjero(client);
-    // await facturaTrasladoAutotransporteInternacionalAduanero(client);
-    // await facturaTrasladoTransporteFerroviarioNacional(client);
-    // await facturaTrasladoTransporteFerroviarioExtranjero(client);
-    // await facturaTrasladoTransporteFerroviarioInternacionalAduanero(client);
-    // await facturaTrasladoTransporteAereoNacional(client);
-    // await facturaTrasladoTransporteAereoExtranjero(client);
-    // await facturaTrasladoTransporteAereoInternacionalAduanero(client);
-    // await facturaTrasladoTransporteMAritimoNacional(client);
-    // await facturaTrasladoTransporteMAritimoExtranjero(client);
-    // await facturaTrasladoTransporteMAritimoInternacionalAduanero(client);
+    await facturaIngresoAutotransporteNacionalConImpuestos(client);
+    await facturaIngresoAutotransporteExtranjero(client);
+    await facturaIngresoAutotransporteInternacionalAduanero(client);
+    await facturaIngresoTransporteFerroviarioNacional(client);
+    await facturaIngresoTransporteFerroviarioExtranjero(client);
+    await facturaIngresoTransporteFerroviarioInternacionalAduanero(client);
+    await facturaIngresoTransporteAereoNacional(client);
+    await facturaIngresoTransporteAereoExtranjero(client);
+    await facturaIngresoTransporteAereoInternacionalAduanero(client);
+    await facturaIngresoTransporteMAritimoNacional(client);
+    await facturaIngresoTransporteMAritimoExtranjero(client);
+    await facturaIngresoTransporteMAritimoInternacionalAduanero(client);
+    await facturaTrasladoAutotransporteNacional(client);
+    await facturaTrasladoAutotransporteExtranjero(client);
+    await facturaTrasladoAutotransporteInternacionalAduanero(client);
+    await facturaTrasladoTransporteFerroviarioNacional(client);
+    await facturaTrasladoTransporteFerroviarioExtranjero(client);
+    await facturaTrasladoTransporteFerroviarioInternacionalAduanero(client);
+    await facturaTrasladoTransporteAereoNacional(client);
+    await facturaTrasladoTransporteAereoExtranjero(client);
+    await facturaTrasladoTransporteAereoInternacionalAduanero(client);
+    await facturaTrasladoTransporteMAritimoNacional(client);
+    await facturaTrasladoTransporteMAritimoExtranjero(client);
+    await facturaTrasladoTransporteMAritimoInternacionalAduanero(client);
 
     console.log('\nEjecución completada.');
   } catch (error) {

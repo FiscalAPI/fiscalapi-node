@@ -104,7 +104,7 @@ export interface Complement {
   payroll?: PayrollComplement;
 
   /** Complemento de carta porte */
-  lading?: LadingComplement;
+  cartaPorte?: LadingComplement;
 }
 
 // ============================================================================
