@@ -104,7 +104,7 @@ export interface Complement {
   payroll?: PayrollComplement;
 
   /** Complemento de carta porte */
-  lading?: LadingComplement;
+  cartaPorte?: LadingComplement;
 }
 
 // ============================================================================
@@ -456,10 +456,704 @@ export interface PayrollDisability {
 // ============================================================================
 
 /**
- * Complemento de carta porte (placeholder para futura implementación)
+ * Régimen aduanero en carta porte
+ */
+export interface LadingCustomsRegime {
+  /** Clave del régimen aduanero. Catálogo SAT c_RegimenAduanero */
+  regimenAduaneroId: string;
+}
+
+/**
+ * Domicilio de una ubicación en carta porte (CartaPorteUbicacionDomicilioRequest)
+ */
+export interface LadingLocationAddress {
+  /** Calle */
+  calle?: string;
+
+  /** Número exterior */
+  numeroExterior?: string;
+
+  /** Número interior */
+  numeroInterior?: string;
+
+  /** Clave de colonia. Catálogo SAT c_Colonia */
+  coloniaId?: string;
+
+  /** Clave de localidad. Catálogo SAT c_Localidad */
+  localidadId?: string;
+
+  /** Referencia adicional */
+  referencia?: string;
+
+  /** Clave de municipio. Catálogo SAT c_Municipio */
+  municipioId?: string;
+
+  /** Clave de estado. Catálogo SAT c_Estado */
+  estadoId: string;
+
+  /** Clave de país. Catálogo SAT c_Pais */
+  paisId: string;
+
+  /** Código postal. Catálogo SAT c_CodigoPostal */
+  codigoPostalId: string;
+}
+
+/**
+ * Domicilio de una figura de transporte en carta porte (CartaPorteTiposFiguraDomicilioRequest)
+ */
+export interface LadingFigureAddress {
+  /** Calle */
+  calle?: string;
+
+  /** Número exterior */
+  numeroExterior?: string;
+
+  /** Número interior */
+  numeroInterior?: string;
+
+  /** Clave de colonia. Catálogo SAT c_Colonia */
+  coloniaId?: string;
+
+  /** Clave de localidad. Catálogo SAT c_Localidad */
+  localidadId?: string;
+
+  /** Referencia adicional */
+  referencia?: string;
+
+  /** Clave de municipio. Catálogo SAT c_Municipio */
+  municipioId?: string;
+
+  /** Clave de estado. Catálogo SAT c_Estado */
+  estadoId: string;
+
+  /** Clave de país. Catálogo SAT c_Pais */
+  paisId: string;
+
+  /** Código postal. Catálogo SAT c_CodigoPostal */
+  codigoPostalId: string;
+}
+
+/**
+ * Ubicación de origen o destino en carta porte
+ */
+export interface LadingLocation {
+  /** Tipo de ubicación (Origen / Destino) */
+  tipoUbicacion: string;
+
+  /** Identificador de la ubicación */
+  idUbicacion?: string;
+
+  /** RFC del remitente o destinatario */
+  rfcRemitenteDestinatario: string;
+  
+  /** Número de registro de identificación tributaria (extranjeros) */
+  numRegIdTrib?: string;
+
+  /** Clave de residencia fiscal. Catálogo SAT c_Pais */
+  residenciaFiscalId?: string;
+
+  /** Nombre del remitente o destinatario */
+  nombreRemitenteDestinatario?: string;
+
+  /** Número de estación. Catálogo SAT c_Estaciones */
+  numEstacionId?: string;
+
+  /** Nombre de la estación */
+  nombreEstacion?: string;
+
+  /** Clave de navegación/tráfico. Catálogo SAT c_NavegacionTrafico */
+  navegacionTraficoId?: string;
+
+  /** Tipo de estación. Catálogo SAT c_TipoEstacion */
+  tipoEstacionId?: string;
+
+  /** Fecha y hora de salida o llegada (formato SAT: yyyy-MM-ddTHH:mm:ss) */
+  fechaHoraSalidaLlegada: string;
+  
+  /** Distancia recorrida en km */
+  distanciaRecorrida?: number;
+
+  /** Domicilio de la ubicación */
+  domicilio?: LadingLocationAddress;
+}
+
+/**
+ * Detalle de la mercancía
+ */
+export interface LadingMerchandiseDetail {
+  /** Clave de unidad de peso. Catálogo SAT c_UnidadPeso */
+  unidadPesoMercId: string;
+
+  /** Peso bruto en kg */
+  pesoBruto: number;
+
+  /** Peso neto en kg */
+  pesoNeto: number;
+
+  /** Peso tara en kg */
+  pesoTara: number;
+
+  /** Número de piezas */
+  numPiezas?: number;
+}
+
+/**
+ * Documento aduanero asociado a una mercancía
+ */
+export interface LadingCustomsDocument {
+  /** Clave del tipo de documento. Catálogo SAT c_DocumentoAduanero */
+  tipoDocumentoId: string;
+
+  /** Número de pedimento */
+  numPedimento?: string;
+
+  /** Identificador del documento aduanero */
+  identDocAduanero?: string;
+
+  /** RFC del importador */
+  rfcImpo?: string;
+}
+
+/**
+ * Guía de identificación de mercancía
+ */
+export interface LadingGuideIdentification {
+  /** Número de guía de identificación */
+  numeroGuiaIdentificacion: string;
+
+  /** Descripción de la guía de identificación */
+  descripGuiaIdentificacion: string;
+
+  /** Peso de la guía de identificación en kg */
+  pesoGuiaIdentificacion: number;
+}
+
+/**
+ * Cantidad transportada de una mercancía entre ubicaciones
+ */
+export interface LadingQuantityTransported {
+  /** Cantidad transportada */
+  cantidad: number;
+
+  /** Identificador de ubicación de origen */
+  idOrigen: string;
+
+  /** Identificador de ubicación de destino */
+  idDestino: string;
+
+  /** Clave de transporte. Catálogo SAT c_CveTransporte */
+  cvesTransporteId?: string;
+}
+
+/**
+ * Mercancía en carta porte
+ */
+export interface LadingMerchandise {
+  /** Clave de bienes transportados. Catálogo SAT c_ClaveProdServCP */
+  bienesTranspId: string;
+
+  /** Clave STCC. Catálogo SAT c_ClaveSTCC */
+  claveSTCCId?: string;
+
+  /** Descripción de la mercancía */
+  descripcion: string;
+
+  /** Cantidad */
+  cantidad: number;
+
+  /** Clave de unidad. Catálogo SAT c_ClaveUnidad */
+  claveUnidadId: string;
+
+  /** Unidad de medida */
+  unidad?: string;
+
+  /** Dimensiones de la mercancía */
+  dimensiones?: string;
+
+  /** Indica si es material peligroso (inline). Catálogo SAT c_MaterialPeligroso */
+  materialPeligrosoId?: string;
+
+  /** Clave de material peligroso. Catálogo SAT c_MaterialPeligroso */
+  cveMaterialPeligrosoId?: string;
+
+  /** Clave del tipo de embalaje. Catálogo SAT c_TipoEmbalaje */
+  embalajeId?: string;
+
+  /** Descripción del embalaje */
+  descripEmbalaje?: string;
+
+  /** Clave del sector COFEPRIS. Catálogo SAT c_SectorCOFEPRIS */
+  sectorCOFEPRISId?: string;
+
+  /** Nombre del ingrediente activo */
+  nombreIngredienteActivo?: string;
+
+  /** Nombre químico */
+  nomQuimico?: string;
+
+  /** Denominación genérica del producto */
+  denominacionGenericaProd?: string;
+
+  /** Denominación distintiva del producto */
+  denominacionDistintivaProd?: string;
+
+  /** Fabricante */
+  fabricante?: string;
+
+  /** Fecha de caducidad (formato SAT: yyyy-MM-ddTHH:mm:ss) */
+  fechaCaducidad?: string;
+
+  /** Lote del medicamento */
+  loteMedicamento?: string;
+
+  /** Clave de forma farmacéutica. Catálogo SAT c_FormaFarmaceutica */
+  formaFarmaceuticaId?: string;
+
+  /** Clave de condiciones especiales de transporte. Catálogo SAT c_CondicionesEspeciales */
+  condicionesEspTranspId?: string;
+
+  /** Registro sanitario o folio de autorización */
+  registroSanitarioFolioAutorizacion?: string;
+
+  /** Permiso de importación */
+  permisoImportacion?: string;
+
+  /** Folio de importación VUCEM */
+  folioImpoVUCEM?: string;
+
+  /** Número CAS */
+  numCAS?: string;
+
+  /** Razón social de la empresa importadora */
+  razonSocialEmpImp?: string;
+
+  /** Número de registro sanitario de plaguicidas COFEPRIS */
+  numRegSanPlagCOFEPRIS?: string;
+
+  /** Datos del fabricante */
+  datosFabricante?: string;
+
+  /** Datos del formulador */
+  datosFormulador?: string;
+
+  /** Datos del maquilador */
+  datosMaquilador?: string;
+
+  /** Uso autorizado */
+  usoAutorizado?: string;
+
+  /** Peso en kilogramos */
+  pesoEnKg: number;
+
+  /** Valor de la mercancía */
+  valorMercancia?: number;
+
+  /** Clave de moneda. Catálogo SAT c_Moneda */
+  monedaId?: string;
+
+  /** Clave de fracción arancelaria. Catálogo SAT c_FraccionArancelaria */
+  fraccionArancelariaId?: string;
+
+  /** UUID de comercio exterior */
+  uuidComercioExt?: string;
+
+  /** Clave del tipo de materia. Catálogo SAT c_TipoMateria */
+  tipoMateriaId?: string;
+
+  /** Descripción de la materia */
+  descripcionMateria?: string;
+
+  /** Documentación aduanera */
+  documentacionAduanera?: LadingCustomsDocument[];
+
+  /** Guías de identificación */
+  guiasIdentificacion?: LadingGuideIdentification[];
+
+  /** Cantidades transportadas entre ubicaciones */
+  cantidadTransporta?: LadingQuantityTransported[];
+
+  /** Detalle de la mercancía */
+  detalleMercancia?: LadingMerchandiseDetail;
+}
+
+/**
+ * Remolque en autotransporte
+ */
+export interface LadingTrailer {
+  /** Clave del sub-tipo de remolque. Catálogo SAT c_SubTipoRem */
+  subTipoRemId: string;
+
+  /** Placa del remolque */
+  placa: string;
+}
+
+/**
+ * Autotransporte federal en carta porte
+ */
+export interface LadingAutoTransport {
+  /** Clave del permiso SCT. Catálogo SAT c_TipoPermiso */
+  permSCTId: string;
+
+  /** Número de permiso SCT */
+  numPermisoSCT: string;
+
+  /** Clave de configuración vehicular. Catálogo SAT c_ConfigAutotransporte */
+  configVehicularId: string;
+
+  /** Peso bruto vehicular en toneladas */
+  pesoBrutoVehicular: number;
+
+  /** Placa del vehículo/motriz */
+  placaVM: string;
+
+  /** Año modelo del vehículo */
+  anioModeloVM: number;
+
+  /** Nombre de la aseguradora de responsabilidad civil */
+  aseguraRespCivil: string;
+
+  /** Número de póliza de responsabilidad civil */
+  polizaRespCivil: string;
+
+  /** Nombre de la aseguradora de medio ambiente */
+  aseguraMedAmbiente?: string;
+
+  /** Número de póliza de medio ambiente */
+  polizaMedAmbiente?: string;
+
+  /** Nombre de la aseguradora de carga */
+  aseguraCarga?: string;
+
+  /** Número de póliza de carga */
+  polizaCarga?: string;
+
+  /** Prima del seguro */
+  primaSeguro?: number;
+
+  /** Remolques */
+  remolques?: LadingTrailer[];
+}
+
+/**
+ * Remolque CCP en transporte marítimo
+ */
+export interface LadingSeaTrailerCCP {
+  /** Clave del sub-tipo de remolque CCP. Catálogo SAT c_SubTipoRem */
+  subTipoRemCCPId: string;
+  
+  /** Placa del remolque CCP */
+  placaCCP: string;
+}
+
+/**
+ * Contenedor marítimo
+ */
+export interface LadingSeaContainer {
+  /** Clave del tipo de contenedor. Catálogo SAT c_ContenedorMaritimo */
+  tipoContenedorId: string;
+
+  /** Matrícula del contenedor */
+  matriculaContenedor?: string;
+
+  /** Número de precinto */
+  numPrecinto?: string;
+
+  /** Identificador de CCP relacionado */
+  idCCPRelacionado?: string;
+
+  /** Placa del vehículo/motriz CCP */
+  placaVMCCP?: string;
+
+  /** Fecha de certificación CCP */
+  fechaCertificacionCCP?: string;
+
+  /** Remolques CCP */
+  remolquesCCP?: LadingSeaTrailerCCP[];
+}
+
+/**
+ * Transporte marítimo en carta porte
+ */
+export interface LadingSeaTransport {
+  /** Clave del permiso SCT. Catálogo SAT c_TipoPermiso */
+  permSCTId?: string;
+
+  /** Número de permiso SCT */
+  numPermisoSCT?: string;
+
+  /** Nombre de la aseguradora */
+  nombreAseg?: string;
+
+  /** Número de póliza de seguro */
+  numPolizaSeguro?: string;
+
+  /** Clave del tipo de embarcación. Catálogo SAT c_ConfigMaritima */
+  tipoEmbarcacionId: string;
+
+  /** Matrícula de la embarcación */
+  matricula: string;
+
+  /** Número OMI */
+  numeroOMI: string;
+
+  /** Año de la embarcación */
+  anioEmbarcacion?: number;
+
+  /** Nombre de la embarcación */
+  nombreEmbarc?: string;
+
+  /** Clave de nacionalidad de la embarcación. Catálogo SAT c_Pais */
+  nacionalidadEmbarcId: string;
+
+  /** Unidades de arqueo bruto */
+  unidadesDeArqBruto: number;
+
+  /** Clave del tipo de carga. Catálogo SAT c_ClaveTipoCarga */
+  tipoCargaId: string;
+
+  /** Eslora en metros */
+  eslora?: number;
+
+  /** Manga en metros */
+  manga?: number;
+
+  /** Calado en metros */
+  calado?: number;
+
+  /** Puntal en metros */
+  puntal?: number;
+
+  /** Línea naviera */
+  lineaNaviera?: string;
+
+  /** Nombre del agente naviero */
+  nombreAgenteNaviero: string;
+
+  /** Número de autorización naviero. Catálogo SAT c_NumAutorizacionNaviero */
+  numAutorizacionNavieroId: string;
+
+  /** Número de viaje */
+  numViaje?: string;
+
+  /** Número de conocimiento de embarque */
+  numConocEmbarc?: string;
+
+  /** Permiso temporal de navegación */
+  permisoTempNavegacion?: string;
+
+  /** Contenedores */
+  contenedores?: LadingSeaContainer[];
+}
+
+/**
+ * Transporte aéreo en carta porte
+ */
+export interface LadingAirTransport {
+  /** Clave del permiso SCT. Catálogo SAT c_TipoPermiso */
+  permSCTId: string;
+
+  /** Número de permiso SCT */
+  numPermisoSCT: string;
+
+  /** Matrícula de la aeronave */
+  matriculaAeronave?: string;
+
+  /** Nombre de la aseguradora */
+  nombreAseg?: string;
+
+  /** Número de póliza de seguro */
+  numPolizaSeguro?: string;
+
+  /** Número de guía aérea */
+  numeroGuia: string;
+
+  /** Lugar del contrato */
+  lugarContrato?: string;
+
+  /** Clave del código del transportista. Catálogo SAT c_CodigoTransporteAereo */
+  codigoTransportistaId: string;
+
+  /** RFC del embarcador */
+  rfcEmbarcador?: string;
+
+  /** Número de registro de identificación tributaria del embarcador */
+  numRegIdTribEmbarc?: string;
+
+  /** Clave de residencia fiscal del embarcador. Catálogo SAT c_Pais */
+  residenciaFiscalEmbarcId?: string;
+
+  /** Nombre del embarcador */
+  nombreEmbarcador?: string;
+}
+
+/**
+ * Contenedor ferroviario
+ */
+export interface LadingContainerCar {
+  /** Clave del tipo de contenedor. Catálogo SAT c_Contenedor */
+  tipoContenedorId: string;
+
+  /** Peso del contenedor vacío en toneladas */
+  pesoContenedorVacio: number;
+
+  /** Peso neto de la mercancía en toneladas */
+  pesoNetoMercancia: number;
+}
+
+/**
+ * Carro ferroviario
+ */
+export interface LadingCar {
+  /** Clave del tipo de carro. Catálogo SAT c_TipoCarro */
+  tipoCarroId: string;
+
+  /** Matrícula del carro */
+  matriculaCarro: string;
+
+  /** Número de guía del carro */
+  guiaCarro: string;
+
+  /** Toneladas netas del carro */
+  toneladasNetasCarro: number;
+  
+  /** Contenedores ferroviarios */
+  contenedores?: LadingContainerCar[];
+}
+
+/**
+ * Derecho de paso en transporte ferroviario
+ */
+export interface LadingRailRightOfWay {
+  /** Clave del tipo de derecho de paso. Catálogo SAT c_TipoDerechoDePaso */
+  tipoDerechoDePasoId: string;
+
+  /** Kilometraje pagado */
+  kilometrajePagado: number;
+}
+
+/**
+ * Transporte ferroviario en carta porte
+ */
+export interface LadingRailTransport {
+  /** Clave del tipo de servicio. Catálogo SAT c_TipoDeServicio */
+  tipoDeServicioId: string;
+
+  /** Clave del tipo de tráfico. Catálogo SAT c_TipoDeTrafico */
+  tipoDeTraficoId: string;
+
+  /** Nombre de la aseguradora */
+  nombreAseg?: string;
+
+  /** Número de póliza de seguro */
+  numPolizaSeguro?: string;
+
+  /** Derechos de paso */
+  derechosDePaso?: LadingRailRightOfWay[];
+
+  /** Carros ferroviarios */
+  carros: LadingCar[];
+}
+
+/**
+ * Parte de transporte asociada a una figura
+ */
+export interface LadingTransportPart {
+  /** Clave de la parte del transporte. Catálogo SAT c_ParteTransporte */
+  parteTransporteId: string;
+}
+
+/**
+ * Figura del transporte (operador, propietario, arrendador, notificado)
+ */
+export interface LadingFigure {
+  /** Clave del tipo de figura. Catálogo SAT c_TipoFigura */
+  tipoFiguraId: string;
+
+  /** RFC de la figura */
+  rfcFigura?: string;
+
+  /** Número de licencia */
+  numLicencia?: string;
+
+  /** Nombre de la figura */
+  nombreFigura: string;
+
+  /** Número de registro de identificación tributaria de la figura */
+  numRegIdTribFigura?: string;
+
+  /** Clave de residencia fiscal de la figura. Catálogo SAT c_Pais */
+  residenciaFiscalFiguraId?: string;
+
+  /** Partes del transporte */
+  partesTransporte?: LadingTransportPart[];
+
+  /** Domicilio de la figura */
+  domicilio?: LadingFigureAddress;
+}
+
+/**
+ * Complemento de carta porte (Complemento de Traslado de Mercancías)
  */
 export interface LadingComplement {
-  // Carta Porte complement - to be implemented
+  /** Indica si el transporte es internacional (Sí/No) */
+  transpInternacId: string;
+
+  /** Clave de entrada/salida de mercancía. Catálogo SAT c_EntradaSalidaMerc */
+  entradaSalidaMercId?: string;
+
+  /** Clave del país de origen o destino. Catálogo SAT c_Pais */
+  paisOrigenDestinoId?: string;
+
+  /** Clave de vía de entrada/salida. Catálogo SAT c_CveTransporte */
+  viaEntradaSalidaId?: string;
+
+  /** Total de distancia recorrida en km */
+  totalDistRec?: number;
+
+  /** Peso neto total en kg */
+  pesoNetoTotal?: number;
+
+  /** Cargo por tasación */
+  cargoPorTasacion?: number;
+
+  /** Clave del registro ISTMO. Catálogo SAT c_RegistroISTMO */
+  registroISTMOId?: string;
+
+  /** Clave de ubicación polo origen. Catálogo SAT c_UbicacionPolo */
+  ubicacionPoloOrigenId?: string;
+
+  /** Clave de ubicación polo destino. Catálogo SAT c_UbicacionPolo */
+  ubicacionPoloDestinoId?: string;
+
+  /** Clave de unidad de peso. Catálogo SAT c_UnidadPeso */
+  unidadPesoId: string;
+
+  /** Clave de logística inversa/recolección/devolución. Catálogo SAT c_LogisticaInversa */
+  logisticaInversaRecoleccionDevolucionId?: string;
+
+  /** Regímenes aduaneros */
+  regimenAduaneros?: LadingCustomsRegime[];
+
+  /** Ubicaciones de origen y destino */
+  ubicaciones: LadingLocation[];
+
+  /** Mercancías transportadas */
+  mercancias: LadingMerchandise[];
+
+  /** Autotransporte federal */
+  autotransporte?: LadingAutoTransport;
+
+  /** Transporte marítimo */
+  transporteMaritimo?: LadingSeaTransport;
+
+  /** Transporte aéreo */
+  transporteAereo?: LadingAirTransport;
+
+  /** Transporte ferroviario */
+  transporteFerroviario?: LadingRailTransport;
+
+  /** Figuras del transporte */
+  tiposFigura?: LadingFigure[];
 }
 
 /**
