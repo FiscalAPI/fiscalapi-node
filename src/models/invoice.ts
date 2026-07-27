@@ -1421,7 +1421,7 @@ export interface Invoice extends BaseDto {
   consecutive?: number;
 
   /** Consecutivo de facturas por RFC emisor. Se incrementa por cada factura generada por el mismo RFC emisor */
-  number?: number;
+  number?: string;
 
   /** Subtotal de la factura. Campo de solo lectura */
   subtotal?: number;
