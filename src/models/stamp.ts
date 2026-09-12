@@ -22,6 +22,16 @@ export enum StampTransactionStatus {
 }
 
 /**
+ * Tipo de crédito de una transacción.
+ * Los saldos nunca se mezclan: Stamp afecta el saldo de timbres (availableBalance) y
+ * Validation el saldo de créditos de validación (availableValidationBalance).
+ */
+export enum CreditType {
+  Stamp = 1,
+  Validation = 2,
+}
+
+/**
  * DTO para información resumida de persona en transacciones de timbres
  */
 export interface UserLookupDto extends BaseDto {
@@ -59,6 +69,9 @@ export interface StampTransaction extends BaseDto {
 
   /** Comentarios de la transacción */
   comments?: string;
+
+  /** Tipo de crédito de la transacción. Default: Stamp */
+  creditType?: CreditType;
 }
 
 /**
@@ -74,6 +87,12 @@ export interface StampTransactionParams {
   /** Cantidad de timbres a transferir */
   amount: number;
 
-  /** Comentarios opcionales */
+  /** Comentarios opcionales. Máximo 100 caracteres */
   comments?: string;
+
+  /**
+   * Tipo de crédito a transferir. Opcional.
+   * Si se omite, el backend transfiere timbres (CreditType.Stamp).
+   */
+  creditType?: CreditType;
 }

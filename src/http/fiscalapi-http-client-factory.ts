@@ -21,8 +21,10 @@ export class FiscalapiHttpClientFactory {
       throw new Error('La configuración no puede ser nula o indefinida');
     }
 
-    // Crea una clave única para cachear el cliente
-    const clientKey = `${settings.apiKey}:${settings.tenant}:${settings.apiUrl}`;
+    // Crea una clave única para cachear el cliente.
+    // Incluye timeZone y apiVersion porque ambos viajan en la instancia de Axios:
+    // sin ellos, dos clientes que sólo difieran en esos valores compartirían configuración.
+    const clientKey = `${settings.apiKey}:${settings.tenant}:${settings.apiUrl}:${settings.timeZone || ''}:${settings.apiVersion || ''}`;
 
     // Devuelve el cliente cacheado si existe
     if (this.clients.has(clientKey)) {
@@ -58,7 +60,7 @@ export class FiscalapiHttpClientFactory {
       headers: {
         'X-API-KEY': settings.apiKey,
         'X-TENANT-KEY': settings.tenant,
-        'X-TIMEZONE': settings.timeZone || 'America/Mexico_City',
+        'X-TIME-ZONE': settings.timeZone || 'America/Mexico_City',
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },

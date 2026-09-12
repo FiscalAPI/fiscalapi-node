@@ -40,6 +40,13 @@
 
 ## 🎖️ Gestión de Timbres 
 - **Gestión de folios fiscales** Compra timbres a fiscalapi y transfiere/retira a las personas de tu organizacion segun tus reglas de negocio.
+- **Créditos de validación** Transfiere créditos para validaciones del SAT con el mismo endpoint, indicando `creditType`.
+
+## ✅ Validaciones del SAT
+- **Verificación de CFDI timbrados** contra los servicios oficiales del SAT: estructura del XML (Anexo 20), vigencia del certificado del emisor, sello del comprobante y sello del SAT en el Timbre Fiscal Digital.
+- **Estado del comprobante** en ConsultaCFDIService: vigente, cancelado o no encontrado.
+- **Listas negras** de los artículos 69-B y 69-B Bis del CFF, consultables por CFDI o directamente por RFC.
+- **Catálogo consultable** de tipos de validación y de los estatus que cada uno puede devolver.
 
 ## 🛍️ Gestión de Productos/Servicios
 - **Gestión de productos y servicios** con catálogo personalizable
@@ -390,9 +397,59 @@ try {
 }
 ```
 
+### 8. Validar un CFDI ante el SAT
+
+Cada tipo de validación solicitado consume un crédito de validación. El cobro es todo o nada: si el
+saldo no alcanza para todos, no se ejecuta ninguno.
+
+```javascript
+try {
+    const apiResponse = await fiscalApi.satValidations.validate({
+        xml: encodeToBase64(xmlDelCfdi), // CFDI timbrado, en base64
+        validationTypes: [
+            SatValidationTypeIds.XmlStructure,
+            SatValidationTypeIds.CfdiStatus,
+            SatValidationTypeIds.Blacklist69B
+        ]
+    });
+
+    if (apiResponse.succeeded) {
+        apiResponse.data.forEach(resultado => {
+            console.log(`${resultado.type.id}: ${resultado.status.id} (passed: ${resultado.passed})`);
+        });
+    } else {
+        console.log(apiResponse.details);
+    }
+} catch (error) {
+    console.error(error);
+}
+```
+
+Para consultar únicamente las listas negras de un RFC, envía `tin` en lugar de `xml`:
+
+```javascript
+const apiResponse = await fiscalApi.satValidations.validate({
+    tin: "XAXX010101000",
+    validationTypes: [SatValidationTypeIds.Blacklist69B, SatValidationTypeIds.Blacklist69BBis]
+});
+```
+
+El saldo de créditos de validación se consulta en la persona, en `availableValidationBalance`, y se
+transfiere con el servicio de timbres indicando `creditType`:
+
+```javascript
+await fiscalApi.stamps.transferStamps({
+    fromPersonId: "...",
+    toPersonId: "...",
+    amount: 10,
+    creditType: CreditType.Validation
+});
+```
+
 ## 📂 Más Ejemplos
 
 - [Gestión de Timbres](examples/ejemplo-timbres.ts)
+- [Validaciones del SAT](examples/ejemplo-validaciones-sat.ts)
 - [Datos Empleador/Empleado](examples/ejemplo-datos-empleado-empleador.ts)
 - [Facturas de Nómina (Por Valores)](examples/ejemplos-factura-nomina-valores.ts)
 - [Facturas de Nómina (Por Referencias)](examples/ejemplos-factura-nomina-referencias.ts) 
@@ -407,7 +464,8 @@ try {
 - **Facturas (CFDI)** - Ingreso, egreso, pago, nómina, cancelaciones, PDF/XML
 - **Personas** - Emisores, receptores, certificados CSD
 - **Productos** - Catálogo de productos/servicios
-- **Timbres** - Transferencias y retiros
+- **Timbres** - Transferencias de timbres y de créditos de validación
+- **Validaciones SAT** - Estructura, certificado, sellos, estado del CFDI y listas negras 69-B / 69-B Bis
 
 
 ## 🤝 Contribuir

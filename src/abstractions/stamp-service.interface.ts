@@ -15,6 +15,11 @@ export interface IStampService extends IFiscalapiService<StampTransaction> {
 
   /**
    * Retira timbres de una persona
+   *
+   * @deprecated Usa {@link transferStamps}. La API sólo expone una operación de transferencia:
+   * retirar es transferir invirtiendo `fromPersonId` y `toPersonId`. Este método hace exactamente
+   * la misma petición y se conserva únicamente por compatibilidad.
+   *
    * @param {StampTransactionParams} request - Parámetros del retiro
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */

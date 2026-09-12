@@ -15,6 +15,7 @@ export type { IDownloadCatalogService } from './abstractions/download-catalog-se
 export type { IDownloadRequestService } from './abstractions/download-request-service.interface';
 export type { IDownloadRuleService } from './abstractions/download-rule-service.interface';
 export type { IStampService } from './abstractions/stamp-service.interface';
+export type { ISatValidationService } from './abstractions/sat-validation-service.interface';
 export type { IEmployeeService } from './abstractions/employee-service.interface';
 export type { IEmployerService } from './abstractions/employer-service.interface';
 
@@ -134,8 +135,22 @@ export type {
 
 export {
   StampTransactionType,
-  StampTransactionStatus
+  StampTransactionStatus,
+  CreditType
 } from './models/stamp';
+
+export type {
+  SatValidationType,
+  SatValidationTypeStatus,
+  SatValidationStatus,
+  SatValidationResult,
+  SatValidationRequest
+} from './models/sat-validation';
+
+export {
+  SatValidationTypeIds,
+  SatValidationStatusIds
+} from './models/sat-validation';
 
 
 // Common types

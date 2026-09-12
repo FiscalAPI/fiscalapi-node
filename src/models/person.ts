@@ -56,6 +56,9 @@ export interface Person extends BaseDto {
   /** Saldo en tránsito. Atributo de sólo lectura */
   committedBalance?: number;
 
+  /** Saldo de créditos de validación del SAT. Independiente de availableBalance (timbres). Atributo de sólo lectura */
+  availableValidationBalance?: number;
+
   /** ID del tenant al que pertenece el emisor. Atributo de sólo lectura */
   tenantId?: string;
 

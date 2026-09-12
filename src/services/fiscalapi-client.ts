@@ -9,6 +9,7 @@ import { ITaxFileService } from '../abstractions/tax-file-service.interface';
 import { IDownloadCatalogService } from '../abstractions/download-catalog-service.interface';
 import { IDownloadRuleService } from '../abstractions/download-rule-service.interface';
 import { IDownloadRequestService } from '../abstractions/download-request-service.interface';
+import { ISatValidationService } from '../abstractions/sat-validation-service.interface';
 import { IStampService } from '../abstractions/stamp-service.interface';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
@@ -21,6 +22,7 @@ import { InvoiceService } from './invoice-service';
 import { ManifestService } from './manifest-service';
 import { PersonService } from './person-service';
 import { ProductService } from './product-service';
+import { SatValidationService } from './sat-validation-service';
 import { StampService } from './stamp-service';
 import { TaxFileService } from './tax-file-service';
 
@@ -84,6 +86,11 @@ export class FiscalapiClient implements IFiscalapiClient {
   readonly manifests: IManifestService;
 
   /**
+   * Servicio de validaciones del SAT
+   */
+  readonly satValidations: ISatValidationService;
+
+  /**
    * Crea una nueva instancia del cliente de FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración
    * @private
@@ -105,6 +112,7 @@ export class FiscalapiClient implements IFiscalapiClient {
     this.downloadRequests = new DownloadRequestService(httpClient, apiVersion);
     this.stamps = new StampService(httpClient, apiVersion);
     this.manifests = new ManifestService(httpClient, apiVersion);
+    this.satValidations = new SatValidationService(httpClient, apiVersion);
   }
 
   /**

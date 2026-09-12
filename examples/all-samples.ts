@@ -1,4 +1,4 @@
-import { DownloadCatalogService } from './../src/services/download-catalog.service';
+import { DownloadCatalogService } from '../src/services/download-catalog-service';
 import { DateTime } from 'luxon';
 import { CancelInvoiceRequest, CreatePdfRequest, GlobalInformation,FiscalapiClient, FiscalapiSettings, Invoice, InvoiceStatusRequest, Person, Product, SendInvoiceRequest, TaxFile, DownloadRule, DownloadRequest } from '../src';
 import { inspect } from 'util';

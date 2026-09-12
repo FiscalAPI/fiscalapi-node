@@ -18,7 +18,8 @@ export class StampService extends BaseFiscalapiService<StampTransaction> impleme
   }
 
   /**
-   * Transfiere timbres de una persona a otra
+   * Transfiere timbres o créditos de validación de una persona a otra.
+   * El tipo de crédito se elige con `creditType`; si se omite, se transfieren timbres.
    * @param {StampTransactionParams} request - Parámetros de la transferencia
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
@@ -27,6 +28,7 @@ export class StampService extends BaseFiscalapiService<StampTransaction> impleme
       throw new Error('request cannot be null');
     }
 
+    // POST /api/v4/stamps
     return await this.executeRequest<boolean, StampTransactionParams>({
       data: request,
       method: 'POST',
@@ -35,17 +37,15 @@ export class StampService extends BaseFiscalapiService<StampTransaction> impleme
 
   /**
    * Retira timbres de una persona
+   *
+   * @deprecated Usa {@link transferStamps}. La API sólo expone una operación de transferencia:
+   * retirar es transferir invirtiendo `fromPersonId` y `toPersonId`. Delega en `transferStamps`
+   * para que ambas rutas no puedan divergir.
+   *
    * @param {StampTransactionParams} request - Parámetros del retiro
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
   async withdrawStamps(request: StampTransactionParams): Promise<ApiResponse<boolean>> {
-    if (!request) {
-      throw new Error('request cannot be null');
-    }
-
-    return await this.executeRequest<boolean, StampTransactionParams>({
-      data: request,
-      method: 'POST',
-    });
+    return await this.transferStamps(request);
   }
 }

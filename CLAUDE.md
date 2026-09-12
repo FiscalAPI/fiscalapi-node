@@ -25,22 +25,23 @@ There is no `build:types` script — the full `build` script handles CJS + ESM +
 **Facade Pattern**: `FiscalapiClient` (`src/services/fiscalapi-client.ts`) is the single entry point.
 - Static factory: `FiscalapiClient.create(settings)` — validates settings, sets defaults, creates one shared HTTP client
 - Private constructor enforces factory usage
-- Services exposed as readonly properties: `invoices`, `products`, `persons`, `taxFiles`, `catalogs`, `apiKeys`, `stamps`, `downloadCatalogs`, `downloadRules`, `downloadRequests`
+- Services exposed as readonly properties: `invoices`, `products`, `persons`, `taxFiles`, `catalogs`, `apiKeys`, `stamps`, `downloadCatalogs`, `downloadRules`, `downloadRequests`, `manifests`, `satValidations`
 
 **Service Layer**:
-- `BaseFiscalapiService` provides CRUD: `list()`, `getById()`, `create()`, `update()`, `remove()`, `upload()`
+- `BaseFiscalapiService` provides CRUD: `getList(pageNumber, pageSize)`, `getById(id, details?)`, `create()`, `update()`, `delete()`, `search()`, plus `executeRequest()` for custom calls. There is no `upload()`: file uploads are base64 fields on the payload (e.g. `TaxFile.base64File`)
+- Not every service extends the base class. Read-only resources whose shape does not fit `IFiscalapiService` are standalone: `DownloadCatalogService` (unpaged `getList()`) and `SatValidationService` (plain arrays, no CRUD). Their interfaces do not extend `IFiscalapiService`
 - Specialized services add domain methods (e.g., `InvoiceService.cancel()`, `.getPdf()`, `.getXml()`, `.send()`, `.getStatus()`)
 - `PersonService` contains nested `EmployeeService` and `EmployerService`
 
 **HTTP Client** (`src/http/`):
 - Axios-based with 30s timeout
-- Factory caches clients by key `apiKey:tenant:apiUrl`
-- Headers: `X-API-KEY`, `X-TENANT-KEY`, `X-TIMEZONE`
+- Factory caches clients by key `apiKey:tenant:apiUrl:timeZone:apiVersion` — all five matter because they are baked into the Axios instance
+- Headers: `X-API-KEY`, `X-TENANT-KEY`, `X-TIME-ZONE` (the backend reads exactly `X-TIME-ZONE`; a different spelling is silently ignored and the user's timezone is lost)
 - Debug mode enables request/response logging via Axios interceptors and disables SSL certificate verification (`rejectUnauthorized: false`)
 
 **Key Patterns**:
 - All services implement interfaces from `src/abstractions/`
-- `ApiResponse<T>` wraps all responses: `{ succeeded, data, message, details, httpStatusCode }`
+- `ApiResponse<T>` wraps all responses: `{ succeeded, data, message, details, httpStatusCode, traceIdentifier? }` (`traceIdentifier` only comes back on errors). Errors never throw: HTTP failures are returned as `succeeded: false`
 - Dual-package output: ESM + CJS. Post-build script `scripts/fix-esm-imports.js` adds `.js` extensions to ESM imports for Node.js native module support
 - Date handling uses Luxon with `America/Mexico_City` timezone; SAT format: `yyyy-MM-dd'T'HH:mm:ss`
 - `src/index.ts` re-exports 100+ types — all public API surface
@@ -63,7 +64,7 @@ const client = FiscalapiClient.create({
 1. **By References**: Send only IDs of pre-configured entities in FiscalAPI dashboard
 2. **By Values**: Send complete data in each request (no prior setup needed)
 
-Examples for both modes are in `examples/` (7 files covering invoices, payroll, local taxes, stamps, employee/employer data).
+Examples for both modes are in `examples/` (invoices, payroll, local taxes, carta porte, comercio exterior, stamps, SAT validations, manifests, employee/employer data). Examples are executable documentation and the only test net: every variable is declared with its exported SDK type — no `any`, `unknown`, anonymous object literals or `as` assertions — so a contract drift breaks the build.
 
 ## TypeScript Configuration
 

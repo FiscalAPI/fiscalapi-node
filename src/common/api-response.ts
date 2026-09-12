@@ -28,6 +28,12 @@ export interface ApiResponse<T> {
      * Código de estado HTTP
      */
     httpStatusCode: number;
+
+    /**
+     * Identificador de rastreo de la petición. Sólo viene en respuestas de error;
+     * es el dato que soporte necesita para localizar el fallo en los logs.
+     */
+    traceIdentifier?: string;
   }
   
   /**
