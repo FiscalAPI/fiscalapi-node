@@ -11,31 +11,65 @@ on:
         options:
           - 'Publicación desde package.json'
 
+# id-token: write habilita Trusted Publishing (OIDC) de npm, que publica sin token.
+# Mientras no se dé de alta el "trusted publisher" del paquete en npmjs.com, npm usa
+# el NPM_TOKEN del .npmrc que escribe setup-node. Declararlo ahora no cambia nada.
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
+      # Node 24 trae npm >= 11.5.1, requisito de Trusted Publishing.
+      # Node 18 dejó de tener soporte en abril de 2025 y trae npm 10.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org/'
-      
+
       - name: Get package version
         id: package-version
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
-      
+
+      # El registry de npm responde 404 (no 401) a cualquier PUT sin credencial válida.
+      # Sin esta verificación, un token vencido se manifiesta 400 líneas después como un
+      # "E404 Not Found - PUT" que parece un problema del paquete y no de autenticación.
+      - name: Verify npm credentials
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::El secret NPM_TOKEN no existe o está vacío."
+            exit 1
+          fi
+          if ! npm whoami; then
+            echo "::error::NPM_TOKEN inválido o expirado. Los granular access tokens de npm caducan: genera uno nuevo con permiso Read and write sobre el paquete y actualiza el secret NPM_TOKEN."
+            exit 1
+          fi
+          # Informativo: si el token es válido pero no cubre este paquete, el publish
+          # también devolvería 404. Aquí se ve el permiso real que trae el token.
+          npm access list packages || echo "No fue posible listar los permisos del token (no bloquea el publish)."
+
+      - name: Verify version is not already published
+        run: |
+          if npm view "$(node -p "require('./package.json').name")@${VERSION}" version > /dev/null 2>&1; then
+            echo "::error::La versión ${VERSION} ya está publicada en npm. Incrementa la versión en package.json."
+            exit 1
+          fi
+          echo "La versión ${VERSION} está libre."
+
       - name: Install dependencies
         run: npm ci
-      
 
-      
       - name: Build package
         run: npm run build
-      
+
       - name: Verify build artifacts
         run: |
           if [ ! -d "dist/cjs" ]; then
@@ -59,10 +93,8 @@ jobs:
             exit 1
           fi
           echo "Build artifacts verified successfully"
-      
+
       - name: Publish to NPM
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          npm_config_//registry.npmjs.org/:_authToken: ${{ secrets.NPM_TOKEN }}
-          npm_config_email: ${{ secrets.NPM_USER }}
