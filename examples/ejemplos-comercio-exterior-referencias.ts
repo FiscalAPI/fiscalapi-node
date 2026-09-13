@@ -1,9 +1,16 @@
 /**
  * Ejemplos de facturas con complemento Comercio Exterior (CFDI 4.0) usando el SDK de FiscalAPI
- * Todos los métodos usan el modo "ByReferences" - emisor y receptor se envían solo con su `id`.
+ * Todos los métodos usan el modo "ByReferences": emisor, receptor y productos se envían solo con su `id`.
  * Cada caso de uso expone dos funciones:
  *   - <nombre>UpdatePeople     : actualiza emisor y receptor en FiscalAPI con sus datos completos.
  *   - <nombre>PorReferencias   : invoca UpdatePeople y luego crea la factura referenciando solo los ids.
+ *
+ * Al referenciar un producto por `id`, el CFDI toma de él la clave del SAT, la unidad, la descripción,
+ * el precio y los impuestos; el `itemSku` del concepto se ignora y `NoIdentificacion` pasa a ser el id
+ * del producto. Por eso las mercancías del complemento apuntan a ese mismo id.
+ *
+ * Dos casos de traslado envían sus conceptos en línea y no por referencia: un producto registrado exige
+ * precio unitario mayor que cero, y un concepto no puede bajarlo a cero, que es lo que esos CFDI requieren.
  *
  * Pre-requisito: los certificados CSD (.cer y .key) del emisor deben estar previamente cargados
  * en el dashboard de FiscalAPI para `issuerId`. Estos ejemplos NO los suben.
@@ -59,6 +66,19 @@ const tipoCambioUsdDof: string = '16.9722';
 // IDs de personas previamente registradas en FiscalAPI (emisor y receptor)
 const issuerId: string = '<issuer-id>';
 const recipientId: string = '<recipient-id>';
+
+// IDs de productos previamente registrados en FiscalAPI.
+// Al referenciar un producto por id, el CFDI toma de el la clave, unidad, descripcion,
+// precio e impuestos, y NoIdentificacion pasa a ser el id del producto: por eso las
+// mercancias del complemento apuntan al mismo id y no al SKU.
+const productoFlete: string = '<producto-flete-id>';
+const productoGomitas: string = '<producto-gomitas-id>';
+const productoPulparindo: string = '<producto-pulparindo-id>';
+const productoCigarrosIvaIsrIvaRetenido: string = '<producto-cigarros-iva-isr-ivaret-id>';
+const productoCigarrosIvaIsr: string = '<producto-cigarros-iva-isr-id>';
+const productoCigarrosTraslado: string = '<producto-cigarros-traslado-id>';
+const productoFormulaMagistral: string = '<producto-formula-magistral-id>';
+const productoBebida: string = '<producto-bebida-id>';
 
 // Carpeta donde se guardan los XML timbrados que devuelve la API
 const carpetaSalida: string = 'C:/facturas';
@@ -135,46 +155,9 @@ async function facturaCEIngresoConCartaPorte31PorReferencias(client: IFiscalapiC
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '78101800',
-      itemSku: 'SERV02',
-      quantity: 1.0,
-      unitOfMeasurementCode: 'HUR',
-      description: 'FLETE',
-      unitPrice: 2300.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' },
-        { taxCode: '003', taxTypeCode: 'Tasa', taxRate: '0.300000', taxFlagCode: 'R' }
-      ]
-    },
-    {
-      itemCode: '50161509',
-      itemSku: 'A0001',
-      quantity: 1.0,
-      unitOfMeasurementCode: 'H87',
-      description: 'Gomitas',
-      unitPrice: 120.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' }
-      ]
-    },
-    {
-      itemCode: '50307037',
-      itemSku: 'A0002',
-      quantity: 1.0,
-      unitOfMeasurementCode: 'H87',
-      description: 'Pulparindo',
-      unitPrice: 100.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' }
-      ]
-    }
+    { id: productoFlete, quantity: 1.0 },
+    { id: productoGomitas, quantity: 1.0 },
+    { id: productoPulparindo, quantity: 1.0 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -203,7 +186,7 @@ async function facturaCEIngresoConCartaPorte31PorReferencias(client: IFiscalapiC
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: 'A0001',
+      noIdentificacion: productoGomitas,
       fraccionArancelariaId: '4011101099',
       cantidadAduana: '1.000',
       unidadAduanaId: '06',
@@ -211,7 +194,7 @@ async function facturaCEIngresoConCartaPorte31PorReferencias(client: IFiscalapiC
       valorDolares: '120.00'
     },
     {
-      noIdentificacion: 'A0002',
+      noIdentificacion: productoPulparindo,
       fraccionArancelariaId: '8407210299',
       cantidadAduana: '1.000',
       unidadAduanaId: '06',
@@ -388,21 +371,7 @@ async function facturaCEIngresoDiferentesMonedasPorReferencias(client: IFiscalap
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '50211503',
-      itemSku: '131494-1055',
-      quantity: 2,
-      unitOfMeasurementCode: 'H87',
-      description: 'Cigarros',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' },
-        { taxCode: '001', taxTypeCode: 'Tasa', taxRate: '0.100000', taxFlagCode: 'R' },
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.106666', taxFlagCode: 'R' }
-      ]
-    }
+    { id: productoCigarrosIvaIsrIvaRetenido, quantity: 2 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -429,7 +398,7 @@ async function facturaCEIngresoDiferentesMonedasPorReferencias(client: IFiscalap
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoCigarrosIvaIsrIvaRetenido,
       fraccionArancelariaId: '2402200100',
       cantidadAduana: '2.00',
       unidadAduanaId: '01',
@@ -514,28 +483,8 @@ async function facturaCEKitPartePorReferencias(client: IFiscalapiClient): Promis
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '51241200',
-      itemSku: '131494-1055',
-      quantity: 1.0,
-      unitOfMeasurementCode: 'H87',
-      description: 'FORMULA MAGISTRAL',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '01',
-      itemTaxes: []
-    },
-    {
-      itemCode: '51241200',
-      itemSku: '131494-1055',
-      quantity: 1.0,
-      unitOfMeasurementCode: 'H87',
-      description: 'FORMULA MAGISTRAL',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '01',
-      itemTaxes: []
-    }
+    { id: productoFormulaMagistral, quantity: 1.0 },
+    { id: productoFormulaMagistral, quantity: 1.0 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -561,7 +510,7 @@ async function facturaCEKitPartePorReferencias(client: IFiscalapiClient): Promis
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoFormulaMagistral,
       fraccionArancelariaId: '2402200100',
       cantidadAduana: '2',
       unidadAduanaId: '01',
@@ -646,20 +595,7 @@ async function facturaCEReceptorExtranjeroPorReferencias(client: IFiscalapiClien
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '50211503',
-      itemSku: '131494-1055',
-      quantity: 2,
-      unitOfMeasurementCode: 'H87',
-      description: 'Cigarros',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' },
-        { taxCode: '001', taxTypeCode: 'Tasa', taxRate: '0.100000', taxFlagCode: 'R' }
-      ]
-    }
+    { id: productoCigarrosIvaIsr, quantity: 2 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -686,7 +622,7 @@ async function facturaCEReceptorExtranjeroPorReferencias(client: IFiscalapiClien
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoCigarrosIvaIsr,
       fraccionArancelariaId: '2402200100',
       cantidadAduana: '117.64',
       unidadAduanaId: '01',
@@ -769,21 +705,7 @@ async function facturaCEReceptorNacionalPorReferencias(client: IFiscalapiClient)
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '50211503',
-      itemSku: '131494-1055',
-      quantity: 2,
-      unitOfMeasurementCode: 'H87',
-      description: 'Cigarros',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' },
-        { taxCode: '001', taxTypeCode: 'Tasa', taxRate: '0.100000', taxFlagCode: 'R' },
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.106666', taxFlagCode: 'R' }
-      ]
-    }
+    { id: productoCigarrosIvaIsrIvaRetenido, quantity: 2 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -812,7 +734,7 @@ async function facturaCEReceptorNacionalPorReferencias(client: IFiscalapiClient)
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoCigarrosIvaIsrIvaRetenido,
       fraccionArancelariaId: '2402200100',
       cantidadAduana: '117.64',
       unidadAduanaId: '01',
@@ -1249,17 +1171,7 @@ async function facturaCETrasladoTrasladoPorReferencias(client: IFiscalapiClient)
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '50211503',
-      itemSku: '131494-1055',
-      quantity: 2,
-      unitOfMeasurementCode: 'H87',
-      description: 'Cigarros',
-      unitPrice: 200.00,
-      discount: 0,
-      taxObjectCode: '01',
-      itemTaxes: []
-    }
+    { id: productoCigarrosTraslado, quantity: 2 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -1285,7 +1197,7 @@ async function facturaCETrasladoTrasladoPorReferencias(client: IFiscalapiClient)
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoCigarrosTraslado,
       fraccionArancelariaId: '2402200100',
       cantidadAduana: '117.64',
       unidadAduanaId: '01',
@@ -1367,21 +1279,7 @@ async function facturaCEUnidadesDeMedidaNoEquivalentesPorReferencias(client: IFi
   const recipient: InvoiceRecipient = { id: recipientId };
 
   const items: InvoiceItem[] = [
-    {
-      itemCode: '50201708',
-      itemSku: '131494-1055',
-      quantity: 1.000,
-      unitOfMeasurementCode: 'H87',
-      description: 'Bebida',
-      unitPrice: 100.00,
-      discount: 0,
-      taxObjectCode: '02',
-      itemTaxes: [
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.160000', taxFlagCode: 'T' },
-        { taxCode: '001', taxTypeCode: 'Tasa', taxRate: '0.100000', taxFlagCode: 'R' },
-        { taxCode: '002', taxTypeCode: 'Tasa', taxRate: '0.106666', taxFlagCode: 'R' }
-      ]
-    }
+    { id: productoBebida, quantity: 1.000 }
   ];
 
   const emisor: ComercioExteriorEmisor = {
@@ -1408,7 +1306,7 @@ async function facturaCEUnidadesDeMedidaNoEquivalentesPorReferencias(client: IFi
 
   const mercancias: ComercioExteriorMercancia[] = [
     {
-      noIdentificacion: '131494-1055',
+      noIdentificacion: productoBebida,
       fraccionArancelariaId: '2009310201',
       cantidadAduana: '0.500',
       unidadAduanaId: '08',
