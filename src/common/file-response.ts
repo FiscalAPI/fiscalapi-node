@@ -1,21 +1,20 @@
- 
 /**
- * File response from the API.
- *Por ejemplo: Modelo de respuesta de generación de PDF o recuperación de XML
+ * Modelo de respuesta de los endpoints que devuelven un archivo.
+ * Por ejemplo: generación del PDF o recuperación del XML de una factura.
  */
 export interface FileResponse {
     /**
-     * File content as a base64 string
+     * Contenido del archivo en base64
      */
-    base64Content: string;
-    
+    base64File?: string;
+
     /**
-     * File name
+     * Nombre del archivo
      */
-    fileName: string;
-    
+    fileName?: string;
+
     /**
-     * Content type
+     * Extensión del archivo
      */
-    contentType: string;
+    fileExtension?: string;
   }

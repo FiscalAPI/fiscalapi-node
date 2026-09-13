@@ -1,11 +1,10 @@
 // src/models/manifest.ts
-import { BaseDto } from '../common/base-dto';
 
 /**
  * Solicitud para firmar un manifiesto.
  * Contiene el certificado, llave privada y contraseña en base64.
  */
-export interface SignManifestRequest extends BaseDto {
+export interface SignManifestRequest {
   /** Certificado (.cer) en base64 */
   base64Cer?: string;
 
