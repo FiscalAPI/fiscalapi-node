@@ -5,8 +5,11 @@ import { FileResponse } from '../common/file-response';
 
 /**
  * Interfaz del servicio de archivos fiscales
+ *
+ * No incluye `update()`: el API retiró `PUT /api/v4/tax-files/{id}`, que responde 405 (Method Not Allowed).
+ * Un certificado no se edita: suba el nuevo con `create()` y elimine el anterior con `delete()`.
  */
-export interface ITaxFileService extends IFiscalapiService<TaxFile> {
+export interface ITaxFileService extends Omit<IFiscalapiService<TaxFile>, 'update'> {
 
 
   /**
