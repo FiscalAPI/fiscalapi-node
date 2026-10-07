@@ -80,7 +80,7 @@ async function main() : Promise<void> {
      //  legalName: 'EMPRESA S.A. DE C.V.',
      //  email: 'empresa@example.com',
      //  password: 'StrongPassword123!',
-     //  userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+     //  userTypeId: 'C', // C=Cliente (por omisión), U=Usuario. T=Tenant solo llega en respuestas
      // };
      // const apiResponse = await client.persons.create(modelRequest);
      // console.log(apiResponse);
@@ -90,10 +90,9 @@ async function main() : Promise<void> {
     //  const modelRequest: Person = {
     //    id: 'cce1def0-7df0-4c44-b7b8-046a7681ced6',
     //    legalName: 'KARLA FUENTE NOLASCO',
-    //    //capitalRegime: "S.A de C.V", // Régimen de capital de la persona, solo cuando es persona moral
     //    tin: 'FUNK671228PH6', // RFC
     //    email: 'karla.fuentes@example.com',
-    //    userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+    //    userTypeId: 'C', // C=Cliente, U=Usuario. T=Tenant solo se acepta si la persona ya es T
     //    satTaxRegimeId: '601', // General de Ley Personas Morales
     //    satCfdiUseId: 'G03', // Gastos en general.
     //    zipCode: '01160', // Código postal

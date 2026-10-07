@@ -24,7 +24,7 @@ export type { HttpMethod } from './http/fiscalapi-http-client.interface';
 
 // Models types
 export type { ApiKey } from './models/api-key';
-export type { Person } from './models/person';
+export type { Person, CreditBalance } from './models/person';
 export type { EmployeeData, CreateEmployeeRequest, UpdateEmployeeRequest } from './models/employee-data';
 export type { EmployerData, CreateEmployerRequest, UpdateEmployerRequest } from './models/employer-data';
 export type { Product, ProductTax } from './models/product';
