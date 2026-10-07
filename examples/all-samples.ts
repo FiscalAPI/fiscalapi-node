@@ -122,7 +122,7 @@ async function main() : Promise<void> {
     // Crear certificado CSD (subir certificado y llave privada)
     // const certModelRequest: TaxFile = {
     //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
-    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional para el API)
+    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional)
     //   base64File: base64Cert,
     //   fileType: 0, // 0=Certificado, 1=Llave privada
     //   password: '12345678a', // Contraseña de la llave privada0
@@ -130,7 +130,7 @@ async function main() : Promise<void> {
 
     // const keyModelRequest: TaxFile = {
     //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
-    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional para el API)
+    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional)
     //   base64File: base64Key,
     //   fileType: 1, // 0=Certificado, 1=Llave privada
     //   password: '12345678a', // Contraseña de la llave privada

@@ -11,16 +11,16 @@ export interface TaxFile extends BaseDto  {
   personId: string;
 
   /**
-   * RFC de la persona. El API no lo exige al subir: si va vacío, usa el RFC de la persona; si se envía, debe ser el RFC
-   * de la persona (sin distinguir mayúsculas) o responde 400 con la falla en Tin. El API no guarda el valor enviado:
-   * siempre devuelve el RFC de la persona
+   * RFC de la persona. Opcional al subir: si se omite o va vacío, el API usa el RFC de la persona; si se envía, debe ser
+   * el RFC de la persona (sin distinguir mayúsculas) o responde 400 con la falla en Tin. El API no guarda el valor
+   * enviado: en las respuestas siempre trae el RFC de la persona
    */
-  tin: string;
+  tin?: string;
 
   /** Archivo certificado o llave privada en formato base64. Para certificados debe ser el archivo .cer codificado en base64, para llaves privadas debe ser el archivo .key codificado en base64 */
   base64File: string;
 
-  /** Tipo de archivo que se está enviando. Valores: "01" */
+  /** Tipo de archivo que se está enviando, como número: 0 = certificado (.cer), 1 = llave privada (.key) */
   fileType: number;
 
   /** Contraseña de la llave privada. Independientemente si se envía un certificado o una llave privada, siempre se debe enviar la contraseña de la llave privada */
