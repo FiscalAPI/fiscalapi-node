@@ -1,5 +1,6 @@
  
 // src/models/person.ts
+import { DateTime } from 'luxon';
 import { BaseDto } from '../common/base-dto';
 import { CatalogDto } from '../common/catalog-dto';
 import type { CreditType } from './stamp';
@@ -64,7 +65,7 @@ export interface Person extends BaseDto {
   /** Saldo disponible en la cuenta del emisor. Atributo de sólo lectura */
   availableBalance?: number;
 
-  /** Saldo en tránsito. Atributo de sólo lectura */
+  /** Campo heredado: el API ya no lo calcula y siempre vale 0. Para el saldo use availableBalance o balances. Atributo de sólo lectura */
   committedBalance?: number;
 
   /** Saldo de créditos de validación del SAT. Independiente de availableBalance (timbres). Atributo de sólo lectura */
@@ -78,6 +79,12 @@ export interface Person extends BaseDto {
 
   /** true si la persona es el owner de su tenant. Atributo de sólo lectura */
   isOwner?: boolean;
+
+  /**
+   * Fin de vigencia de la persona (llega como texto ISO 8601). La asigna el API; casi siempre es null y es informativa
+   * (no limita el timbrado ni el acceso al API). Atributo de sólo lectura
+   */
+  validTo?: DateTime | string;
 
   /** Clave del país de residencia fiscal del receptor extranjero. Catálogo SAT c_Pais */
   countryId?: string;

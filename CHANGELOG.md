@@ -8,6 +8,7 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 
 - Se elimina `capitalRegime` de la interfaz `Person` (estaba `@deprecated`): el API no tiene régimen de capital, ignoraba el valor y nunca lo devolvía. En TypeScript, un objeto `Person` que lo incluya o una lectura de `person.capitalRegime` deja de compilar: quite la propiedad de su código y envíe la razón social sin régimen de capital en `legalName`. En JavaScript no hay error, pero el valor nunca tuvo efecto; quítelo también.
 - `TaxFile.tin` pasa a ser opcional (`tin?: string`): al subir certificados con `taxFiles.create()` ya no hay que enviarlo (el API usa el RFC de la persona). En TypeScript con `strictNullChecks`, leer `taxFile.tin` da `string | undefined`: el código que lo asigne a un `string` deja de compilar; use `taxFile.tin ?? ''` o compruebe el valor (las respuestas del API siempre lo traen con el RFC de la persona). En JavaScript no cambia nada.
+- El API deja de devolver `stripeCustomerId` y `subscriptionStatus` en las personas (`/api/v4/people` y la persona de las reglas de descarga): eran datos internos de Stripe. Este SDK nunca los modeló en `Person`, así que el código tipado con el modelo no cambia; si su integración los lee de la respuesta (por ejemplo, `(person as any).stripeCustomerId` o el JSON crudo), quite esa lectura: el campo ya no llega.
 
 ### Modelo `Person`
 
@@ -16,6 +17,7 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
   - `country`: país de residencia fiscal expandido (solo lectura).
   - `balances`: saldos por tipo de crédito (`CreditBalance`: `creditType` y `available`, solo lectura). Solo aparecen los tipos que la persona ha tenido; un tipo ausente tiene saldo 0.
   - `isOwner`: `true` si la persona es el owner de su tenant (solo lectura).
+  - `validTo` (`DateTime | string`, llega como texto ISO 8601): fin de vigencia de la persona (solo lectura). La asigna el API; casi siempre es `null` y es informativa (no limita el timbrado ni el acceso al API).
 - `password`: requerida al crear; al actualizar, `null` o vacía conserva la contraseña actual. El API nunca la devuelve.
 - `userTypeId`: `"C"` (cliente, el valor por omisión al crear) o `"U"` (usuario). `"T"` (tenant) solo llega en respuestas: el API lo rechaza al crear y al actualizar solo lo acepta si la persona ya es `"T"`.
 
@@ -27,3 +29,4 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 - `TaxFile.tin`: el API ya no lo exige en `taxFiles.create()`; si se omite o va vacío, usa el RFC de la persona. Si se envía, debe ser el RFC de la persona (sin distinguir mayúsculas); si no, el API responde 400 con la falla en `Tin` (después de comprobar que puede gestionar los certificados de la persona; si no, 403). El API no guarda el valor enviado: el `tin` del archivo siempre es el RFC de la persona. En el SDK, `tin` es opcional (ver «Cambios incompatibles»).
 - `fileType` (en `TaxFile` y en `TaxCredential`) va como número: `0` = certificado (.cer), `1` = llave privada (.key). El API no acepta el nombre (`"CertificateCsd"`, `"PrivateKeyCsd"`): responde 400. Se corrigen los ejemplos del README que lo enviaban como texto.
 - El API ya no devuelve `twoFactorEnabled` en las personas (este SDK nunca lo modeló).
+- Las personas ya no traen `stripeCustomerId` ni `subscriptionStatus` (datos internos de Stripe). `validTo` y `committedBalance` son de solo lectura: el API los ignora al crear o actualizar. `committedBalance` es un campo heredado que el API ya no calcula y siempre vale 0; para el saldo use `availableBalance`, `availableValidationBalance` o `balances`.
