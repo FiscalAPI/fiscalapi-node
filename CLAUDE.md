@@ -28,7 +28,7 @@ There is no `build:types` script — the full `build` script handles CJS + ESM +
 - Services exposed as readonly properties: `invoices`, `products`, `persons`, `taxFiles`, `catalogs`, `apiKeys`, `stamps`, `downloadCatalogs`, `downloadRules`, `downloadRequests`, `manifests`, `satValidations`
 
 **Service Layer**:
-- `BaseFiscalapiService` provides CRUD: `getList(pageNumber, pageSize)`, `getById(id, details?)`, `create()`, `update()`, `delete()`, `search()`, plus `executeRequest()` for custom calls. There is no `upload()`: file uploads are base64 fields on the payload (e.g. `TaxFile.base64File`)
+- `BaseImmutableFiscalapiService` (implements `IImmutableFiscalapiService`) provides `getList(pageNumber, pageSize)`, `getById(id, details?)`, `create()`, `delete()`, `search()`, plus `executeRequest()` for custom calls; `BaseFiscalapiService` (implements `IFiscalapiService`) extends it with `update()`. `TaxFileService` extends only the immutable base: the API does not update certificates (PUT tax-files answers 405), so `update()` does not exist on `taxFiles`. There is no `upload()`: file uploads are base64 fields on the payload (e.g. `TaxFile.base64File`)
 - Not every service extends the base class. Read-only resources whose shape does not fit `IFiscalapiService` are standalone: `DownloadCatalogService` (unpaged `getList()`) and `SatValidationService` (plain arrays, no CRUD). Their interfaces do not extend `IFiscalapiService`
 - Specialized services add domain methods (e.g., `InvoiceService.cancel()`, `.getPdf()`, `.getXml()`, `.send()`, `.getStatus()`)
 - `PersonService` contains nested `EmployeeService` and `EmployerService`
