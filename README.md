@@ -203,7 +203,7 @@ const certificadoCsd = {
     base64File: "MIIFsDCCA5igAwIBAgI...==", // Certificado .cer codificado en Base64
     fileType: "CertificateCsd",
     password: "12345678a",
-    tin: "EKU9003173C9"
+    tin: "EKU9003173C9" // RFC de la persona (opcional para el API)
 };
 
 const clavePrivadaCsd = {
@@ -211,7 +211,7 @@ const clavePrivadaCsd = {
     base64File: "MIIFDjBABgkqhkiG9w0BBQ0...==", // Llave privada .key codificada en Base64
     fileType: "PrivateKeyCsd",
     password: "12345678a",
-    tin: "EKU9003173C9"
+    tin: "EKU9003173C9" // RFC de la persona (opcional para el API)
 };
 
 try {
