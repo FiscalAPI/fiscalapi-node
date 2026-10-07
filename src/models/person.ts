@@ -60,7 +60,11 @@ export interface Person extends BaseDto {
   /** Foto de perfil del emisor en formato base64 */
   base64Photo?: string;
 
-  /** Contraseña de los certificados CSD cuando es un emisor */
+  /**
+   * Contraseña de la llave privada (.key) que la persona guarda en su perfil. El API no la usa para sellar
+   * (al timbrar usa la de los certificados registrados o la de taxCredentials). Con valor solo para la propia
+   * persona y el owner del tenant; los demás reciben null. Al actualizar, null la conserva y "" la borra.
+   */
   taxPassword?: string;
 
   /** Saldo disponible en la cuenta del emisor. Atributo de sólo lectura */

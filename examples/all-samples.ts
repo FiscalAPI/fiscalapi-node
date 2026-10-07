@@ -96,7 +96,7 @@ async function main() : Promise<void> {
     //    satTaxRegimeId: '601', // General de Ley Personas Morales
     //    satCfdiUseId: 'G03', // Gastos en general.
     //    zipCode: '01160', // Código postal
-    //    taxPassword: '12345678a', // Contraseña de los certificados CSD
+    //    taxPassword: '12345678a', // Contraseña de la .key guardada en el perfil (el API no la usa para sellar)
     //    //base64Photo: 'base64Photo', // Foto de perfil en base64
     //    //password: '12345678a', // Contraseña para acceder al dashboard
     //    //password: '12345678a', // Contraseña para acceder al dashboard
