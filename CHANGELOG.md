@@ -4,9 +4,12 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 
 ## [Sin publicar]
 
+### Cambios incompatibles (BREAKING)
+
+- Se elimina `capitalRegime` de la interfaz `Person` (estaba `@deprecated`): el API no tiene régimen de capital, ignoraba el valor y nunca lo devolvía. En TypeScript, un objeto `Person` que lo incluya o una lectura de `person.capitalRegime` deja de compilar: quite la propiedad de su código y envíe la razón social sin régimen de capital en `legalName`. En JavaScript no hay error, pero el valor nunca tuvo efecto; quítelo también.
+
 ### Modelo `Person`
 
-- `capitalRegime` queda obsoleto (`@deprecated`): el API no tiene régimen de capital, ignora el valor y no lo devuelve. Envíe la razón social sin régimen de capital en `legalName`. Se conserva para no romper a quien lo asigna.
 - Nuevos campos opcionales:
   - `phoneNumber` y `curp`: los aceptan la creación y la actualización de personas.
   - `country`: país de residencia fiscal expandido (solo lectura).

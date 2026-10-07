@@ -21,12 +21,6 @@ export interface Person extends BaseDto {
   /** Teléfono de la persona */
   phoneNumber?: string;
 
-  /**
-   * @deprecated El API no tiene régimen de capital: ignora el valor y nunca lo devuelve.
-   * Envíe la razón social sin régimen de capital en legalName.
-   */
-  capitalRegime?: string;
-
   /** Código del régimen fiscal del emisor. Catálogo del SAT c_régimenFiscal. Valores: "601", "603", "605" */
   satTaxRegimeId?: string;
 
