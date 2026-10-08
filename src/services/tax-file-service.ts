@@ -2,13 +2,13 @@ import { TaxFile } from '../models/tax-file';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { ApiResponse } from '../common/api-response';
 import { FileResponse } from '../common/file-response';
-import { BaseFiscalapiService } from './base-fiscalapi-service';
+import { BaseImmutableFiscalapiService } from './base-immutable-fiscalapi-service';
 import { ITaxFileService } from '..';
 
 /**
  * Implementación del servicio de archivos fiscales
  */
-export class TaxFileService extends BaseFiscalapiService<TaxFile> implements ITaxFileService {
+export class TaxFileService extends BaseImmutableFiscalapiService<TaxFile> implements ITaxFileService {
   /**
    * Crea una nueva instancia del servicio de archivos fiscales
    * @param {IFiscalapiHttpClient} httpClient - Cliente HTTP

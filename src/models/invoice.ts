@@ -1520,7 +1520,7 @@ export interface TaxCredential {
   /** Tipo de archivo. 0: Cetifiacdo CSD (archivo .cer), 1: Llave privada (archivo .key) */
   fileType: number;
 
-  /** Contraseña del archivo .key. Debe ser la misma en ambos objetos (.cer y .key) */
+  /** Contraseña de la llave privada. Requerida en el objeto .key; en el .cer el API no la usa */
   password: string;
 }
 

@@ -201,17 +201,17 @@ const fiscalApi = FiscalApiClient.create(settings);
 const certificadoCsd = {
     personId: "984708c4-fcc0-43bd-9d30-ec017815c20e",
     base64File: "MIIFsDCCA5igAwIBAgI...==", // Certificado .cer codificado en Base64
-    fileType: "CertificateCsd",
+    fileType: 0, // 0 = certificado (.cer)
     password: "12345678a",
-    tin: "EKU9003173C9"
+    tin: "EKU9003173C9" // RFC de la persona (opcional)
 };
 
 const clavePrivadaCsd = {
     personId: "984708c4-fcc0-43bd-9d30-ec017815c20e",
     base64File: "MIIFDjBABgkqhkiG9w0BBQ0...==", // Llave privada .key codificada en Base64
-    fileType: "PrivateKeyCsd",
+    fileType: 1, // 1 = llave privada (.key)
     password: "12345678a",
-    tin: "EKU9003173C9"
+    tin: "EKU9003173C9" // RFC de la persona (opcional)
 };
 
 try {
@@ -329,12 +329,12 @@ const invoice = {
         taxCredentials: [
             {
                 base64File: "certificate_base64...",
-                fileType: "CertificateCsd",
+                fileType: 0, // 0 = certificado (.cer)
                 password: "12345678a"
             },
             {
                 base64File: "private_key_base64...",
-                fileType: "PrivateKeyCsd",
+                fileType: 1, // 1 = llave privada (.key)
                 password: "12345678a"
             }
         ]

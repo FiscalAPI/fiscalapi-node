@@ -80,7 +80,7 @@ async function main() : Promise<void> {
      //  legalName: 'EMPRESA S.A. DE C.V.',
      //  email: 'empresa@example.com',
      //  password: 'StrongPassword123!',
-     //  userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+     //  userTypeId: 'C', // C=Cliente (por omisión), U=Usuario. T=Tenant solo llega en respuestas
      // };
      // const apiResponse = await client.persons.create(modelRequest);
      // console.log(apiResponse);
@@ -90,14 +90,13 @@ async function main() : Promise<void> {
     //  const modelRequest: Person = {
     //    id: 'cce1def0-7df0-4c44-b7b8-046a7681ced6',
     //    legalName: 'KARLA FUENTE NOLASCO',
-    //    //capitalRegime: "S.A de C.V", // Régimen de capital de la persona, solo cuando es persona moral
     //    tin: 'FUNK671228PH6', // RFC
     //    email: 'karla.fuentes@example.com',
-    //    userTypeId: 'C', // C=Cliente, U=Usuario T=Tenant
+    //    userTypeId: 'C', // C=Cliente, U=Usuario. T=Tenant solo se acepta si la persona ya es T
     //    satTaxRegimeId: '601', // General de Ley Personas Morales
     //    satCfdiUseId: 'G03', // Gastos en general.
     //    zipCode: '01160', // Código postal
-    //    taxPassword: '12345678a', // Contraseña de los certificados CSD
+    //    taxPassword: '12345678a', // Contraseña de la .key guardada en el perfil (el API no la usa para sellar)
     //    //base64Photo: 'base64Photo', // Foto de perfil en base64
     //    //password: '12345678a', // Contraseña para acceder al dashboard
     //    //password: '12345678a', // Contraseña para acceder al dashboard
@@ -123,7 +122,7 @@ async function main() : Promise<void> {
     // Crear certificado CSD (subir certificado y llave privada)
     // const certModelRequest: TaxFile = {
     //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
-    //   tin: 'FUNK671228PH6', // RFC
+    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional)
     //   base64File: base64Cert,
     //   fileType: 0, // 0=Certificado, 1=Llave privada
     //   password: '12345678a', // Contraseña de la llave privada0
@@ -131,7 +130,7 @@ async function main() : Promise<void> {
 
     // const keyModelRequest: TaxFile = {
     //   personId: '3f3478b4-60fd-459e-8bfc-f8239fc96257',
-    //   tin: 'FUNK671228PH6', // RFC
+    //   tin: 'FUNK671228PH6', // RFC de la persona (opcional)
     //   base64File: base64Key,
     //   fileType: 1, // 0=Certificado, 1=Llave privada
     //   password: '12345678a', // Contraseña de la llave privada
