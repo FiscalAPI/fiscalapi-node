@@ -1,12 +1,15 @@
-import { IFiscalapiService } from './fiscalapi-service.interface';
+import { IImmutableFiscalapiService } from './fiscalapi-service.interface';
 import { TaxFile } from '../models/tax-file';
 import { ApiResponse } from '../common/api-response';
 import { FileResponse } from '../common/file-response';
 
 /**
  * Interfaz del servicio de archivos fiscales
+ *
+ * No tiene `update()`: el API no actualiza certificados (`PUT /api/v4/tax-files/{id}` responde 405).
+ * Para cambiar un certificado, suba el nuevo con `create()` y elimine el anterior con `delete()`.
  */
-export interface ITaxFileService extends IFiscalapiService<TaxFile> {
+export interface ITaxFileService extends IImmutableFiscalapiService<TaxFile> {
 
 
   /**
