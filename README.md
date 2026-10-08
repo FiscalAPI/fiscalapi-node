@@ -37,6 +37,7 @@
 - **Configuración de datos fiscales** (RFC, domicilio fiscal, régimen fiscal)
 - **Datos de empleado** (agrega/actualiza/elimina datos de empleado a una persona. CFDI Nómina)
 - **Datos de empleador** (agrega/actualiza/elimina datos de empleador a una persona. CFDI Nómina)
+- **Firma de carta manifiesto** (firma el manifiesto de una persona con su e.firma/FIEL)
 
 ## 🎖️ Gestión de Timbres 
 - **Gestión de folios fiscales** Compra timbres a fiscalapi y transfiere/retira a las personas de tu organizacion segun tus reglas de negocio.
@@ -446,9 +447,38 @@ await fiscalApi.stamps.transferStamps({
 });
 ```
 
+### 9. Firmar Carta Manifiesto
+
+Firma la carta manifiesto de una persona y devuelve el PDF resultante en base64.
+
+Requiere la **e.firma (FIEL)** del contribuyente, no el CSD de timbrado, y que exista una persona con ese RFC en el tenant.
+
+```javascript
+try {
+    const apiResponse = await fiscalApi.manifests.sign({
+        base64Cer: "<FIEL_CER_BASE64>",
+        base64Key: "<FIEL_KEY_BASE64>",
+        password: "<FIEL_PASSWORD>"
+    });
+
+    if (apiResponse.succeeded) {
+        console.log(apiResponse.data.fileName);      // EKU9003173C9.pdf
+        console.log(apiResponse.data.fileExtension); // .pdf
+        console.log(apiResponse.data.base64File);    // PDF firmado en base64
+    } else {
+        console.log(apiResponse.details);
+    }
+} catch (error) {
+    console.error(error);
+}
+```
+
+Tras una firma exitosa, todas las personas del tenant con el RFC del certificado quedan con `manifestStatusId` en `Signed`; `fiscalApi.persons.getById(...)` lo refleja.
+
 ## 📂 Más Ejemplos
 
 - [Gestión de Timbres](examples/ejemplo-timbres.ts)
+- [Firma de Carta Manifiesto](examples/ejemplos-firma-manifiestos.ts)
 - [Validaciones del SAT](examples/ejemplo-validaciones-sat.ts)
 - [Datos Empleador/Empleado](examples/ejemplo-datos-empleado-empleador.ts)
 - [Facturas de Nómina (Por Valores)](examples/ejemplos-factura-nomina-valores.ts)
