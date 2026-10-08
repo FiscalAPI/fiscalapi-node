@@ -6,6 +6,13 @@ import { FiscalapiSettings } from '../src/common/fiscalapi-settings';
 
 const FIXTURES_DIR = join(__dirname, 'fixtures');
 
+/** Petición recibida: método, URL completa y cuerpo JSON ya decodificado (undefined si no lleva). */
+export interface RecordedRequest {
+  method: string;
+  url: string;
+  body: Record<string, unknown> | undefined;
+}
+
 /** Devuelve el cuerpo crudo de `tests/fixtures/<name>`, tal como lo enviaría el API. */
 export function readFixture(name: string): string {
   return readFileSync(join(FIXTURES_DIR, name), 'utf-8');
@@ -17,6 +24,7 @@ export function readFixture(name: string): string {
  */
 export class FakeApi {
   readonly requestedUrls: string[] = [];
+  readonly requests: RecordedRequest[] = [];
   readonly httpClient: FiscalapiHttpClient;
   private body = '';
 
@@ -36,6 +44,8 @@ export class FakeApi {
 
   private async respond(config: InternalAxiosRequestConfig): Promise<AxiosResponse<string>> {
     this.requestedUrls.push(axios.getUri(config));
+    const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+    this.requests.push({ method: (config.method ?? '').toUpperCase(), url: axios.getUri(config), body });
     return { data: this.body, status: 200, statusText: 'OK', headers: {}, config };
   }
 }
