@@ -20,7 +20,7 @@ export interface TaxFile extends BaseDto  {
   /** Archivo certificado o llave privada en formato base64. Para certificados debe ser el archivo .cer codificado en base64, para llaves privadas debe ser el archivo .key codificado en base64 */
   base64File: string;
 
-  /** Tipo de archivo que se está enviando, como número: 0 = certificado (.cer), 1 = llave privada (.key) */
+  /** Tipo de archivo, como número: 0 = certificado CSD (.cer), 1 = llave privada CSD (.key), 2 = certificado FIEL (.cer), 3 = llave privada FIEL (.key). El API valida el valor: otro (por ejemplo 4, Pfx) responde 400 en FileType */
   fileType: number;
 
   /** Contraseña de la llave privada. Independientemente si se envía un certificado o una llave privada, siempre se debe enviar la contraseña de la llave privada */
