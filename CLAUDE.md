@@ -13,7 +13,7 @@ npm run build          # Full build: clean + cjs + esm + package-json markers
 npm run build:esm      # TypeScript → ES Modules (dist/esm), then fix-esm-imports.js adds .js extensions
 npm run build:cjs      # TypeScript → CommonJS (dist/cjs)
 npm run clean          # Remove dist directory
-npm test               # Run Jest (note: jest not in devDependencies yet)
+npm test               # Run Jest + ts-jest over tests/ (tsconfig.test.json, offline)
 npm run lint           # ESLint on src/**/*.ts (note: eslint not in devDependencies yet)
 npm run main           # Run examples/main.ts with ts-node
 ```
@@ -64,11 +64,15 @@ const client = FiscalapiClient.create({
 1. **By References**: Send only IDs of pre-configured entities in FiscalAPI dashboard
 2. **By Values**: Send complete data in each request (no prior setup needed)
 
-Examples for both modes are in `examples/` (invoices, payroll, local taxes, carta porte, comercio exterior, stamps, SAT validations, manifests, employee/employer data). Examples are executable documentation and the only test net: every variable is declared with its exported SDK type — no `any`, `unknown`, anonymous object literals or `as` assertions — so a contract drift breaks the build.
+Examples for both modes are in `examples/` (invoices, payroll, local taxes, carta porte, comercio exterior, stamps, SAT validations, manifests, employee/employer data). Examples are executable documentation: every variable is declared with its exported SDK type — no `any`, `unknown`, anonymous object literals or `as` assertions — so a contract drift breaks the build.
+
+## Tests
+
+`tests/` holds offline Jest tests, outside `src/` so they never reach `dist/`. `tests/fake-api.ts` builds a `FiscalapiHttpClient` over an Axios instance with a fake adapter, so each test runs the real service → HTTP client → Axios path against a fixed JSON from `tests/fixtures/` (shaped like the API's camelCase responses, enums as numbers). `response-tolerance.test.ts` characterizes how the SDK handles responses of upcoming API phases; a test whose name cites a task (for example SDK-011) documents what that task changes.
 
 ## TypeScript Configuration
 
-Strict mode enabled. Target: **ES2019**. Key flags: `noImplicitAny`, `strictNullChecks`, `noImplicitReturns`, `noUnusedParameters`, `noFallthroughCasesInSwitch`. `noUnusedLocals` is **false**. Three tsconfig files: `tsconfig.base.json` (shared), `tsconfig.esm.json` (ESNext modules → dist/esm), `tsconfig.cjs.json` (CommonJS → dist/cjs).
+Strict mode enabled. Target: **ES2019**. Key flags: `noImplicitAny`, `strictNullChecks`, `noImplicitReturns`, `noUnusedParameters`, `noFallthroughCasesInSwitch`. `noUnusedLocals` is **false**. Three tsconfig files: `tsconfig.base.json` (shared), `tsconfig.esm.json` (ESNext modules → dist/esm), `tsconfig.cjs.json` (CommonJS → dist/cjs). `tsconfig.test.json` adds `tests/` and the Jest types for ts-jest only.
 
 ## CI/CD
 
