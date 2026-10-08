@@ -94,6 +94,16 @@ export interface Person extends BaseDto {
 
   /** Número de registro de identificación tributaria del receptor extranjero */
   foreignTin?: string;
+
+  /**
+   * Estado de la carta manifiesto de la persona. Valores: "NotInvited" (no invitada), "Unsigned" (invitada, sin firmar)
+   * o "Signed" (firmada). Lo escribe la firma de la carta manifiesto (manifests.sign): todas las personas del tenant con
+   * el RFC del certificado quedan "Signed". Atributo de sólo lectura
+   */
+  manifestStatusId?: string;
+
+  /** Estado de la carta manifiesto expandido. Atributo de sólo lectura */
+  manifestStatus?: CatalogDto;
 }
 
 /**
