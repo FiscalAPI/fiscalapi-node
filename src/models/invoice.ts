@@ -1517,10 +1517,10 @@ export interface TaxCredential {
   /** Archivo en formato base64 */
   base64File: string;
 
-  /** Tipo de archivo. 0: Cetifiacdo CSD (archivo .cer), 1: Llave privada (archivo .key) */
+  /** Tipo de archivo: 0 = certificado CSD (.cer), 1 = llave privada CSD (.key). El timbrado y la cancelación por valores exigen ese par */
   fileType: number;
 
-  /** Contraseña del archivo .key. Debe ser la misma en ambos objetos (.cer y .key) */
+  /** Contraseña de la llave privada. Requerida en el objeto .key; en el .cer el API no la usa */
   password: string;
 }
 

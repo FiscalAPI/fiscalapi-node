@@ -253,6 +253,8 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
 
     const axiosError = error as AxiosError;
     const responseData = axiosError.response?.data;
+    // SDK-060: el identificador de la petición que el API manda en sus errores (soporte lo pide en los 5xx).
+    const traceIdentifier = this.readTraceIdentifier(responseData);
 
     // Revisar si es un ProblemDetails según RFC 9457
     if (
@@ -291,7 +293,8 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
           succeeded: false,
           message: firstFailure.errorMessage,
           details: JSON.stringify(apiResponse.data),
-          httpStatusCode: 400
+          httpStatusCode: 400,
+          traceIdentifier
         };
       }
     }
@@ -302,8 +305,23 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
       succeeded: false,
       message: axiosError.message || 'Ocurrió un error en la comunicación con el servidor',
       details: JSON.stringify(responseData || {}),
-      httpStatusCode: axiosError.response?.status || 500
+      httpStatusCode: axiosError.response?.status || 500,
+      traceIdentifier
     };
+  }
+
+  /**
+   * Lee el traceIdentifier del cuerpo de una respuesta de error del API (ApiResponse), si lo trae
+   * @param {unknown} responseData - Cuerpo de la respuesta de error
+   * @returns {string | undefined} El traceIdentifier, o undefined si el cuerpo no lo trae
+   * @private
+   */
+  private readTraceIdentifier(responseData: unknown): string | undefined {
+    if (responseData && typeof responseData === 'object' && 'traceIdentifier' in responseData) {
+      const traceIdentifier = (responseData as { traceIdentifier: unknown }).traceIdentifier;
+      return typeof traceIdentifier === 'string' ? traceIdentifier : undefined;
+    }
+    return undefined;
   }
 
   /**

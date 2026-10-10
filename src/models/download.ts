@@ -178,7 +178,8 @@ export interface DownloadRequest extends BaseDto {
   
     /** 
      * Fecha del siguiente intento
-     * Fecha del siguiente intento para la solicitud asociada
+     * @deprecated El API ya no lo devuelve: siempre era null (Fiscalapi no programa un siguiente intento por
+     * solicitud). Se eliminará en una versión mayor; use {@link lastAttemptDate}.
      */
     nextAttemptDate?: DateTime | string;
   

@@ -43,10 +43,11 @@ export type RequestOptions<TData = any> = {
 };
 
 /**
- * Interfaz base para todos los servicios de FiscalAPI
+ * Interfaz base de un servicio cuyo recurso se consulta, se crea y se elimina, pero no se actualiza
+ * (por ejemplo, los certificados). `IFiscalapiService` la extiende con `update()`.
  * @template T - Tipo de DTO que maneja el servicio
  */
-export interface IFiscalapiService<T extends BaseDto> {
+export interface IImmutableFiscalapiService<T extends BaseDto> {
   /**
    * Recupera una lista paginada de recursos
    * @param {number} pageNumber - Número de página (base 1)
@@ -69,15 +70,7 @@ export interface IFiscalapiService<T extends BaseDto> {
    * @returns {Promise<ApiResponse<T>>} Recurso creado
    */
   create(model: T): Promise<ApiResponse<T>>;
-  
-  /**
-   * Actualiza un recurso existente
-   * @param {string} id - ID del recurso
-   * @param {T} model - Datos actualizados del recurso
-   * @returns {Promise<ApiResponse<T>>} Recurso actualizado
-   */
-  update(model: T): Promise<ApiResponse<T>>;
-  
+
   /**
    * Elimina un recurso
    * @param {string} id - ID del recurso
@@ -103,4 +96,17 @@ export interface IFiscalapiService<T extends BaseDto> {
   executeRequest<TResult, TData = any>(
     options: RequestOptions<TData>
   ): Promise<ApiResponse<TResult>>;
+}
+
+/**
+ * Interfaz base para todos los servicios de FiscalAPI
+ * @template T - Tipo de DTO que maneja el servicio
+ */
+export interface IFiscalapiService<T extends BaseDto> extends IImmutableFiscalapiService<T> {
+  /**
+   * Actualiza un recurso existente
+   * @param {T} model - Datos actualizados del recurso (con su `id`)
+   * @returns {Promise<ApiResponse<T>>} Recurso actualizado
+   */
+  update(model: T): Promise<ApiResponse<T>>;
 }
