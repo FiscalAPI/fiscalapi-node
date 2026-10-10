@@ -68,7 +68,7 @@ Examples for both modes are in `examples/` (invoices, payroll, local taxes, cart
 
 ## Tests
 
-`tests/` holds offline Jest tests, outside `src/` so they never reach `dist/`. `tests/fake-api.ts` builds a `FiscalapiHttpClient` over an Axios instance with a fake adapter, so each test runs the real service → HTTP client → Axios path against a fixed JSON from `tests/fixtures/` (shaped like the API's camelCase responses, enums as numbers). `response-tolerance.test.ts` characterizes how the SDK handles responses of upcoming API phases; a test whose name cites a task (for example SDK-011) documents what that task changes.
+`tests/` holds offline Jest tests, outside `src/` so they never reach `dist/`. `tests/fake-api.ts` builds a `FiscalapiHttpClient` over an Axios instance with a fake adapter, so each test runs the real service → HTTP client → Axios path against a fixed JSON from `tests/fixtures/` (shaped like the API's camelCase responses, enums as numbers). `response-tolerance.test.ts` characterizes how the SDK handles API responses with values and fields it does not model yet; a test whose name says "falta agregar" documents the pending change.
 
 ## TypeScript Configuration
 

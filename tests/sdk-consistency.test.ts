@@ -1,7 +1,7 @@
 /**
- * Consistencia entre SDK (SDK-060, DEC-184, DEC-136). Los mismos escenarios viven en los SDK de .NET, Python y Java:
+ * Consistencia entre SDK. Los mismos escenarios viven en los SDK de .NET, Python y Java:
  *  1. las respuestas de error exponen el `traceIdentifier` que manda el API (los textos de los 5xx piden enviarlo a
- *     soporte). Aditivo: `message`, `details` y `httpStatusCode` no cambian (deuda DEC-182/DEC-185 H1);
+ *     soporte). Aditivo: `message`, `details` y `httpStatusCode` no cambian (cambiarlos queda para una versión mayor);
  *  2. `Person` trae `manifestStatusId` (y `manifestStatus` expandido), que escribe la firma de la carta manifiesto.
  */
 import { FakeApi } from './fake-api';
@@ -30,7 +30,7 @@ beforeEach(() => {
   api = new FakeApi();
 });
 
-describe('1. traceIdentifier en las respuestas de error (SDK-060)', () => {
+describe('1. traceIdentifier en las respuestas de error', () => {
   test('un 500 trae el traceIdentifier; message y details como antes', async () => {
     const body = {
       data: null,
@@ -105,7 +105,7 @@ describe('1. traceIdentifier en las respuestas de error (SDK-060)', () => {
   });
 });
 
-describe('2. persona: manifestStatusId (SDK-060)', () => {
+describe('2. persona: manifestStatusId', () => {
   test('la respuesta trae manifestStatusId y manifestStatus', async () => {
     api.respondWith(
       JSON.stringify({

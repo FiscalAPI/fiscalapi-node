@@ -253,7 +253,7 @@ export class FiscalapiHttpClient implements IFiscalapiHttpClient {
 
     const axiosError = error as AxiosError;
     const responseData = axiosError.response?.data;
-    // SDK-060: el identificador de la petición que el API manda en sus errores (soporte lo pide en los 5xx).
+    // El identificador de la petición que el API manda en sus errores (soporte lo pide en los 5xx).
     const traceIdentifier = this.readTraceIdentifier(responseData);
 
     // Revisar si es un ProblemDetails según RFC 9457

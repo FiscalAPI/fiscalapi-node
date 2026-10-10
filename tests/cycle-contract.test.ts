@@ -1,10 +1,10 @@
 /**
- * Cambios de código del SDK en el ciclo de deuda técnica 2 (Fase III, C22). Los mismos escenarios viven en los SDK de
- * .NET, Python, PHP y Java (DEC-136), cuando el cambio aplica a cada uno:
+ * Contrato público que fijan estas pruebas. Los mismos escenarios viven en los SDK de .NET, Python, PHP y Java, con el
+ * mismo resultado observable en cada uno (lo retirado no existe ni compila), cuando el cambio le aplica:
  *  1. persona: `validTo` de solo lectura y `committedBalance` heredado; `capitalRegime`, `stripeCustomerId` y
- *     `subscriptionStatus` fuera del tipo `Person` (SDK-043, SDK-044);
- *  2. certificados: `tin` opcional al subir (SDK-045, SDK-046) y `fileType` 2 y 3 de la FIEL (SDK-058);
- *  3. certificados sin `update()`: el API retiró PUT tax-files (SDK-051); los servicios que sí actualizan lo conservan.
+ *     `subscriptionStatus` fuera del tipo `Person`;
+ *  2. certificados: `tin` opcional al subir y `fileType` 2 y 3 de la FIEL;
+ *  3. certificados sin `update()`: el API retiró PUT tax-files; los servicios que sí actualizan lo conservan.
  *
  * Las líneas con `@ts-expect-error` son pruebas de tipos: ts-jest compila el archivo y falla si el miembro vuelve a
  * existir.
@@ -36,7 +36,7 @@ beforeEach(() => {
   api = new FakeApi();
 });
 
-describe('1. persona (SDK-043, SDK-044)', () => {
+describe('1. persona', () => {
   test('la respuesta trae validTo y committedBalance; capitalRegime y los campos de Stripe no están en el tipo', async () => {
     api.respondWith(readFixture('person-valid-to.json'));
 
@@ -47,11 +47,11 @@ describe('1. persona (SDK-043, SDK-044)', () => {
     expect(person.validTo).toBe('2025-07-15T10:30:00.000');
     expect(person.committedBalance).toBe(0);
     expect(person.availableBalance).toBe(100);
-    // @ts-expect-error capitalRegime salió de Person (SDK-044)
+    // @ts-expect-error capitalRegime salió de Person
     void person.capitalRegime;
-    // @ts-expect-error stripeCustomerId salió de Person (SDK-043)
+    // @ts-expect-error stripeCustomerId salió de Person
     void person.stripeCustomerId;
-    // @ts-expect-error subscriptionStatus salió de Person (SDK-043)
+    // @ts-expect-error subscriptionStatus salió de Person
     void person.subscriptionStatus;
   });
 
@@ -77,7 +77,7 @@ describe('1. persona (SDK-043, SDK-044)', () => {
   });
 });
 
-describe('2. certificados: tin opcional (SDK-045, SDK-046) y fileType de la FIEL (SDK-058)', () => {
+describe('2. certificados: tin opcional y fileType de la FIEL', () => {
   test.each([2, 3])('subir sin tin con fileType %i lo envía como número y sin tin', async (fileType: number) => {
     api.respondWith(TAX_FILE_RESPONSE);
     const taxFile: TaxFile = {
@@ -104,11 +104,11 @@ describe('2. certificados: tin opcional (SDK-045, SDK-046) y fileType de la FIEL
   });
 });
 
-describe('3. certificados sin update() (SDK-051)', () => {
+describe('3. certificados sin update()', () => {
   test('el servicio de certificados no tiene update()', () => {
     const service: ITaxFileService = new TaxFileService(api.httpClient, API_VERSION);
 
-    // @ts-expect-error ITaxFileService no tiene update() (SDK-051)
+    // @ts-expect-error ITaxFileService no tiene update()
     void service.update;
     expect('update' in service).toBe(false);
   });
