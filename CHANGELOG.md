@@ -19,6 +19,10 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 - `IFiscalapiClient` agrega `tickets`. Quien implementa su propia versión de `IFiscalapiClient` (p. ej. un doble de pruebas) debe agregar `tickets`; quien usa el cliente del SDK no cambia nada.
 - Ejemplo: `examples/ejemplo-tickets.ts`.
 
+### Interfaz `InvoiceItem`
+
+- `ticketId` en el concepto de la factura para ligar la factura global a los tickets (Auto CFDI); se omite si es nulo. En Node es `ticketId?: string`: sin asignar no viaja en el JSON. Un 409 por tickets no disponibles trae en `details` el cuerpo del error con `data.unavailableTickets` (`ticketId`, `status`). Ejemplo: `examples/ejemplo-factura-global-tickets.ts`.
+
 ## [4.0.433] - 2026-10-10
 
 ### Cambios incompatibles (BREAKING)
