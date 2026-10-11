@@ -8,6 +8,17 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 
 - Tipo de crédito `Ticket` (3) para transferir y leer créditos de ticket: `stamps.transferStamps()` con `creditType: CreditType.Ticket` los transfiere con las mismas reglas que los timbres, y las transacciones (`stamps.getList()`, `stamps.getById()`) los devuelven con `creditType` igual a `CreditType.Ticket` (antes, el número 3 sin miembro en el enum). El saldo de créditos de ticket se lee en `balances` de la persona (`CreditBalance` con `creditType: CreditType.Ticket`); un tipo ausente tiene saldo 0. Los valores existentes no cambian (`Stamp` 1, `Validation` 2), y un tipo que el SDK no conoce sigue llegando como su número.
 
+### Servicio de tickets (Auto CFDI)
+
+- Servicio de tickets (Auto CFDI): `tickets.create` (con `Idempotency-Key` opcional), `getList` con filtros, `getById`, `getCode` y `cancel`, en `client.tickets` (`ITicketService`/`TicketService`):
+  - `create(ticket, idempotencyKey?)`: `POST /api/v4/tickets`; cobra 1 crédito de ticket y devuelve `TicketIngestionResult` (`id`, `ticketCode`, `qrUrl`, `status`, `selfInvoiceEligible`, `eligibleUntil` y los importes calculados). Con `idempotencyKey` envía el header `Idempotency-Key` (sin ella no lo envía): repetir la key con el mismo cuerpo responde 200 con el ticket original y sin cobrar. Un folio y serie ya activos del emisor responden 409 y un total que no cuadra 422, como `ApiResponse` fallida cuyo `details` trae el cuerpo del error en JSON, con su `data` (`existingTicketId`; `expectedTotal` y `computedTotal`).
+  - `getList(filters?)`: `GET /api/v4/tickets` con `status` (uno o más; se repite la llave `status`), `personId`, `from`/`to` (fecha civil de México `YYYY-MM-DD`), `pageNumber` y `pageSize`; los filtros sin asignar no se envían.
+  - `getById(id, details?)`: con `details` trae `items` (con `itemTaxes`) y `events`. `getCode(id)` devuelve `TicketCodeResult` (`ticketCode`, `qrUrl`) para reimprimir. `cancel(id)` usa `DELETE` (solo desde `pending`; el crédito no se devuelve).
+- Tipos nuevos exportados: `Ticket`, `TicketIssuer`, `TicketItem`, `TicketItemTax`, `TicketEvent`, `TicketIngestionResult`, `TicketCodeResult`, `TicketListFilters` e `ITicketService`. `paymentDate` es texto en hora civil de México sin zona (`yyyy-MM-ddTHH:mm:ss`); los decimales se envían tal cual (en texto, como `"0.160000"`, conservan los ceros finales).
+- `status`, `events[].type` y `events[].actorType` son texto camelCase, con las constantes `TicketStatus`, `TicketEventType` y `TicketActorType`: un valor que el SDK no conoce llega tal cual, sin error.
+- `IFiscalapiClient` agrega `tickets`. Quien implementa su propia versión de `IFiscalapiClient` (p. ej. un doble de pruebas) debe agregar `tickets`; quien usa el cliente del SDK no cambia nada.
+- Ejemplo: `examples/ejemplo-tickets.ts`.
+
 ## [4.0.433] - 2026-10-10
 
 ### Cambios incompatibles (BREAKING)

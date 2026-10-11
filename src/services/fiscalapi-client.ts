@@ -10,6 +10,7 @@ import { IDownloadCatalogService } from '../abstractions/download-catalog-servic
 import { IDownloadRuleService } from '../abstractions/download-rule-service.interface';
 import { IDownloadRequestService } from '../abstractions/download-request-service.interface';
 import { ISatValidationService } from '../abstractions/sat-validation-service.interface';
+import { ITicketService } from '../abstractions/ticket-service.interface';
 import { IStampService } from '../abstractions/stamp-service.interface';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
@@ -23,6 +24,7 @@ import { ManifestService } from './manifest-service';
 import { PersonService } from './person-service';
 import { ProductService } from './product-service';
 import { SatValidationService } from './sat-validation-service';
+import { TicketService } from './ticket-service';
 import { StampService } from './stamp-service';
 import { TaxFileService } from './tax-file-service';
 
@@ -91,6 +93,11 @@ export class FiscalapiClient implements IFiscalapiClient {
   readonly satValidations: ISatValidationService;
 
   /**
+   * Servicio de tickets de Auto CFDI
+   */
+  readonly tickets: ITicketService;
+
+  /**
    * Crea una nueva instancia del cliente de FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración
    * @private
@@ -113,6 +120,7 @@ export class FiscalapiClient implements IFiscalapiClient {
     this.stamps = new StampService(httpClient, apiVersion);
     this.manifests = new ManifestService(httpClient, apiVersion);
     this.satValidations = new SatValidationService(httpClient, apiVersion);
+    this.tickets = new TicketService(httpClient, apiVersion);
   }
 
   /**

@@ -8,6 +8,7 @@ import { IManifestService } from './manifest-service.interface';
 import { IPersonService } from './person-service.interface';
 import { IProductService } from './product-service.interface';
 import { ISatValidationService } from './sat-validation-service.interface';
+import { ITicketService } from './ticket-service.interface';
 import { IStampService } from './stamp-service.interface';
 import { ITaxFileService } from './tax-file-service.interface';
 
@@ -74,4 +75,9 @@ export interface IFiscalapiClient {
    * Servicio de validaciones del SAT
    */
   satValidations: ISatValidationService;
+
+  /**
+   * Servicio de tickets de Auto CFDI
+   */
+  tickets: ITicketService;
 }
