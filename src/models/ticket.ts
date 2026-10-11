@@ -227,6 +227,12 @@ export interface TicketListFilters {
   /** Persona emisora. */
   personId?: string;
 
+  /** Con `true`, cada ticket trae sus conceptos con impuestos (sin la historia). */
+  details?: boolean;
+
+  /** Factura global que ampara los tickets. */
+  globalInvoiceId?: string;
+
   /** Primer día del pago (incluido), en fecha civil de México `YYYY-MM-DD`. */
   from?: string;
 

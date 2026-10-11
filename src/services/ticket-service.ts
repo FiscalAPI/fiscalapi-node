@@ -107,6 +107,8 @@ function buildListQuery(filters: TicketListFilters): string {
   const pairs: Array<[string, string]> = (filters.status ?? []).map((status): [string, string] => ['status', status]);
   const optional: Array<[string, string | number | undefined]> = [
     ['personId', filters.personId],
+    ['details', filters.details ? 'true' : undefined],
+    ['globalInvoiceId', filters.globalInvoiceId],
     ['from', filters.from],
     ['to', filters.to],
     ['pageNumber', filters.pageNumber],

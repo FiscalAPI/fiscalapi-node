@@ -13,6 +13,7 @@ const API_VERSION = 'v4';
 const BASE_URL = 'https://sdk-tests.fiscalapi.invalid';
 const ISSUER_ID = '4b1c2d3e-0000-4000-8000-000000000002';
 const TICKET_ID = '9f8e7d6c-0000-4000-8000-0000000000a1';
+const GLOBAL_INVOICE_ID = '7c1d2e3f-0000-4000-8000-0000000000b2';
 const IDEMPOTENCY_KEY = 'pos-01-F-1001';
 
 const ok = (data: unknown, httpStatusCode = 200): string =>
@@ -229,6 +230,22 @@ describe('c. lista con filtros', () => {
       `${BASE_URL}/api/v4/tickets?status=pending&status=invoiced&personId=${ISSUER_ID}&from=2026-09-01&to=2026-09-30&pageNumber=2&pageSize=50`,
     );
     expect(response.data).toStrictEqual(page);
+  });
+
+  test('getList envía details=true y globalInvoiceId cuando se asignan', async () => {
+    api.respondWith(ok({ items: [], pageNumber: 1, totalPages: 0, totalCount: 0, hasPreviousPage: false, hasNextPage: false }));
+
+    await tickets.getList({ details: true, globalInvoiceId: GLOBAL_INVOICE_ID });
+
+    expect(api.requests[0].url).toBe(`${BASE_URL}/api/v4/tickets?details=true&globalInvoiceId=${GLOBAL_INVOICE_ID}`);
+  });
+
+  test('getList con details en false no envía details', async () => {
+    api.respondWith(ok({ items: [], pageNumber: 1, totalPages: 0, totalCount: 0, hasPreviousPage: false, hasNextPage: false }));
+
+    await tickets.getList({ details: false });
+
+    expect(api.requests[0].url).toBe(`${BASE_URL}/api/v4/tickets`);
   });
 
   test('getList sin filtros no envía query', async () => {
