@@ -111,7 +111,7 @@ export interface Person extends BaseDto {
  * Un tipo ausente tiene saldo 0; un tipo que este SDK no conoce conserva su número en creditType.
  */
 export interface CreditBalance {
-  /** Tipo de crédito: 1 timbres, 2 créditos de validación */
+  /** Tipo de crédito: 1 timbres, 2 créditos de validación, 3 créditos de ticket */
   creditType: CreditType;
 
   /** Saldo disponible */

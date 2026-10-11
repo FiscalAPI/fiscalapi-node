@@ -1,17 +1,19 @@
 /**
- * Timbres y créditos de validación — /api/v4/stamps
+ * Timbres, créditos de validación y créditos de ticket — /api/v4/stamps
  *
- * El ledger de timbres maneja dos tipos de crédito que nunca se mezclan:
- * CreditType.Stamp (timbres) y CreditType.Validation (validaciones del SAT).
- * La misma operación de transferencia sirve para ambos: lo decide el campo creditType.
+ * El ledger de timbres maneja tres tipos de crédito que nunca se mezclan:
+ * CreditType.Stamp (timbres), CreditType.Validation (validaciones del SAT) y CreditType.Ticket (créditos de ticket).
+ * La misma operación de transferencia sirve para todos: lo decide el campo creditType.
  */
 import {
   ApiResponse,
+  CreditBalance,
   CreditType,
   FiscalapiClient,
   FiscalapiSettings,
   IFiscalapiClient,
   PagedList,
+  Person,
   StampTransaction,
   StampTransactionParams,
 } from '../src/index';
@@ -62,7 +64,25 @@ async function main(): Promise<void> {
   );
   console.log('Transferencia de validaciones:', validationTransfer);
 
-  // 5. Retirar timbres: es una transferencia con el origen y el destino invertidos.
+  // 5. Transferir créditos de ticket
+  //    Se descuentan del saldo de créditos de ticket, que se lee en balances de la persona.
+  const ticketTransferParams: StampTransactionParams = {
+    fromPersonId: '2e7b988f-3a2a-4f67-86e9-3f931dd48581',
+    toPersonId: '5fd9f48c-a6a2-474f-944b-88a01751d432',
+    amount: 100,
+    comments: 'Transferencia de créditos de ticket',
+    creditType: CreditType.Ticket
+  };
+  const ticketTransfer: ApiResponse<boolean> = await client.stamps.transferStamps(ticketTransferParams);
+  console.log('Transferencia de créditos de ticket:', ticketTransfer);
+
+  // 6. Consultar el saldo de créditos de ticket: el de tipo Ticket en balances (un tipo ausente tiene saldo 0).
+  const person: ApiResponse<Person> = await client.persons.getById('5fd9f48c-a6a2-474f-944b-88a01751d432');
+  const ticketBalance: number =
+    person.data.balances?.find((balance: CreditBalance) => balance.creditType === CreditType.Ticket)?.available ?? 0;
+  console.log('Créditos de ticket disponibles:', ticketBalance);
+
+  // 7. Retirar timbres: es una transferencia con el origen y el destino invertidos.
   const withdrawParams: StampTransactionParams = {
     fromPersonId: '5fd9f48c-a6a2-474f-944b-88a01751d432',
     toPersonId: '2e7b988f-3a2a-4f67-86e9-3f931dd48581',
