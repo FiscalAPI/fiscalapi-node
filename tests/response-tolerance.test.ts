@@ -1,12 +1,12 @@
 /**
- * Tolerancia del SDK a respuestas que el API devolverá en las próximas fases (SDK-001).
+ * Tolerancia del SDK a respuestas del API con valores y campos que el SDK todavía no modela.
  *
- * Son pruebas de caracterización: fijan el comportamiento ACTUAL. Una prueba cuyo nombre cita
- * SDK-011 documenta lo que esa tarea cambia. Los casos son:
- *  1. una transacción de timbres con `creditType: 3` (créditos de ticket, Fase 1);
- *  2. una persona con el campo nuevo `availableTicketBalance` (Fase 1);
+ * Son pruebas de caracterización: fijan el comportamiento ACTUAL. Una prueba cuyo nombre dice "falta agregar"
+ * documenta lo que cambia cuando el SDK agregue `CreditType.Ticket` y `availableTicketBalance`. Los casos son:
+ *  1. una transacción de timbres con `creditType: 3` (créditos de ticket);
+ *  2. una persona con el campo nuevo `availableTicketBalance`;
  *  3. propiedades desconocidas en la envoltura, en `data` y en objetos anidados;
- *  4. `globalInformation` en la respuesta de una factura (BE-008).
+ *  4. `globalInformation` en la respuesta de una factura.
  *
  * El SDK no transforma las respuestas: el JSON llega tal cual detrás de los tipos.
  */
@@ -30,7 +30,7 @@ beforeEach(() => {
 });
 
 describe('1. creditType: 3', () => {
-  test('la lista conserva creditType 3 como número sin miembro en CreditType (SDK-011 agrega CreditType.Ticket)', async () => {
+  test('la lista conserva creditType 3 como número sin miembro en CreditType (falta agregar CreditType.Ticket)', async () => {
     api.respondWith(readFixture('stamps-page-credit-type-3.json'));
 
     const response: ApiResponse<PagedList<StampTransaction>> = await new StampService(api.httpClient, API_VERSION).getList(1, 10);
@@ -57,7 +57,7 @@ describe('1. creditType: 3', () => {
 });
 
 describe('2. availableTicketBalance', () => {
-  test('la persona conserva availableTicketBalance en tiempo de ejecución, sin tiparlo (SDK-011 lo agrega a Person)', async () => {
+  test('la persona conserva availableTicketBalance en tiempo de ejecución, sin tiparlo (falta agregarlo a Person)', async () => {
     api.respondWith(readFixture('person-ticket-balance.json'));
 
     const response = await new PersonService(api.httpClient, API_VERSION).getById('4b1c2d3e-0000-4000-8000-000000000001');
@@ -88,7 +88,7 @@ describe('3. propiedades desconocidas', () => {
   });
 });
 
-describe('4. globalInformation en la respuesta de una factura (BE-008)', () => {
+describe('4. globalInformation en la respuesta de una factura', () => {
   test('se lee el objeto completo', async () => {
     api.respondWith(readFixture('invoice-global-information.json'));
 
