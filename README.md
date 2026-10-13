@@ -476,6 +476,63 @@ try {
 
 Tras una firma exitosa, todas las personas del tenant con el RFC del certificado quedan con `manifestStatusId` en `Signed`; `fiscalApi.persons.getById(...)` lo refleja.
 
+### 10. Recibir webhooks
+
+FiscalAPI firma cada entrega con [Standard Webhooks](https://www.standardwebhooks.com) y el secreto `whsec_…` de tu endpoint. `Webhook.verify` comprueba la firma (en tiempo constante) y que `webhook-timestamp` no difiera más de 5 minutos del reloj del receptor, y devuelve el `WebhookEvent`. La firma es la única prueba de que la entrega viene de FiscalAPI.
+
+**Verifica el cuerpo crudo**: en Express, recíbelo con `express.raw({ type: 'application/json' })` y pasa el `Buffer` tal cual. Un cuerpo deserializado y vuelto a serializar (`JSON.stringify(req.body)` después de `express.json()`) cambia sus bytes y la firma deja de coincidir. Registra la ruta antes de un `app.use(express.json())` global: si ese parser corre primero, `req.body` ya no es el cuerpo crudo.
+
+```javascript
+const express = require('express');
+const { FiscalapiClient, Webhook, WebhookEventTypes, WebhookVerificationError } = require('fiscalapi');
+
+const app = express();
+const fiscalApi = FiscalapiClient.create(settings);
+const webhookSecret = process.env.FISCALAPI_WEBHOOK_SECRET; // whsec_… del endpoint, desde tu configuración segura
+
+app.post('/webhooks/fiscalapi', express.raw({ type: 'application/json' }), (req, res) => {
+    let webhookEvent;
+    try {
+        webhookEvent = Webhook.verify(req.headers, req.body, webhookSecret);
+    } catch (error) {
+        if (error instanceof WebhookVerificationError) {
+            return res.sendStatus(400); // firma inválida, header faltante o timestamp fuera de tolerancia
+        }
+        throw error; // secreto mal configurado: error del receptor, no de la entrega
+    }
+
+    // Responde 2xx rápido y procesa después: FiscalAPI corta cada intento a los 15 s y lo reintenta.
+    res.sendStatus(200);
+    // Procesa fuera de la petición. setImmediate es ilustrativo: en producción usa una cola durable.
+    setImmediate(() => processEvent(webhookEvent).catch(console.error));
+});
+
+async function processEvent(webhookEvent) {
+    // La entrega es al menos una vez: webhookEvent.id (el header webhook-id) se repite en cada reintento;
+    // descarta los ya procesados. El orden de llegada no está garantizado: el estado autoritativo se lee del recurso.
+    switch (webhookEvent.type) {
+        case WebhookEventTypes.InvoiceCanceled: {
+            const invoice = await fiscalApi.invoices.getById(webhookEvent.data.relatedObject.id);
+            break;
+        }
+        case WebhookEventTypes.DownloadRequestCompleted: {
+            const request = await fiscalApi.downloadRequests.getById(webhookEvent.data.relatedObject.id);
+            break;
+        }
+        default:
+            break; // un tipo que no conoces se ignora: el catálogo puede crecer
+    }
+}
+```
+
+- `WebhookEvent` es el mismo sobre para todo evento: `id`, `type` (texto; compáralo con las constantes de `WebhookEventTypes`), `createdAt` (un `Date`; el sobre lo trae en UTC), `personId` (`null` si el recurso no tiene persona) y `data` con `relatedObject` (`id`, `type`, `url`), `status` y `previousStatus`.
+- `relatedObject.url` es la ruta relativa del GET v4 del recurso (`/api/v4/invoices/{id}`); para leerlo, usa el servicio de su tipo con `relatedObject.id`.
+- El botón "Enviar prueba" del endpoint (`POST webhook-endpoints/{id}/test`) envía `WebhookEventTypes.WebhookEndpointTest`, cuyo `relatedObject` es el endpoint (`webhook_endpoint`), sin persona ni estados; no se suscribe.
+- `headers` acepta el objeto `req.headers` de Node/Express o un `Headers` de fetch; los nombres no distinguen mayúsculas. `body` acepta el `Buffer` crudo o ese mismo cuerpo como texto; un cuerpo que no es UTF-8 válido se rechaza.
+- Durante una rotación del secreto, FiscalAPI firma con el nuevo y con el anterior por 24 h: pasa ambos, `Webhook.verify(req.headers, req.body, [secretoNuevo, secretoAnterior])`.
+- La tolerancia es configurable en segundos (`Webhook.verify(req.headers, req.body, secreto, 120)`); el valor por omisión es `Webhook.DEFAULT_TOLERANCE_SECONDS` (300).
+- Un secreto mal copiado (no es base64) o una lista de secretos vacía lanza `TypeError` con la posición del secreto (nunca su valor), y una tolerancia negativa `RangeError`: son errores de configuración, no de la entrega.
+
 ## 📂 Más Ejemplos
 
 - [Gestión de Timbres](examples/ejemplo-timbres.ts)

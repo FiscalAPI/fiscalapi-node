@@ -170,6 +170,13 @@ export {
   TicketActorType
 } from './models/ticket';
 
+// Webhooks
+export type { WebhookEvent, WebhookEventData, WebhookRelatedObject } from './models/webhook-event';
+export { WebhookEventTypes } from './models/webhook-event';
+export type { WebhookHeaders, WebhookHeadersGetter } from './webhooks/webhook';
+export { Webhook } from './webhooks/webhook';
+export { WebhookVerificationError } from './webhooks/webhook-verification-error';
+
 
 // Common types
 export type { FiscalapiSettings } from './common/fiscalapi-settings';
