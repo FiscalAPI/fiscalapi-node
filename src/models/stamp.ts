@@ -23,12 +23,15 @@ export enum StampTransactionStatus {
 
 /**
  * Tipo de crédito de una transacción.
- * Los saldos nunca se mezclan: Stamp afecta el saldo de timbres (availableBalance) y
- * Validation el saldo de créditos de validación (availableValidationBalance).
+ * Los saldos nunca se mezclan: Stamp afecta el saldo de timbres (availableBalance),
+ * Validation el saldo de créditos de validación (availableValidationBalance) y
+ * Ticket el saldo de créditos de ticket (el de tipo Ticket en Person.balances).
+ * Un tipo que este SDK no conoce llega como su número, sin miembro en el enum.
  */
 export enum CreditType {
   Stamp = 1,
   Validation = 2,
+  Ticket = 3,
 }
 
 /**

@@ -6,11 +6,12 @@ import { FiscalapiSettings } from '../src/common/fiscalapi-settings';
 
 const FIXTURES_DIR = join(__dirname, 'fixtures');
 
-/** Petición recibida: método, URL completa y cuerpo JSON ya decodificado (undefined si no lleva). */
+/** Petición recibida: método, URL completa, cuerpo JSON ya decodificado (undefined si no lleva) y headers. */
 export interface RecordedRequest {
   method: string;
   url: string;
   body: Record<string, unknown> | undefined;
+  headers: Record<string, unknown>;
 }
 
 /** Devuelve el cuerpo crudo de `tests/fixtures/<name>`, tal como lo enviaría el API. */
@@ -49,7 +50,12 @@ export class FakeApi {
   private async respond(config: InternalAxiosRequestConfig): Promise<AxiosResponse<string>> {
     this.requestedUrls.push(axios.getUri(config));
     const body = typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
-    this.requests.push({ method: (config.method ?? '').toUpperCase(), url: axios.getUri(config), body });
+    this.requests.push({
+      method: (config.method ?? '').toUpperCase(),
+      url: axios.getUri(config),
+      body,
+      headers: config.headers.toJSON(),
+    });
     const response: AxiosResponse<string> = { data: this.body, status: this.status, statusText: '', headers: {}, config };
     if (this.status >= 200 && this.status < 300) {
       return response;

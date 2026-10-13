@@ -16,6 +16,7 @@ export type { IDownloadRequestService } from './abstractions/download-request-se
 export type { IDownloadRuleService } from './abstractions/download-rule-service.interface';
 export type { IStampService } from './abstractions/stamp-service.interface';
 export type { ISatValidationService } from './abstractions/sat-validation-service.interface';
+export type { ITicketService } from './abstractions/ticket-service.interface';
 export type { IEmployeeService } from './abstractions/employee-service.interface';
 export type { IEmployerService } from './abstractions/employer-service.interface';
 
@@ -151,6 +152,23 @@ export {
   SatValidationTypeIds,
   SatValidationStatusIds
 } from './models/sat-validation';
+
+export type {
+  Ticket,
+  TicketIssuer,
+  TicketItem,
+  TicketItemTax,
+  TicketEvent,
+  TicketIngestionResult,
+  TicketCodeResult,
+  TicketListFilters
+} from './models/ticket';
+
+export {
+  TicketStatus,
+  TicketEventType,
+  TicketActorType
+} from './models/ticket';
 
 
 // Common types

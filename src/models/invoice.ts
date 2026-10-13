@@ -1592,6 +1592,14 @@ export interface InvoiceItem {
 
   /** Impuestos aplicables al producto o servicio */
   itemTaxes?: ItemTax[];
+
+  /**
+   * Id del ticket de Auto CFDI que este concepto factura. Solo en una factura global de ingreso (tipo I con
+   * `globalInformation`) con el emisor por referencia (`issuer.id`). Un ticket puede ir en varios conceptos, uno por
+   * grupo de objeto de impuesto e impuestos; la suma de sus conceptos debe reflejar el ticket. Sin asignar no viaja en
+   * el JSON: sin `ticketId` la petición es la de siempre.
+   */
+  ticketId?: string;
 }
 
 /**

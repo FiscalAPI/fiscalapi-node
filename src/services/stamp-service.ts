@@ -18,7 +18,7 @@ export class StampService extends BaseFiscalapiService<StampTransaction> impleme
   }
 
   /**
-   * Transfiere timbres o créditos de validación de una persona a otra.
+   * Transfiere timbres, créditos de validación o créditos de ticket de una persona a otra.
    * El tipo de crédito se elige con `creditType`; si se omite, se transfieren timbres.
    * @param {StampTransactionParams} request - Parámetros de la transferencia
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación

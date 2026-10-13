@@ -42,6 +42,7 @@
 ## 🎖️ Gestión de Timbres 
 - **Gestión de folios fiscales** Compra timbres a fiscalapi y transfiere/retira a las personas de tu organizacion segun tus reglas de negocio.
 - **Créditos de validación** Transfiere créditos para validaciones del SAT con el mismo endpoint, indicando `creditType`.
+- **Créditos de ticket** Transfiere créditos de ticket con el mismo endpoint (`creditType: CreditType.Ticket`) y consulta su saldo en `balances` de la persona.
 
 ## ✅ Validaciones del SAT
 - **Verificación de CFDI timbrados** contra los servicios oficiales del SAT: estructura del XML (Anexo 20), vigencia del certificado del emisor, sello del comprobante y sello del SAT en el Timbre Fiscal Digital.
@@ -480,6 +481,7 @@ Tras una firma exitosa, todas las personas del tenant con el RFC del certificado
 - [Gestión de Timbres](examples/ejemplo-timbres.ts)
 - [Firma de Carta Manifiesto](examples/ejemplos-firma-manifiestos.ts)
 - [Validaciones del SAT](examples/ejemplo-validaciones-sat.ts)
+- [Tickets de Auto CFDI](examples/ejemplo-tickets.ts)
 - [Datos Empleador/Empleado](examples/ejemplo-datos-empleado-empleador.ts)
 - [Facturas de Nómina (Por Valores)](examples/ejemplos-factura-nomina-valores.ts)
 - [Facturas de Nómina (Por Referencias)](examples/ejemplos-factura-nomina-referencias.ts) 
@@ -494,8 +496,9 @@ Tras una firma exitosa, todas las personas del tenant con el RFC del certificado
 - **Facturas (CFDI)** - Ingreso, egreso, pago, nómina, cancelaciones, PDF/XML
 - **Personas** - Emisores, receptores, certificados CSD
 - **Productos** - Catálogo de productos/servicios
-- **Timbres** - Transferencias de timbres y de créditos de validación
+- **Timbres** - Transferencias de timbres, de créditos de validación y de créditos de ticket
 - **Validaciones SAT** - Estructura, certificado, sellos, estado del CFDI y listas negras 69-B / 69-B Bis
+- **Tickets (Auto CFDI)** - Ingesta de ventas pagadas con `Idempotency-Key` opcional, consulta con filtros, código para reimprimir y cancelación
 
 
 ## 🤝 Contribuir
