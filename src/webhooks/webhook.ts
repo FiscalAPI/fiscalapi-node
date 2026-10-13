@@ -34,11 +34,12 @@ const MAX_INT64 = '9223372036854775807';
 // cambian en silencio por U+FFFD, así que se busca explícitamente (String.prototype.isWellFormed exige Node 20).
 const LONE_SURROGATE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/;
 
-// ISO 8601 con la hora; sin zona se lee en UTC, como el back la escribe, y no en la zona del proceso.
-const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?$/;
-const HAS_ZONE = /(?:Z|[+-]\d{2}:\d{2})$/;
+// ISO 8601 con la hora: fecha, hora, fracción opcional y zona opcional (Z o ±hh:mm). Sin zona se lee en UTC, como el
+// back la escribe, y no en la zona del proceso.
+const ISO_DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?(?:Z|([+-])(\d{2}):(\d{2}))?$/;
 
 const NOT_AN_EVENT = 'El cuerpo firmado no es un evento de webhook en JSON.';
+const NOT_AN_EVENT_PREFIX = 'El cuerpo firmado no es un evento de webhook';
 
 /**
  * Verificación de las entregas de webhooks de FiscalAPI, que se firman con Standard Webhooks
@@ -248,18 +249,79 @@ function readEvent(body: string): WebhookEvent {
   }
 
   const envelope = parsed as Record<string, unknown>;
-  if (envelope.createdAt !== undefined && envelope.createdAt !== null) {
-    envelope.createdAt = utcDate(envelope.createdAt);
+  ensureEnvelopeShape(envelope);
+  if (isPresent(envelope.createdAt)) {
+    envelope.createdAt = createdAtDate(envelope.createdAt as string);
   }
   return envelope as unknown as WebhookEvent;
 }
 
-function utcDate(value: unknown): Date {
-  const date = typeof value === 'string' && ISO_DATE_TIME.test(value)
-    ? new Date(HAS_ZONE.test(value) ? value : value + 'Z')
-    : null;
-  if (date === null || Number.isNaN(date.getTime())) {
-    throw new WebhookVerificationError(NOT_AN_EVENT, new RangeError('createdAt no es una fecha ISO 8601.'));
+// Validación mínima de la forma: los campos que el SDK lee tienen el tipo del contrato si vienen; ausentes o null se
+// aceptan, igual que los campos desconocidos.
+function ensureEnvelopeShape(envelope: Record<string, unknown>): void {
+  ensureTextIfPresent(envelope, 'id');
+  ensureTextIfPresent(envelope, 'type');
+  ensureTextIfPresent(envelope, 'createdAt');
+  ensureObjectIfPresent(envelope, 'data');
+  if (isPresent(envelope.data)) {
+    ensureObjectIfPresent(envelope.data as Record<string, unknown>, 'relatedObject');
   }
-  return date;
+}
+
+function ensureTextIfPresent(owner: Record<string, unknown>, field: string): void {
+  if (isPresent(owner[field]) && typeof owner[field] !== 'string') {
+    throw invalidField(`el campo ${field} no es texto`);
+  }
+}
+
+function ensureObjectIfPresent(owner: Record<string, unknown>, field: string): void {
+  const value = owner[field];
+  if (isPresent(value) && (typeof value !== 'object' || Array.isArray(value))) {
+    throw invalidField(`el campo ${field} no es un objeto`);
+  }
+}
+
+function isPresent(value: unknown): boolean {
+  return value !== undefined && value !== null;
+}
+
+function invalidField(problem: string): WebhookVerificationError {
+  return new WebhookVerificationError(`${NOT_AN_EVENT_PREFIX}: ${problem}.`);
+}
+
+// new Date() rueda una fecha imposible (30 de febrero → 2 de marzo, 24:00 → día siguiente): la fecha y la hora
+// reconstruidas deben ser las mismas que llegaron.
+function createdAtDate(value: string): Date {
+  const parts = ISO_DATE_TIME.exec(value);
+  if (parts === null) {
+    throw invalidField('el campo createdAt no es una fecha ISO 8601');
+  }
+  const [year, month, day, hour, minute, second] = parts.slice(1, 7).map(Number);
+  const wallClock = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  const sameWallClock =
+    wallClock.getUTCFullYear() === year &&
+    wallClock.getUTCMonth() === month - 1 &&
+    wallClock.getUTCDate() === day &&
+    wallClock.getUTCHours() === hour &&
+    wallClock.getUTCMinutes() === minute &&
+    wallClock.getUTCSeconds() === second;
+  const offsetMinutes = utcOffsetMinutes(parts[8], parts[9], parts[10]);
+  if (!sameWallClock || offsetMinutes === null) {
+    throw invalidField('el campo createdAt no es una fecha ISO 8601 posible');
+  }
+  const fractionMs = parts[7] ? Math.floor(Number(parts[7]) * 1000) : 0;
+  return new Date(wallClock.getTime() + fractionMs - offsetMinutes * 60000);
+}
+
+// Minutos de la zona ±hh:mm (0 sin zona o con Z); null si la zona no existe.
+function utcOffsetMinutes(sign: string | undefined, hours: string | undefined, minutes: string | undefined): number | null {
+  if (sign === undefined) {
+    return 0;
+  }
+  const h = Number(hours);
+  const m = Number(minutes);
+  if (h > 23 || m > 59) {
+    return null;
+  }
+  return (sign === '-' ? -1 : 1) * (h * 60 + m);
 }

@@ -132,10 +132,40 @@ describe('createdAt se lee en UTC, aislado de la zona horaria del proceso del in
     expect(event.createdAt.getTime()).toBe(CREATED_AT_MS);
   });
 
-  test.each(['ayer', '2026-13-45T99:99:99Z', '1791830873'])('un createdAt que no es una fecha ISO 8601 se rechaza: "%s"', (createdAt) => {
+  test.each([
+    'ayer',
+    '2026-13-45T99:99:99Z',
+    '1791830873',
+    '2026-02-30T00:00:00Z',
+    '2026-10-12T24:00:00Z',
+    '2026-10-12T18:47:60Z',
+    '2026-10-12T18:47:53+24:00',
+  ])('un createdAt que no es una fecha ISO 8601 posible se rechaza nombrando el campo: "%s"', (createdAt) => {
     const body = `{"id":"evt_1","type":"invoice.canceled","createdAt":"${createdAt}","personId":null,"data":null}`;
     const secret = generateSecret();
 
-    expect(() => verifyDelivered(body, [secret], secret)).toThrow('no es un evento');
+    expect(() => verifyDelivered(body, [secret], secret)).toThrow(/no es un evento.*createdAt/);
+  });
+});
+
+describe('validación mínima del sobre, después de la firma', () => {
+  test.each([
+    ['id', 'texto', '{"id":5,"type":"invoice.canceled"}'],
+    ['type', 'texto', '{"id":"evt_1","type":{"x":1}}'],
+    ['createdAt', 'texto', '{"id":"evt_1","createdAt":1791830873}'],
+    ['data', 'un objeto', '{"id":"evt_1","data":"texto"}'],
+    ['data', 'un objeto', '{"id":"evt_1","data":[]}'],
+    ['relatedObject', 'un objeto', '{"id":"evt_1","data":{"relatedObject":"r1"}}'],
+  ])('un %s que no es %s se rechaza nombrando el campo', (field, kind, body) => {
+    const secret = generateSecret();
+
+    expect(() => verifyDelivered(body, [secret], secret)).toThrow(`no es un evento de webhook: el campo ${field} no es ${kind}.`);
+  });
+
+  test('los campos ausentes o nulos se aceptan', () => {
+    const body = '{"id":null,"type":null,"createdAt":null,"data":{"relatedObject":null,"status":null}}';
+    const secret = generateSecret();
+
+    expect(verifyDelivered(body, [secret], secret).data.relatedObject).toBeNull();
   });
 });

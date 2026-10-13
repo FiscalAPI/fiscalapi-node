@@ -491,6 +491,9 @@ const fiscalApi = FiscalapiClient.create(settings);
 const webhookSecret = process.env.FISCALAPI_WEBHOOK_SECRET; // whsec_… del endpoint, desde tu configuración segura
 
 app.post('/webhooks/fiscalapi', express.raw({ type: 'application/json' }), (req, res) => {
+    // Sin cuerpo o con otro Content-Type, express.raw no deja un Buffer: no es una entrega de FiscalAPI.
+    if (!Buffer.isBuffer(req.body)) return res.sendStatus(400);
+
     let webhookEvent;
     try {
         webhookEvent = Webhook.verify(req.headers, req.body, webhookSecret);

@@ -101,6 +101,7 @@ describe('Webhook.verify: firma', () => {
     'g0hM9SsE+OTPJTGt/tmIKtSyZlE3uFJELVlNIOLJ1OE=',
     'v1,',
     'v1,!!!',
+    'v1,g0hM9SsE+OTPJTGt/tmIKtSyZlE3uFJELVlNIOLJ1OE',
   ])('un header de firma sin una firma v1 válida se rechaza: %s', (signature) => {
     const error = verificationErrorOf(() =>
       verifyAt(OFFICIAL_TIMESTAMP, officialHeaders({ signature }), OFFICIAL_BODY),
@@ -308,7 +309,15 @@ describe('Webhook.verify: headers', () => {
 });
 
 describe('Webhook.verify: configuración del receptor', () => {
-  test.each(['', 'whsec_', 'whsec_%%no-es-base64%%', 'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw!!', 'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaS'])(
+  test.each([
+    '',
+    'whsec_',
+    'whsec_%%no-es-base64%%',
+    'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw!!',
+    'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaS',
+    'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw\n',
+    'whsec_MfKQ9r8GKYqrTwjU PD8ILPZIo2LaLaSw',
+  ])(
     'un secreto mal formado es un error de configuración: "%s"',
     (secret) => {
       expect(errorOf(() => verifyAt(OFFICIAL_TIMESTAMP, officialHeaders(), OFFICIAL_BODY, secret))).toBeInstanceOf(TypeError);
