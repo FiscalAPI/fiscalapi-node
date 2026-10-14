@@ -478,7 +478,7 @@ Tras una firma exitosa, todas las personas del tenant con el RFC del certificado
 
 ### 10. Recibir webhooks
 
-FiscalAPI firma cada entrega con [Standard Webhooks](https://www.standardwebhooks.com) y el secreto `whsec_…` de tu endpoint. `Webhook.verify` comprueba la firma (en tiempo constante) y que `webhook-timestamp` no difiera más de 5 minutos del reloj del receptor, y devuelve el `WebhookEvent`. La firma es la única prueba de que la entrega viene de FiscalAPI.
+FiscalAPI firma cada entrega con [Standard Webhooks](https://www.standardwebhooks.com) y el secreto `whsec_…` de tu webhook. `Webhook.verify` comprueba la firma (en tiempo constante) y que `webhook-timestamp` no difiera más de 5 minutos del reloj del receptor, y devuelve el `WebhookEvent`. La firma es la única prueba de que la entrega viene de FiscalAPI.
 
 **Verifica el cuerpo crudo**: en Express, recíbelo con `express.raw({ type: 'application/json' })` y pasa el `Buffer` tal cual. Un cuerpo deserializado y vuelto a serializar (`JSON.stringify(req.body)` después de `express.json()`) cambia sus bytes y la firma deja de coincidir. Registra la ruta antes de un `app.use(express.json())` global: si ese parser corre primero, `req.body` ya no es el cuerpo crudo.
 
@@ -488,7 +488,7 @@ const { FiscalapiClient, Webhook, WebhookEventTypes, WebhookVerificationError } 
 
 const app = express();
 const fiscalApi = FiscalapiClient.create(settings);
-const webhookSecret = process.env.FISCALAPI_WEBHOOK_SECRET; // whsec_… del endpoint, desde tu configuración segura
+const webhookSecret = process.env.FISCALAPI_WEBHOOK_SECRET; // whsec_… del webhook, desde tu configuración segura
 
 app.post('/webhooks/fiscalapi', express.raw({ type: 'application/json' }), (req, res) => {
     // Sin cuerpo o con otro Content-Type, express.raw no deja un Buffer: no es una entrega de FiscalAPI.

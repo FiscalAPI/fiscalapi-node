@@ -44,7 +44,7 @@ const NOT_AN_EVENT_PREFIX = 'El cuerpo firmado no es un evento de webhook';
 /**
  * Verificación de las entregas de webhooks de FiscalAPI, que se firman con Standard Webhooks
  * (https://www.standardwebhooks.com): HMAC-SHA256 sobre `webhook-id.webhook-timestamp.cuerpo` con el secreto `whsec_…`
- * del endpoint, en el header `webhook-signature` como `v1,<base64>`. La firma es la única prueba de que una entrega viene
+ * del webhook, en el header `webhook-signature` como `v1,<base64>`. La firma es la única prueba de que una entrega viene
  * de FiscalAPI.
  */
 export class Webhook {
@@ -68,7 +68,7 @@ export class Webhook {
    * @param body El cuerpo **crudo** tal como llegó (en Express, el `Buffer` de `express.raw({ type: 'application/json' })`),
    *   o ese mismo cuerpo como texto. Nunca uno deserializado y vuelto a serializar (`JSON.stringify(req.body)`): cambian
    *   sus bytes (espacios, orden, escapes) y la firma deja de coincidir.
-   * @param secret El secreto del endpoint (`whsec_…`; se acepta también sin el prefijo), o varios.
+   * @param secret El secreto del webhook (`whsec_…`; se acepta también sin el prefijo), o varios.
    * @param toleranceSeconds Tolerancia del timestamp en segundos; por omisión `Webhook.DEFAULT_TOLERANCE_SECONDS`.
    * @returns El evento del cuerpo verificado.
    * @throws {WebhookVerificationError} Falta un header, el timestamp está fuera de la tolerancia, ninguna firma `v1`
