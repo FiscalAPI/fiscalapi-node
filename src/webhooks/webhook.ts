@@ -127,7 +127,7 @@ function decodeSecret(secret: unknown, description: string): Buffer {
   }
   const encoded = secret.startsWith(SECRET_PREFIX) ? secret.substring(SECRET_PREFIX.length) : secret;
   if (!STRICT_BASE64.test(encoded)) {
-    throw new TypeError(`${description} no es whsec_ seguido de base64: cópielo completo del endpoint de webhooks.`);
+    throw new TypeError(`${description} no es whsec_ seguido de base64: cópielo completo del webhook.`);
   }
   const key = Buffer.from(encoded, 'base64');
   if (key.length === 0) {
