@@ -2,6 +2,18 @@
 
 Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a quien usa el SDK.
 
+## [Sin publicar]
+
+### Webhooks
+
+- `Webhook.verify(headers, body, secret, toleranceSeconds?)` verifica una entrega de webhook de FiscalAPI y devuelve su `WebhookEvent`: valida la firma Standard Webhooks (HMAC-SHA256 sobre `webhook-id.webhook-timestamp.cuerpo` con el secreto `whsec_…`, comparada en tiempo constante) y que `webhook-timestamp` no difiera del reloj del receptor más que la tolerancia, hacia atrás o hacia adelante (por omisión `Webhook.DEFAULT_TOLERANCE_SECONDS`, 300 segundos). Acepta cualquier firma `v1` válida del header `webhook-signature` (varias, separadas por espacio) y el secreto con o sin el prefijo `whsec_`. Con una lista, `Webhook.verify(headers, body, [secretoNuevo, secretoAnterior])`, acepta varios secretos para la rotación (FiscalAPI firma con el nuevo y el anterior durante 24 h).
+  - `headers` acepta el objeto `req.headers` de Node/Express (valores `string` o `string[]`) o un `Headers` de fetch; los nombres no distinguen mayúsculas.
+  - Opera sobre el cuerpo **crudo**: el `Buffer` de `express.raw({ type: 'application/json' })` o ese mismo cuerpo como texto. Un cuerpo reserializado no verifica. Ejemplo para Express en el README (sección 10).
+  - Una entrega que no se puede tratar como auténtica (falta un header, ninguna firma coincide, timestamp fuera de la tolerancia, un cuerpo que no es texto UTF-8 válido o un cuerpo firmado que no es un evento) lanza `WebhookVerificationError` (con `cause` cuando hay un error original). Ya verificada la firma, el cuerpo debe ser un objeto JSON en el que `id`, `type` y `createdAt`, si vienen, son texto, y `data` y `data.relatedObject`, si vienen, son objetos; `createdAt` además debe ser una fecha ISO 8601 posible (se rechaza, por ejemplo, el 30 de febrero). El mensaje nombra el campo. Un secreto que no es base64 (incluidos espacios o un salto de línea), una lista de secretos vacía o un argumento faltante lanzan `TypeError`, y una tolerancia negativa `RangeError` (errores de configuración del receptor); con una lista se indica la posición del secreto y nunca su valor.
+- Tipo `WebhookEvent`, el mismo sobre para todo evento: `id` (igual al header `webhook-id`, se repite en cada reintento), `type`, `createdAt` (`Date`; el sobre lo trae en UTC y una fecha sin zona se lee en UTC, no en la zona del proceso), `personId` (`null` si el recurso no tiene persona) y `data` (`WebhookEventData`) con `relatedObject` (`WebhookRelatedObject`: `id`, `type`, `url`), `status` y `previousStatus`. `relatedObject.url` es la ruta relativa del GET v4 del recurso (por ejemplo `/api/v4/invoices/{id}`); el recurso se lee con el servicio de su tipo y `relatedObject.id`.
+- `type` es texto y no un enum: las constantes de `WebhookEventTypes` (`InvoiceCancellationRequested`, `InvoiceCanceled`, `InvoiceCancellationRejected`, `DownloadRequestCompleted`, `DownloadRequestAbandoned`, `DownloadRuleSuspended` y `WebhookTest`) son una ayuda para comparar, y un tipo o un campo que el SDK no conoce llega sin error. `WebhookTest` (`webhook.test`) no se suscribe: llega solo al pulsar "Enviar prueba" (`POST /api/v4/webhooks/{id}/test`), con `relatedObject.type` `webhook` y `relatedObject.url` `/api/v4/webhooks/{id}`, sin persona ni estados.
+- Cambio aditivo, sin dependencias nuevas (usa `crypto` de Node): nada existente cambia ni deja de compilar.
+
 ## [4.0.439] - 2026-10-12
 
 ### Enum `CreditType`
