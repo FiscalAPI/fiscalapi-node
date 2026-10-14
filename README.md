@@ -530,7 +530,7 @@ async function processEvent(webhookEvent) {
 
 - `WebhookEvent` es el mismo sobre para todo evento: `id`, `type` (texto; compáralo con las constantes de `WebhookEventTypes`), `createdAt` (un `Date`; el sobre lo trae en UTC), `personId` (`null` si el recurso no tiene persona) y `data` con `relatedObject` (`id`, `type`, `url`), `status` y `previousStatus`.
 - `relatedObject.url` es la ruta relativa del GET v4 del recurso (`/api/v4/invoices/{id}`); para leerlo, usa el servicio de su tipo con `relatedObject.id`.
-- El botón "Enviar prueba" del endpoint (`POST webhook-endpoints/{id}/test`) envía `WebhookEventTypes.WebhookEndpointTest`, cuyo `relatedObject` es el endpoint (`webhook_endpoint`), sin persona ni estados; no se suscribe.
+- El botón "Enviar prueba" del webhook (`POST /api/v4/webhooks/{id}/test`) envía `WebhookEventTypes.WebhookTest` (`webhook.test`), cuyo `relatedObject` es el webhook mismo (`type` `webhook`, `url` `/api/v4/webhooks/{id}`), sin persona ni estados; no se suscribe.
 - `headers` acepta el objeto `req.headers` de Node/Express o un `Headers` de fetch; los nombres no distinguen mayúsculas. `body` acepta el `Buffer` crudo o ese mismo cuerpo como texto; un cuerpo que no es UTF-8 válido se rechaza.
 - Durante una rotación del secreto, FiscalAPI firma con el nuevo y con el anterior por 24 h: pasa ambos, `Webhook.verify(req.headers, req.body, [secretoNuevo, secretoAnterior])`.
 - La tolerancia es configurable en segundos (`Webhook.verify(req.headers, req.body, secreto, 120)`); el valor por omisión es `Webhook.DEFAULT_TOLERANCE_SECONDS` (300).

@@ -47,8 +47,8 @@ export interface WebhookRelatedObject {
   id: string;
 
   /**
-   * Tipo de recurso: `invoice`, `download_request`, `download_rule` o `webhook_endpoint` (el de
-   * `WebhookEventTypes.WebhookEndpointTest`); el conjunto puede crecer.
+   * Tipo de recurso: `invoice`, `download_request`, `download_rule` o `webhook` (el de
+   * `WebhookEventTypes.WebhookTest`); el conjunto puede crecer.
    */
   type: string;
 
@@ -80,8 +80,9 @@ export const WebhookEventTypes = {
   /** La regla de descarga masiva quedó suspendida (`2` → `4`). */
   DownloadRuleSuspended: 'download_rule.suspended',
   /**
-   * Prueba de un endpoint: no se suscribe; solo llega al pulsar "Enviar prueba" (`POST webhook-endpoints/{id}/test`), y
-   * solo a ese endpoint. Su `data.relatedObject` es el endpoint mismo (`webhook_endpoint`), sin persona ni estados.
+   * Prueba de un webhook: no se suscribe; llega solo al pulsar "Enviar prueba" (`POST /api/v4/webhooks/{id}/test`), y
+   * solo a ese webhook. Su `data.relatedObject` es el webhook mismo (`type` `webhook`, `url` `/api/v4/webhooks/{id}`),
+   * sin persona ni estados.
    */
-  WebhookEndpointTest: 'webhook_endpoint.test',
+  WebhookTest: 'webhook.test',
 } as const;

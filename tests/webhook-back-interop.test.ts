@@ -11,7 +11,7 @@ const EVENT_ID = '0f6b2c1e-7d3a-4e8b-9c51-2a4d6e8f0b13';
 const PERSON_ID = '4b1c2d3e-0000-4000-8000-000000000002';
 const INVOICE_ID = '9f8e7d6c-0000-4000-8000-0000000000a1';
 const DOWNLOAD_REQUEST_ID = '3c2b1a09-0000-4000-8000-0000000000b7';
-const ENDPOINT_ID = '6a5b4c3d-0000-4000-8000-0000000000c9';
+const WEBHOOK_ID = '6a5b4c3d-0000-4000-8000-0000000000c9';
 const TIMESTAMP = 1791830873; // 2026-10-12T18:47:53Z, el createdAt de los sobres
 const CREATED_AT_MS = Date.UTC(2026, 9, 12, 18, 47, 53);
 
@@ -22,9 +22,9 @@ const CANCELED_INVOICE_BODY =
 const COMPLETED_DOWNLOAD_REQUEST_BODY =
   '{"id":"0f6b2c1e-7d3a-4e8b-9c51-2a4d6e8f0b13","type":"download_request.completed","createdAt":"2026-10-12T18:47:53Z","personId":null,"data":{"relatedObject":{"id":"3c2b1a09-0000-4000-8000-0000000000b7","type":"download_request","url":"/api/v4/download-requests/3c2b1a09-0000-4000-8000-0000000000b7"},"status":null,"previousStatus":null}}';
 
-// El sobre de WebhookEvent.EndpointTest del back (POST webhook-endpoints/{id}/test): el recurso es el endpoint.
-const ENDPOINT_TEST_BODY =
-  '{"id":"0f6b2c1e-7d3a-4e8b-9c51-2a4d6e8f0b13","type":"webhook_endpoint.test","createdAt":"2026-10-12T18:47:53Z","personId":null,"data":{"relatedObject":{"id":"6a5b4c3d-0000-4000-8000-0000000000c9","type":"webhook_endpoint","url":"/api/v4/webhook-endpoints/6a5b4c3d-0000-4000-8000-0000000000c9"},"status":null,"previousStatus":null}}';
+// El sobre de "Enviar prueba" del back (POST /api/v4/webhooks/{id}/test): el recurso es el webhook mismo.
+const WEBHOOK_TEST_BODY =
+  '{"id":"0f6b2c1e-7d3a-4e8b-9c51-2a4d6e8f0b13","type":"webhook.test","createdAt":"2026-10-12T18:47:53Z","personId":null,"data":{"relatedObject":{"id":"6a5b4c3d-0000-4000-8000-0000000000c9","type":"webhook","url":"/api/v4/webhooks/6a5b4c3d-0000-4000-8000-0000000000c9"},"status":null,"previousStatus":null}}';
 
 function verifyDelivered(body: string, receiverSecrets: string[], ...signingSecrets: string[]): WebhookEvent {
   jest.spyOn(Date, 'now').mockReturnValue(TIMESTAMP * 1000);
@@ -88,17 +88,17 @@ test('un tipo y campos desconocidos se leen sin error', () => {
   expect(event.data.status).toBe('Z');
 });
 
-test('una entrega de prueba del back apunta al endpoint, sin persona ni estados', () => {
+test('una entrega de prueba del back apunta al webhook, sin persona ni estados', () => {
   const secret = generateSecret();
 
-  const event = verifyDelivered(ENDPOINT_TEST_BODY, [secret], secret);
+  const event = verifyDelivered(WEBHOOK_TEST_BODY, [secret], secret);
 
-  expect(event.type).toBe(WebhookEventTypes.WebhookEndpointTest);
+  expect(event.type).toBe(WebhookEventTypes.WebhookTest);
   expect(event.personId).toBeNull();
   expect(event.data.relatedObject).toEqual({
-    id: ENDPOINT_ID,
-    type: 'webhook_endpoint',
-    url: `/api/v4/webhook-endpoints/${ENDPOINT_ID}`,
+    id: WEBHOOK_ID,
+    type: 'webhook',
+    url: `/api/v4/webhooks/${WEBHOOK_ID}`,
   });
   expect(event.data.status).toBeNull();
   expect(event.data.previousStatus).toBeNull();
@@ -112,7 +112,7 @@ test('las constantes de tipo son los tipos del back', () => {
     DownloadRequestCompleted: 'download_request.completed',
     DownloadRequestAbandoned: 'download_request.abandoned',
     DownloadRuleSuspended: 'download_rule.suspended',
-    WebhookEndpointTest: 'webhook_endpoint.test',
+    WebhookTest: 'webhook.test',
   });
 });
 
