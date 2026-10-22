@@ -5,6 +5,7 @@
  * receptor lo autofactura en el portal o el tenant lo junta en una factura global. Con la lista filtrada el tenant
  * recupera los tickets pendientes de un periodo.
  */
+import { randomUUID } from 'crypto';
 import {
   ApiResponse,
   FiscalapiClient,
@@ -31,7 +32,8 @@ const issuerId: string = '<person-id>';
 
 // ============================================================
 // 1. Ingerir un ticket con Idempotency-Key
-//    Repetir la misma key con el mismo cuerpo responde 200 con el ticket original y no cobra otra vez.
+//    Repetir la misma llave de idempotencia con el mismo cuerpo, dentro de 24 h, devuelve la respuesta original (201)
+//    y no cobra otra vez.
 // ============================================================
 async function ingerirTicket(client: IFiscalapiClient): Promise<string | undefined> {
   const ticket: Ticket = {
@@ -55,7 +57,9 @@ async function ingerirTicket(client: IFiscalapiClient): Promise<string | undefin
     ],
   };
 
-  const respuesta: ApiResponse<TicketIngestionResult> = await client.tickets.create(ticket, 'pos-01-F-1001');
+  // Una llave de idempotencia por operación: guárdala para reintentar el mismo ticket
+  const idempotencyKey: string = randomUUID();
+  const respuesta: ApiResponse<TicketIngestionResult> = await client.tickets.create(ticket, idempotencyKey);
   if (!respuesta.succeeded) {
     // 409: folio y serie ya activos; 422: total que no cuadra, emisor sin CSD o sin créditos de ticket, etc.
     // details trae el cuerpo del error en JSON, con su data (existingTicketId, expectedTotal, computedTotal).
