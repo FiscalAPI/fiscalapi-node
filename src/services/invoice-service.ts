@@ -13,6 +13,9 @@ import {
   InvoiceStatusResponse
 } from '../models/invoice';
 
+/** Header de la llave de idempotencia; el mismo que usa el servicio de tickets. */
+const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key';
+
 /**
  * Implementación del servicio de facturas
  */
@@ -25,6 +28,21 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
     super(httpClient, 'invoices', apiVersion);
+  }
+
+  /**
+   * Crea una factura
+   * @param {Invoice} model - Datos de la factura
+   * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
+   * @returns {Promise<ApiResponse<Invoice>>} Factura creada
+   */
+  async create(model: Invoice, idempotencyKey?: string): Promise<ApiResponse<Invoice>> {
+    // POST /api/v4/invoices, con el header Idempotency-Key solo si se pasa
+    return await this.executeRequest<Invoice, Invoice>({
+      data: model,
+      method: 'POST',
+      config: idempotencyKey === undefined ? undefined : { headers: { [IDEMPOTENCY_KEY_HEADER]: idempotencyKey } },
+    });
   }
 
   /**

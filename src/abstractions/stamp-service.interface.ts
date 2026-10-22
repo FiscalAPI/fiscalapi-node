@@ -7,11 +7,15 @@ import { IFiscalapiService } from './fiscalapi-service.interface';
  */
 export interface IStampService extends IFiscalapiService<StampTransaction> {
   /**
-   * Transfiere timbres de una persona a otra
+   * POST /api/v4/stamps
+   * Transfiere timbres de una persona a otra. Con `idempotencyKey` (hasta 64 caracteres) se envía el header
+   * `Idempotency-Key`: repetir la key con la misma petición responde el resultado original sin transferir otra vez;
+   * con otra petición, 422. Sin ella, el header no se envía.
    * @param {StampTransactionParams} request - Parámetros de la transferencia
+   * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
-  transferStamps(request: StampTransactionParams): Promise<ApiResponse<boolean>>;
+  transferStamps(request: StampTransactionParams, idempotencyKey?: string): Promise<ApiResponse<boolean>>;
 
   /**
    * Retira timbres de una persona
