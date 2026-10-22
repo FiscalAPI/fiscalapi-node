@@ -1,6 +1,6 @@
 /**
  * Llave de idempotencia opcional en `invoices.create` (POST /api/v4/invoices) y `stamps.transferStamps`
- * (POST /api/v4/stamps): con key, la petición lleva el header `Idempotency-Key` con ese valor; sin key, no lo lleva.
+ * (POST /api/v4/stamps): con una llave de idempotencia, la petición lleva el header `Idempotency-Key` con ese valor; sin ella, no lo lleva.
  * El cuerpo no cambia en ninguno de los dos casos.
  */
 import { FakeApi } from './fake-api';
@@ -49,7 +49,7 @@ beforeEach(() => {
 });
 
 describe('invoices.create con Idempotency-Key', () => {
-  test('con key, envía el header Idempotency-Key con ese valor', async () => {
+  test('con llave de idempotencia, envía el header Idempotency-Key con ese valor', async () => {
     const invoice = globalInvoice();
 
     await new InvoiceService(api.httpClient, API_VERSION).create(invoice, IDEMPOTENCY_KEY);
@@ -62,7 +62,7 @@ describe('invoices.create con Idempotency-Key', () => {
     expect(request.headers['Idempotency-Key']).toBe(IDEMPOTENCY_KEY);
   });
 
-  test('sin key, no envía el header Idempotency-Key', async () => {
+  test('sin llave de idempotencia, no envía el header Idempotency-Key', async () => {
     await new InvoiceService(api.httpClient, API_VERSION).create(globalInvoice());
 
     expect(api.requests).toHaveLength(1);
@@ -77,7 +77,7 @@ describe('stamps.transferStamps con Idempotency-Key', () => {
     amount: 25,
   };
 
-  test('con key, envía el header Idempotency-Key con ese valor', async () => {
+  test('con llave de idempotencia, envía el header Idempotency-Key con ese valor', async () => {
     await new StampService(api.httpClient, API_VERSION).transferStamps(transfer, IDEMPOTENCY_KEY);
 
     expect(api.requests).toHaveLength(1);
@@ -88,7 +88,7 @@ describe('stamps.transferStamps con Idempotency-Key', () => {
     expect(request.headers['Idempotency-Key']).toBe(IDEMPOTENCY_KEY);
   });
 
-  test('sin key, no envía el header Idempotency-Key', async () => {
+  test('sin llave de idempotencia, no envía el header Idempotency-Key', async () => {
     await new StampService(api.httpClient, API_VERSION).transferStamps(transfer);
 
     expect(api.requests).toHaveLength(1);

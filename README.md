@@ -310,7 +310,7 @@ try {
 }
 ```
 
-Si la creación puede repetirse (por ejemplo, tras un corte de red), pasa una llave de idempotencia como segundo argumento, de hasta 64 caracteres. Repetir la misma petición con la misma llave responde la factura original sin crear otra; con otra petición distinta, la API responde 422.
+Si la creación puede repetirse (por ejemplo, tras un corte de red), pasa una llave de idempotencia como segundo argumento, de hasta 64 caracteres. Repetir la misma petición con la misma llave de idempotencia devuelve la factura original sin crear otra; con otra petición distinta, la API responde 422.
 
 ```javascript
 const apiResponse = await fiscalApi.invoices.create(invoice, "pedido-1001-intento-1");

@@ -9,7 +9,7 @@ export interface IStampService extends IFiscalapiService<StampTransaction> {
   /**
    * POST /api/v4/stamps
    * Transfiere timbres de una persona a otra. Con `idempotencyKey` (hasta 64 caracteres) se envía el header
-   * `Idempotency-Key`: repetir la key con la misma petición responde el resultado original sin transferir otra vez;
+   * `Idempotency-Key`: repetir la llave de idempotencia con la misma petición devuelve el resultado original sin transferir otra vez;
    * con otra petición, 422. Sin ella, el header no se envía.
    * @param {StampTransactionParams} request - Parámetros de la transferencia
    * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
