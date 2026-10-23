@@ -16,6 +16,17 @@ import { IFiscalapiService } from './fiscalapi-service.interface';
  */
 export interface IInvoiceService extends IFiscalapiService<Invoice> {
   /**
+   * POST /api/v4/invoices
+   * Crea una factura. Con `idempotencyKey` (hasta 64 caracteres) se envía el header `Idempotency-Key`: repetir la llave de idempotencia
+   * con la misma petición devuelve la factura original sin timbrar otra vez; con otra petición, 422. Sin ella, el
+   * header no se envía.
+   * @param {Invoice} model - Datos de la factura
+   * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
+   * @returns {Promise<ApiResponse<Invoice>>} Factura creada
+   */
+  create(model: Invoice, idempotencyKey?: string): Promise<ApiResponse<Invoice>>;
+
+  /**
    * Cancela una factura
    * @param {CancelInvoiceRequest} request - Solicitud para cancelar factura
    * @returns {Promise<ApiResponse<CancelInvoiceResponse>>} Respuesta de la cancelación

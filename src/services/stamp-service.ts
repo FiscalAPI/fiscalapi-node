@@ -4,6 +4,9 @@ import { BaseFiscalapiService } from './base-fiscalapi-service';
 import { IStampService } from '../abstractions/stamp-service.interface';
 import { StampTransaction, StampTransactionParams } from '../models/stamp';
 
+/** Header de la llave de idempotencia; el mismo que usa el servicio de tickets. */
+const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key';
+
 /**
  * Implementación del servicio de timbres fiscales
  */
@@ -21,17 +24,19 @@ export class StampService extends BaseFiscalapiService<StampTransaction> impleme
    * Transfiere timbres, créditos de validación o créditos de ticket de una persona a otra.
    * El tipo de crédito se elige con `creditType`; si se omite, se transfieren timbres.
    * @param {StampTransactionParams} request - Parámetros de la transferencia
+   * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
    * @returns {Promise<ApiResponse<boolean>>} Resultado de la operación
    */
-  async transferStamps(request: StampTransactionParams): Promise<ApiResponse<boolean>> {
+  async transferStamps(request: StampTransactionParams, idempotencyKey?: string): Promise<ApiResponse<boolean>> {
     if (!request) {
       throw new Error('request cannot be null');
     }
 
-    // POST /api/v4/stamps
+    // POST /api/v4/stamps, con el header Idempotency-Key solo si se pasa
     return await this.executeRequest<boolean, StampTransactionParams>({
       data: request,
       method: 'POST',
+      config: idempotencyKey === undefined ? undefined : { headers: { [IDEMPOTENCY_KEY_HEADER]: idempotencyKey } },
     });
   }
 

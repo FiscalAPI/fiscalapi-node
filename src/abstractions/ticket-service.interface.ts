@@ -10,11 +10,13 @@ import { Ticket, TicketCodeResult, TicketIngestionResult, TicketListFilters } fr
 export interface ITicketService {
   /**
    * POST /api/v4/tickets
-   * Ingiere un ticket y cobra 1 crédito de ticket. Con `idempotencyKey` (hasta 64 caracteres) se envía el header
-   * `Idempotency-Key`: repetir la key con el mismo cuerpo responde 200 con el ticket original sin cobrar otra vez; con
-   * otro cuerpo, 422. Sin ella, el header no se envía. Un folio y serie ya activos del emisor responden 409.
+   * Ingiere un ticket y cobra 1 crédito de ticket. Con `idempotencyKey` (de 1 a 64 caracteres ASCII visibles, sin
+   * espacios) se envía el header `Idempotency-Key`: repetir la misma llave de idempotencia con el mismo cuerpo, dentro de
+   * 24 h, devuelve la respuesta original (201, con el header `Idempotent-Replayed: true`) sin registrar otro ticket ni
+   * cobrar otra vez; con otro cuerpo, 422; con la original aún en proceso, 409 con Retry-After. Sin ella, el header no se
+   * envía. Un folio y serie ya activos del emisor responden 409.
    * @param {Ticket} ticket - Ticket a ingerir
-   * @param {string} [idempotencyKey] - Valor del header Idempotency-Key
+   * @param {string} [idempotencyKey] - Llave de idempotencia (idempotency key), valor del header Idempotency-Key
    * @returns {Promise<ApiResponse<TicketIngestionResult>>} Ticket ingerido con su código y QR
    */
   create(ticket: Ticket, idempotencyKey?: string): Promise<ApiResponse<TicketIngestionResult>>;

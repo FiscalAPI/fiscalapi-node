@@ -1,7 +1,7 @@
 /**
  * Servicio de tickets de Auto CFDI (POST/GET/DELETE /api/v4/tickets). Los mismos escenarios viven en los SDK de .NET,
- * Python, PHP y Java: el cuerpo exacto de la ingesta y el header Idempotency-Key solo si se pasa; las respuestas 201 y
- * 200 de la ingesta; el 409 y el 422 con la forma de error del SDK (en Node, `details` lleva el cuerpo del error en
+ * Python, PHP y Java: el cuerpo exacto de la ingesta y el header Idempotency-Key solo si se pasa; la respuesta 201 de la
+ * ingesta; el 409 y el 422 con la forma de error del SDK (en Node, `details` lleva el cuerpo del error en
  * JSON, con su `data`); la query de la lista con `status` repetido; el detalle con y sin `details`; el código; la
  * cancelación con DELETE, y un estado que el SDK no conoce, conservado como texto.
  */
@@ -14,7 +14,7 @@ const BASE_URL = 'https://sdk-tests.fiscalapi.invalid';
 const ISSUER_ID = '4b1c2d3e-0000-4000-8000-000000000002';
 const TICKET_ID = '9f8e7d6c-0000-4000-8000-0000000000a1';
 const GLOBAL_INVOICE_ID = '7c1d2e3f-0000-4000-8000-0000000000b2';
-const IDEMPOTENCY_KEY = 'pos-01-F-1001';
+const IDEMPOTENCY_KEY = '550e8400-e29b-41d4-a716-446655440000';
 
 const ok = (data: unknown, httpStatusCode = 200): string =>
   JSON.stringify({ data, succeeded: true, message: '', details: '', httpStatusCode });
@@ -161,14 +161,14 @@ describe('a. cuerpo e Idempotency-Key', () => {
   });
 });
 
-describe('b. respuestas de la ingesta', () => {
-  test.each([201, 200])('create lee el ticket ingerido con la misma forma en el %i', async (status) => {
-    api.respondWith(ok(INGESTED, status), status);
+describe('b. respuesta de la ingesta', () => {
+  test('create lee el ticket ingerido con la respuesta 201', async () => {
+    api.respondWith(ok(INGESTED, 201), 201);
 
     const response = await tickets.create(newTicket(), IDEMPOTENCY_KEY);
 
     expect(response.succeeded).toBe(true);
-    expect(response.httpStatusCode).toBe(status);
+    expect(response.httpStatusCode).toBe(201);
     expect(response.data).toStrictEqual(INGESTED);
     expect(response.data.status).toBe(TicketStatus.Pending);
   });
