@@ -1,9 +1,10 @@
 /**
  * `InvoicePayment` (obsoleto): los datos bancarios son opcionales, como en `PaymentComplement` y en el complemento de
  * pago del SAT, que los prohíbe con formas de pago como `"01"` (efectivo). Sin ellos el pago compila y no los serializa;
- * con ellos se serializan tal cual.
+ * con ellos se serializan tal cual. `PaymentComplement.foreignBankName` (NomBancoOrdExt, exigido con XEXX010101000)
+ * viaja solo si se asigna.
  */
-import { InvoicePayment } from '../src/index';
+import { InvoicePayment, PaymentComplement } from '../src/index';
 
 const BANK_KEYS = ['sourceBankTin', 'sourceBankAccount', 'targetBankTin', 'targetBankAccount'];
 
@@ -35,5 +36,25 @@ describe('InvoicePayment datos bancarios', () => {
     const sent = JSON.parse(JSON.stringify({ ...payment('28'), ...BANK_DATA }));
 
     expect(sent).toMatchObject(BANK_DATA);
+  });
+});
+
+describe('PaymentComplement.foreignBankName', () => {
+  const complement: PaymentComplement = {
+    paymentDate: '2026-10-08T10:00:00',
+    paymentFormCode: '03',
+    currencyCode: 'MXN',
+    amount: '100.00',
+    paidInvoices: [],
+  };
+
+  test('con banco extranjero se serializa', () => {
+    const foreign: PaymentComplement = { ...complement, sourceBankTin: 'XEXX010101000', foreignBankName: 'BANK OF TOKY' };
+
+    expect(JSON.parse(JSON.stringify(foreign)).foreignBankName).toBe('BANK OF TOKY');
+  });
+
+  test('sin asignarlo no viaja', () => {
+    expect('foreignBankName' in JSON.parse(JSON.stringify(complement))).toBe(false);
   });
 });
