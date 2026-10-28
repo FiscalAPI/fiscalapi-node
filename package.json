@@ -1,6 +1,6 @@
 {
   "name": "fiscalapi",
-  "version": "4.0.462",
+  "version": "4.0.468",
   "description": "SDK de Node.js para Fiscalapi",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -19,7 +19,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:package-json": "node -e \"require('fs').writeFileSync('dist/cjs/package.json','{\\\"type\\\":\\\"commonjs\\\"}');require('fs').writeFileSync('dist/esm/package.json','{\\\"type\\\":\\\"module\\\"}')\"",
     "test": "jest",
-    "lint": "eslint 'src/**/*.ts'",
+    "lint": "eslint src",
     "prepare": "npm run build",
     "main": "ts-node examples/all-samples.ts"
   },
@@ -57,13 +57,16 @@
     "luxon": "^3.6.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.13.14",
+    "eslint": "^10.13.0",
     "jest": "^30.5.2",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.14",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.72.1"
   }
 }

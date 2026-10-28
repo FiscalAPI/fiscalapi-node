@@ -177,6 +177,9 @@ export interface PaymentComplement {
   /** Cuenta bancaria destino (Cuenta bancaria del banco receptor del pago) */
   targetBankAccount?: string;
 
+  /** Nombre del banco ordenante extranjero. Obligatorio cuando sourceBankTin es XEXX010101000 */
+  foreignBankName?: string;
+
   /** Facturas pagadas con el pago recibido */
   paidInvoices: PaymentPaidInvoice[];
 }
@@ -1666,16 +1669,16 @@ export interface InvoicePayment {
   amount: number | string;
 
   /** RFC del banco origen. (Rfc del banco emisor del pago) */
-  sourceBankTin: string;
+  sourceBankTin?: string;
 
   /** Cuenta bancaria origen. (Cuenta bancaria del banco emisor del pago) */
-  sourceBankAccount: string;
+  sourceBankAccount?: string;
 
   /** RFC del banco destino. (Rfc del banco receptor del pago) */
-  targetBankTin: string;
+  targetBankTin?: string;
 
   /** Cuenta bancaria destino (Cuenta bancaria del banco receptor del pago) */
-  targetBankAccount: string;
+  targetBankAccount?: string;
 
   /** Facturas pagadas con el pago recibido */
   paidInvoices: PaidInvoice[];
