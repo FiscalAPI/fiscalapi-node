@@ -2,6 +2,12 @@
 
 Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a quien usa el SDK.
 
+## [4.0.469] - 2026-10-30
+
+### Seguridad
+
+- axios sube a `^1.20.0` y form-data a `^4.0.6`, que corrigen avisos de seguridad (p. ej. GHSA-hmw2-7cc7-3qxx); el paquete se publica con npm provenance. Sin cambios de API.
+
 ## [4.0.468] - 2026-10-28
 
 ### `PaymentComplement`
