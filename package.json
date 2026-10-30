@@ -52,8 +52,8 @@
     "url": "https://github.com/FiscalAPI/fiscalapi-node/issues"
   },
   "dependencies": {
-    "axios": "^1.8.4",
-    "form-data": "^4.0.4",
+    "axios": "^1.20.0",
+    "form-data": "^4.0.6",
     "luxon": "^3.6.0"
   },
   "devDependencies": {
