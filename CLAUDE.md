@@ -76,4 +76,4 @@ Strict mode enabled. Target: **ES2019**. Key flags: `noImplicitAny`, `strictNull
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/main.yml`): manual trigger only, builds on Node 18, publishes to npm. No tests run before publish.
+GitHub Actions (`.github/workflows/main.yml`): manual trigger only, builds on Node 24, publishes to npm with provenance. No tests run before publish.
