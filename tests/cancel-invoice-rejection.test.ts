@@ -1,9 +1,4 @@
-/**
- * Cancelar factura (DELETE /api/v4/invoices) cuando el SAT rechaza la solicitud: el API responde 422 con `succeeded` en
- * false, el mensaje genérico, "SAT <código>: <descripción>" en `details` y el acuse con el código por UUID en `data`. El
- * SDK no lanza y entrega la forma de error de Node: `details` lleva el cuerpo del error en JSON, con su `data`. Los
- * mismos escenarios viven en los SDK de .NET, Python, PHP y Java.
- */
+/** Cancelar factura con rechazo del SAT: 422, `succeeded` en false y el cuerpo JSON del error en `details`. */
 import { FakeApi } from './fake-api';
 import { InvoiceService } from '../src/services/invoice-service';
 import { ApiResponse, CancelInvoiceRequest, CancelInvoiceResponse } from '../src/index';
