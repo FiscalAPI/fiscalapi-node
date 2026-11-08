@@ -39,6 +39,13 @@ export interface WebhookEventData {
 
   /** Estado del que salió el recurso, con los mismos códigos que `status`; null si no aplica. */
   previousStatus: string | null;
+
+  /**
+   * Motivo de la transición. Todo evento lo trae; es null salvo en `invoice.cancellation_rejected`, donde dice por qué
+   * no procedió la cancelación (`rejectedByRecipient`, `expired`, `notRequested` o `notCancelable`). Es texto libre:
+   * pueden aparecer valores nuevos.
+   */
+  reason: string | null;
 }
 
 /** El recurso al que se refiere un `WebhookEvent`. */
