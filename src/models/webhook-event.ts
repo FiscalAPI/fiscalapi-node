@@ -39,6 +39,9 @@ export interface WebhookEventData {
 
   /** Estado del que salió el recurso, con los mismos códigos que `status`; null si no aplica. */
   previousStatus: string | null;
+
+  /** Por qué no procedió la cancelación en `invoice.cancellation_rejected`; null en los demás eventos. */
+  reason?: string | null;
 }
 
 /** El recurso al que se refiere un `WebhookEvent`. */
