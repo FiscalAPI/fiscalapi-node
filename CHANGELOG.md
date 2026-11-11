@@ -2,6 +2,12 @@
 
 Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a quien usa el SDK.
 
+## [Sin publicar]
+
+### Servicio de personas
+
+- `persons.getTaxFiles(personId)`: lista los certificados (CSD y FIEL) de una persona, solo metadatos; no trae el archivo ni la contraseña.
+
 ## [4.0.474] - 2026-11-07
 
 ### Cambios incompatibles (BREAKING)
