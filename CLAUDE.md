@@ -25,11 +25,12 @@ There is no `build:types` script — the full `build` script handles CJS + ESM +
 **Facade Pattern**: `FiscalapiClient` (`src/services/fiscalapi-client.ts`) is the single entry point.
 - Static factory: `FiscalapiClient.create(settings)` — validates settings, sets defaults, creates one shared HTTP client
 - Private constructor enforces factory usage
-- Services exposed as readonly properties: `invoices`, `products`, `persons`, `taxFiles`, `catalogs`, `apiKeys`, `stamps`, `downloadCatalogs`, `downloadRules`, `downloadRequests`, `manifests`, `satValidations`
+- Services exposed as readonly properties: `invoices`, `products`, `persons`, `taxFiles`, `catalogs`, `apiKeys`, `stamps`, `downloadCatalogs`, `downloadRules`, `downloadRequests`, `manifests`, `satValidations`, `tickets`, `me`
 
 **Service Layer**:
 - `BaseImmutableFiscalapiService` (implements `IImmutableFiscalapiService`) provides `getList(pageNumber, pageSize)`, `getById(id, details?)`, `create()`, `delete()`, `search()`, plus `executeRequest()` for custom calls; `BaseFiscalapiService` (implements `IFiscalapiService`) extends it with `update()`. `TaxFileService` extends only the immutable base: the API does not update certificates (PUT tax-files answers 405), so `update()` does not exist on `taxFiles`. There is no `upload()`: file uploads are base64 fields on the payload (e.g. `TaxFile.base64File`)
-- Not every service extends the base class. Read-only resources whose shape does not fit `IFiscalapiService` are standalone: `DownloadCatalogService` (unpaged `getList()`) and `SatValidationService` (plain arrays, no CRUD). Their interfaces do not extend `IFiscalapiService`
+- Not every service extends the base class. Read-only resources whose shape does not fit `IFiscalapiService` are standalone: `DownloadCatalogService` (unpaged `getList()`) and `SatValidationService` (plain arrays, no CRUD). Their interfaces do not extend `IFiscalapiService`. `TicketService` and `MeService` (`GET /me`, the person of the API key) are standalone too
+- `invoices`, `persons` and `products` overload `getList`: `getList(pageNumber, pageSize)` from the base, or `getList(filters?)` with `InvoiceListFilters`/`PersonListFilters`/`ProductListFilters`. The filters path builds the query with `toQueryString` (`src/utils/list-query.ts`, shared with `tickets.getList`), which skips `undefined` and `null`
 - Specialized services add domain methods (e.g., `InvoiceService.cancel()`, `.getPdf()`, `.getXml()`, `.send()`, `.getStatus()`)
 - `PersonService` contains nested `EmployeeService` and `EmployerService`
 

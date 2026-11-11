@@ -68,3 +68,21 @@ export interface ProductTax {
   /** Tipo de impuesto "Tasa" Tasa | "Cuota" Cuota | "Exento" Exento Expandido */
   taxType?: CatalogDto;
 }
+
+/**
+ * Filtros de `products.getList` (GET /api/v4/products). Cada filtro aplica solo si se asigna; los que no se asignan no
+ * se envían. Sin ninguno, la lista es la de siempre (primera página).
+ */
+export interface ProductListFilters {
+  /**
+   * Texto a buscar, de 2 a 100 caracteres y sin distinguir mayúsculas: los productos cuya descripción o clave de
+   * producto o servicio del SAT lo contiene.
+   */
+  search?: string;
+
+  /** Página, desde 1. Sin ella, el API devuelve la primera. */
+  pageNumber?: number;
+
+  /** Tamaño de página (1 a 50). Sin él, el API usa 10. */
+  pageSize?: number;
+}

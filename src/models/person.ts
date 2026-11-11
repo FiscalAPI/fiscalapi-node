@@ -16,8 +16,20 @@ export interface Person extends BaseDto {
   /** Correo electrónico de la persona */
   email?: string;
 
-  /** Contraseña para acceder al dashboard. Requerida al crear; al actualizar, null o vacía conserva la actual. El API nunca la devuelve */
+  /**
+   * Contraseña para acceder al dashboard. Opcional al crear (sin ella la persona no inicia sesión con contraseña) y
+   * obligatoria solo si `loginEnabled` es `true`; al actualizar, sin asignar o vacía conserva la actual. Sin asignar no
+   * se envía. El API nunca la devuelve
+   */
   password?: string;
+
+  /**
+   * Acceso al portal (inicio de sesión en el dashboard); no afecta a la API key. Al crear, sin asignar o `false`: la
+   * persona nace sin acceso. Al actualizar, sin asignar no se envía y no cambia el acceso actual; `true` lo da (la
+   * persona debe tener contraseña o recibirla en `password`) y `false` lo quita. Solo lo cambia el owner del tenant, y
+   * el owner siempre lo tiene. En las respuestas llega el acceso efectivo.
+   */
+  loginEnabled?: boolean;
 
   /** Teléfono de la persona */
   phoneNumber?: string;
@@ -116,4 +128,25 @@ export interface CreditBalance {
 
   /** Saldo disponible */
   available: number;
+}
+
+/**
+ * Filtros de `persons.getList` (GET /api/v4/people). Cada filtro aplica solo si se asigna; los que no se asignan no se
+ * envían. Sin ninguno, la lista es la de siempre (primera página).
+ */
+export interface PersonListFilters {
+  /**
+   * Texto a buscar, de 2 a 100 caracteres y sin distinguir mayúsculas: las personas cuya razón social, RFC o correo lo
+   * contiene.
+   */
+  search?: string;
+
+  /** Tipo de persona (`Person.userTypeId`): T (tenant), U (usuario) o C (cliente), en mayúsculas. */
+  userTypeId?: string;
+
+  /** Página, desde 1. Sin ella, el API devuelve la primera. */
+  pageNumber?: number;
+
+  /** Tamaño de página (1 a 50). Sin él, el API usa 50. */
+  pageSize?: number;
 }
