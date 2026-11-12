@@ -4,6 +4,7 @@ import { PagedList } from '../common/paged-list';
 import { IFiscalapiHttpClient } from '../http/fiscalapi-http-client.interface';
 import { ITicketService } from '../abstractions/ticket-service.interface';
 import { Ticket, TicketCodeResult, TicketIngestionResult, TicketListFilters } from '../models/ticket';
+import { QueryParam, toQueryString } from '../utils/list-query';
 
 /** Header de la ingesta idempotente. */
 const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key';
@@ -98,14 +99,13 @@ function ensureId(id: string): void {
 }
 
 /**
- * Query string de los filtros asignados, sin el signo `?`; `status` se repite por cada estado. Se arma aquí porque
- * axios serializa los arreglos como `status[]=…`, que el API no lee.
+ * Query string de los filtros asignados, sin el signo `?`; `status` se repite por cada estado.
  * @param {TicketListFilters} filters - Filtros de la lista
  * @returns {string} Query string, vacía si no hay filtros
  */
 function buildListQuery(filters: TicketListFilters): string {
-  const pairs: Array<[string, string]> = (filters.status ?? []).map((status): [string, string] => ['status', status]);
-  const optional: Array<[string, string | number | undefined]> = [
+  return toQueryString([
+    ...(filters.status ?? []).map((status): QueryParam => ['status', status]),
     ['personId', filters.personId],
     ['details', filters.details ? 'true' : undefined],
     ['globalInvoiceId', filters.globalInvoiceId],
@@ -113,12 +113,5 @@ function buildListQuery(filters: TicketListFilters): string {
     ['to', filters.to],
     ['pageNumber', filters.pageNumber],
     ['pageSize', filters.pageSize],
-  ];
-  optional.forEach(([key, value]) => {
-    if (value !== undefined) {
-      pairs.push([key, String(value)]);
-    }
-  });
-
-  return pairs.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+  ]);
 }

@@ -2,6 +2,30 @@
 
 Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a quien usa el SDK.
 
+## [4.0.475] - 2026-11-12
+
+### Agregado
+
+- Filtros en las listas de facturas, personas y productos, con el patrón de `tickets.getList(filters?)`: cada filtro asignado viaja en la query string y uno sin asignar (o en `null`) no se envía; sin filtros, la lista es la de siempre.
+  - `invoices.getList(filters?: InvoiceListFilters)`: `GET /api/v4/invoices` con `from`/`to` (fecha civil de México `YYYY-MM-DD`; van juntos), `issuerTin`, `recipientTin`, `typeCode` (I, E, T, P o N), `statusId` (B, V, C o X), `series`, `number`, `uuid`, `order`, `pageNumber` y `pageSize` (1 a 50). `order` es `'asc'` (por omisión) o `'desc'` (las más recientes primero), por fecha de creación; `InvoiceListOrder.Asc` e `InvoiceListOrder.Desc` tienen esos valores.
+  - `persons.getList(filters?: PersonListFilters)`: `GET /api/v4/people` con `search` (2 a 100 caracteres; razón social, RFC o correo), `userTypeId` (T, U o C), `pageNumber` y `pageSize`.
+  - `products.getList(filters?: ProductListFilters)`: `GET /api/v4/products` con `search` (descripción o clave de producto o servicio del SAT), `pageNumber` y `pageSize`.
+  - `getList(pageNumber, pageSize)` sigue existiendo y se comporta igual.
+- `me.get()` (`IFiscalapiClient.me`, `IMeService`/`MeService`): `GET /api/v4/me`. Devuelve `MeInfo`, la persona de la API key: `id`, `legalName`, `tin`, `email`, `tenantId`, `environment` (Development, Test o Production), `isOwner`, `features` (`PersonFeatures`: `roles`, `permissions`, `denied`, `features`, `subscription` y `seatAssignments`) y `balances` (`CreditBalance[]`; un tipo ausente tiene saldo 0). Sirve para validar una credencial: con una API key o un tenant que no son válidos responde 401.
+- `Person.loginEnabled?: boolean`, el acceso al portal: al crear, sin asignar o `false`, la persona nace sin acceso. En `persons.update`, sin asignar no se envía y no cambia el acceso; `true` lo da y `false` lo quita. Solo lo cambia el owner, el owner siempre lo tiene y no afecta a la API key. En las respuestas llega el acceso efectivo.
+- `Person.password` es opcional al crear: sin asignar no se envía, y solo es obligatoria si `loginEnabled` es `true`.
+- `persons.getTaxFiles(personId)` (`IPersonService`/`PersonService`): `GET /api/v4/people/{personId}/tax-files`. Devuelve la lista de certificados (CSD y FIEL) de la persona como `TaxFile[]`, solo metadatos: no trae el archivo (`base64File`) ni la contraseña (`password`).
+- Quien usa el cliente del SDK no cambia nada. Quien implementa su propia versión de `IFiscalapiClient`, `IInvoiceService`, `IPersonService` o `IProductService` (p. ej. un doble de pruebas) debe agregar `me`, la forma `getList(filters?)` de cada lista y `getTaxFiles(personId)`.
+- `satStatusCode` y `satMessage` en la solicitud de descarga: código y mensaje de la última respuesta del SAT.
+
+### Corregido
+
+- `tickets.getList`: un filtro en `null` ya no viaja como el texto `null`; se omite, como uno sin asignar.
+
+### Obsoleto
+
+- En `persons.getById(id, details)`, `details` no tiene efecto: el API responde la misma persona con cualquier valor. La firma con `details` está marcada `@deprecated` y se conserva para no romper la compilación; usa `persons.getById(id)`. En `invoices.getById` sigue teniendo efecto.
+
 ## [4.0.474] - 2026-11-07
 
 ### Cambios incompatibles (BREAKING)

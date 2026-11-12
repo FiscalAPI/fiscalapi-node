@@ -109,6 +109,10 @@ Puedes usar el SDK tanto en aplicaciones Node.js tradicionales como en framework
 2. **Crea la instancia del cliente**:
     ```javascript
     const fiscalApi = FiscalapiClient.create(settings);
+
+    // Opcional: valida la credencial. Responde la persona de la API key, su tenant, el ambiente, sus features y saldos
+    // (401 si la API key o el tenant no son válidos)
+    const me = await fiscalApi.me.get();
     ```
 
 Para ejemplos completos, consulta [ejemplos Express](https://github.com/FiscalAPI/fiscalapi-samples-express), [ejemplos NestJs](https://github.com/FiscalAPI/fiscalapi-samples-nest) o [más ejemplos en NodeJs](https://github.com/FiscalAPI/fiscalapi-node/blob/main/examples/all-samples.ts).
@@ -314,6 +318,20 @@ Si la creación puede repetirse (por ejemplo, tras un corte de red), pasa una ll
 
 ```javascript
 const apiResponse = await fiscalApi.invoices.create(invoice, "pedido-1001-intento-1");
+```
+
+Para listar facturas con filtros pasa un objeto `InvoiceListFilters`; los filtros sin asignar no se envían. `persons.getList` y `products.getList` buscan con `search`.
+
+```javascript
+// Facturas vigentes de un receptor en septiembre, las más recientes primero
+const invoices = await fiscalApi.invoices.getList({
+    recipientTin: "<rfc_receptor>",
+    statusId: "V",
+    from: "2026-09-01",
+    to: "2026-09-30",
+    order: "desc",
+    pageSize: 50
+});
 ```
 
 ### 6. Crear la Misma Factura de Ingreso (Por Valores)

@@ -17,6 +17,7 @@ export type { IDownloadRuleService } from './abstractions/download-rule-service.
 export type { IStampService } from './abstractions/stamp-service.interface';
 export type { ISatValidationService } from './abstractions/sat-validation-service.interface';
 export type { ITicketService } from './abstractions/ticket-service.interface';
+export type { IMeService } from './abstractions/me-service.interface';
 export type { IEmployeeService } from './abstractions/employee-service.interface';
 export type { IEmployerService } from './abstractions/employer-service.interface';
 
@@ -25,10 +26,10 @@ export type { HttpMethod } from './http/fiscalapi-http-client.interface';
 
 // Models types
 export type { ApiKey } from './models/api-key';
-export type { Person, CreditBalance } from './models/person';
+export type { Person, CreditBalance, PersonListFilters } from './models/person';
 export type { EmployeeData, CreateEmployeeRequest, UpdateEmployeeRequest } from './models/employee-data';
 export type { EmployerData, CreateEmployerRequest, UpdateEmployerRequest } from './models/employer-data';
-export type { Product, ProductTax } from './models/product';
+export type { Product, ProductTax, ProductListFilters } from './models/product';
 export type { TaxFile } from './models/tax-file';
 export type {
   Invoice,
@@ -104,7 +105,19 @@ export type {
   ComercioExteriorDestinatarioDomicilio,
   ComercioExteriorMercancia,
   ComercioExteriorMercanciaDescripcionEspecifica,
+  InvoiceListFilters,
 } from './models/invoice';
+
+export { InvoiceListOrder } from './models/invoice';
+
+export type {
+  MeInfo,
+  PersonFeatures,
+  DeniedPermission,
+  PersonFeature,
+  PersonSubscription,
+  PersonSeatAssignment
+} from './models/me';
 
 export type {
   SignManifestRequest,

@@ -10,8 +10,11 @@ import {
   CreatePdfRequest, 
   SendInvoiceRequest,
   InvoiceStatusRequest,
-  InvoiceStatusResponse
+  InvoiceStatusResponse,
+  InvoiceListFilters
 } from '../models/invoice';
+import { PagedList } from '../common/paged-list';
+import { isListFilters, toQueryString } from '../utils/list-query';
 
 /** Header de la llave de idempotencia; el mismo que usa el servicio de tickets. */
 const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key';
@@ -28,6 +31,25 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
    */
   constructor(httpClient: IFiscalapiHttpClient, apiVersion: string) {
     super(httpClient, 'invoices', apiVersion);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getList(pageNumber: number, pageSize: number): Promise<ApiResponse<PagedList<Invoice>>>;
+  /**
+   * @inheritdoc
+   */
+  getList(filters?: InvoiceListFilters): Promise<ApiResponse<PagedList<Invoice>>>;
+  async getList(
+    pageNumberOrFilters?: number | InvoiceListFilters,
+    pageSize?: number,
+  ): Promise<ApiResponse<PagedList<Invoice>>> {
+    if (isListFilters(pageNumberOrFilters)) {
+      // GET /api/v4/invoices?from=…&to=…&issuerTin=…&…&order=…&pageNumber=…&pageSize=…
+      return this.getFilteredList(buildListQuery(pageNumberOrFilters ?? {}));
+    }
+    return super.getList(pageNumberOrFilters, pageSize as number);
   }
 
   /**
@@ -120,4 +142,26 @@ export class InvoiceService extends BaseFiscalapiService<Invoice> implements IIn
       method: 'POST',
     });
   }
+}
+
+/**
+ * Query string de los filtros asignados, sin el signo `?`.
+ * @param {InvoiceListFilters} filters - Filtros de la lista
+ * @returns {string} Query string, vacía si no hay filtros
+ */
+function buildListQuery(filters: InvoiceListFilters): string {
+  return toQueryString([
+    ['from', filters.from],
+    ['to', filters.to],
+    ['issuerTin', filters.issuerTin],
+    ['recipientTin', filters.recipientTin],
+    ['typeCode', filters.typeCode],
+    ['statusId', filters.statusId],
+    ['series', filters.series],
+    ['number', filters.number],
+    ['uuid', filters.uuid],
+    ['order', filters.order],
+    ['pageNumber', filters.pageNumber],
+    ['pageSize', filters.pageSize],
+  ]);
 }

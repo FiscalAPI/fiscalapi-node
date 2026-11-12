@@ -163,6 +163,16 @@ export interface DownloadRequest extends BaseDto {
     satRequestStatus?: CatalogDto;
   
     /** 
+     * Código (CodEstatus) de la última respuesta del SAT, a la solicitud o a su verificación
+     */
+    satStatusCode?: string;
+  
+    /** 
+     * Mensaje de la última respuesta del SAT, a la solicitud o a su verificación
+     */
+    satMessage?: string;
+  
+    /** 
      * ID del estado de la solicitud en Fiscalapi
      */
     downloadRequestStatusId?: string;

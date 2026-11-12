@@ -7,14 +7,34 @@ import {
   CreatePdfRequest, 
   SendInvoiceRequest,
   InvoiceStatusRequest,
-  InvoiceStatusResponse
+  InvoiceStatusResponse,
+  InvoiceListFilters
 } from '../models/invoice';
+import { PagedList } from '../common/paged-list';
 import { IFiscalapiService } from './fiscalapi-service.interface';
 
 /**
  * Interfaz para el servicio de facturas
  */
 export interface IInvoiceService extends IFiscalapiService<Invoice> {
+  /**
+   * GET /api/v4/invoices?PageNumber=…&PageSize=…
+   * Recupera una página de facturas, sin filtros.
+   * @param {number} pageNumber - Número de página (base 1)
+   * @param {number} pageSize - Número de elementos por página
+   * @returns {Promise<ApiResponse<PagedList<Invoice>>>} Página de facturas
+   */
+  getList(pageNumber: number, pageSize: number): Promise<ApiResponse<PagedList<Invoice>>>;
+
+  /**
+   * GET /api/v4/invoices
+   * Lista las facturas del tenant con los filtros y el orden asignados (sin filtros: la lista de siempre, primera
+   * página).
+   * @param {InvoiceListFilters} [filters] - Filtros de la consulta
+   * @returns {Promise<ApiResponse<PagedList<Invoice>>>} Página de facturas
+   */
+  getList(filters?: InvoiceListFilters): Promise<ApiResponse<PagedList<Invoice>>>;
+
   /**
    * POST /api/v4/invoices
    * Crea una factura. Con `idempotencyKey` (hasta 64 caracteres) se envía el header `Idempotency-Key`: repetir la llave de idempotencia

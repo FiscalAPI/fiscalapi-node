@@ -11,6 +11,7 @@ import { IDownloadRuleService } from '../abstractions/download-rule-service.inte
 import { IDownloadRequestService } from '../abstractions/download-request-service.interface';
 import { ISatValidationService } from '../abstractions/sat-validation-service.interface';
 import { ITicketService } from '../abstractions/ticket-service.interface';
+import { IMeService } from '../abstractions/me-service.interface';
 import { IStampService } from '../abstractions/stamp-service.interface';
 import { FiscalapiSettings } from '../common/fiscalapi-settings';
 import { FiscalapiHttpClientFactory } from '../http/fiscalapi-http-client-factory';
@@ -25,6 +26,7 @@ import { PersonService } from './person-service';
 import { ProductService } from './product-service';
 import { SatValidationService } from './sat-validation-service';
 import { TicketService } from './ticket-service';
+import { MeService } from './me-service';
 import { StampService } from './stamp-service';
 import { TaxFileService } from './tax-file-service';
 
@@ -98,6 +100,11 @@ export class FiscalapiClient implements IFiscalapiClient {
   readonly tickets: ITicketService;
 
   /**
+   * Servicio de la persona de la credencial (GET /api/v4/me)
+   */
+  readonly me: IMeService;
+
+  /**
    * Crea una nueva instancia del cliente de FiscalAPI
    * @param {FiscalapiSettings} settings - Configuración
    * @private
@@ -121,6 +128,7 @@ export class FiscalapiClient implements IFiscalapiClient {
     this.manifests = new ManifestService(httpClient, apiVersion);
     this.satValidations = new SatValidationService(httpClient, apiVersion);
     this.tickets = new TicketService(httpClient, apiVersion);
+    this.me = new MeService(httpClient, apiVersion);
   }
 
   /**

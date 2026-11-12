@@ -158,6 +158,17 @@ export abstract class BaseImmutableFiscalapiService<T extends BaseDto> implement
   }
 
   /**
+   * Lista con la query string de unos filtros ya armada (ver `toQueryString`)
+   * @param {string} query - Query string sin el signo `?`; vacía, la lista sin filtros
+   * @returns {Promise<ApiResponse<PagedList<T>>>} Lista paginada de recursos
+   * @protected
+   */
+  protected async getFilteredList(query: string): Promise<ApiResponse<PagedList<T>>> {
+    const endpoint = this.buildEndpoint();
+    return this.httpClient.getAsync<PagedList<T>>(query ? `${endpoint}?${query}` : endpoint);
+  }
+
+  /**
    * @inheritdoc
    */
   async getById(id: string, details: boolean = false): Promise<ApiResponse<T>> {

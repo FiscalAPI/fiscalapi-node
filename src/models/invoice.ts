@@ -1896,3 +1896,53 @@ export interface InvoiceStatusResponse {
   /** Codigo que indica si el RFC Emisor se encuentra dentro de la lista negra de EFOS */
   efosValidation: string;
 }
+
+/** Valores de `InvoiceListFilters.order`: el orden de la lista por fecha de creación. */
+export const InvoiceListOrder = {
+  /** De la más antigua a la más reciente (el orden por omisión). */
+  Asc: 'asc',
+  /** Las más recientes primero. */
+  Desc: 'desc',
+} as const;
+
+/**
+ * Filtros de `invoices.getList` (GET /api/v4/invoices). Cada filtro aplica solo si se asigna; los que no se asignan no
+ * se envían. Sin ninguno, la lista es la de siempre (primera página, de la más antigua a la más reciente).
+ */
+export interface InvoiceListFilters {
+  /** Primer día de la fecha de la factura (incluido), en fecha civil de México `YYYY-MM-DD`. Va junto con `to`. */
+  from?: string;
+
+  /** Último día de la fecha de la factura (incluido), en fecha civil de México `YYYY-MM-DD`. Va junto con `from`. */
+  to?: string;
+
+  /** RFC del emisor, exacto. */
+  issuerTin?: string;
+
+  /** RFC del receptor, exacto. */
+  recipientTin?: string;
+
+  /** Tipo de comprobante (c_TipoDeComprobante): I, E, T, P o N. */
+  typeCode?: string;
+
+  /** Estatus de la factura: B (borrador), V (vigente), C (cancelando) o X (cancelada). */
+  statusId?: string;
+
+  /** Serie, exacta. */
+  series?: string;
+
+  /** Folio, exacto. */
+  number?: string;
+
+  /** Folio fiscal (UUID). */
+  uuid?: string;
+
+  /** Orden por fecha de creación (ver `InvoiceListOrder`). Sin él, el API usa `asc`. */
+  order?: 'asc' | 'desc';
+
+  /** Página, desde 1. Sin ella, el API devuelve la primera. */
+  pageNumber?: number;
+
+  /** Tamaño de página (1 a 50). Sin él, el API usa 10. */
+  pageSize?: number;
+}
