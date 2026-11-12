@@ -16,6 +16,7 @@ Cambios del SDK y notas de comportamiento del API de FiscalAPI que afectan a qui
 - `Person.password` es opcional al crear: sin asignar no se envía, y solo es obligatoria si `loginEnabled` es `true`.
 - `persons.getTaxFiles(personId)` (`IPersonService`/`PersonService`): `GET /api/v4/people/{personId}/tax-files`. Devuelve la lista de certificados (CSD y FIEL) de la persona como `TaxFile[]`, solo metadatos: no trae el archivo (`base64File`) ni la contraseña (`password`).
 - Quien usa el cliente del SDK no cambia nada. Quien implementa su propia versión de `IFiscalapiClient`, `IInvoiceService`, `IPersonService` o `IProductService` (p. ej. un doble de pruebas) debe agregar `me`, la forma `getList(filters?)` de cada lista y `getTaxFiles(personId)`.
+- `satStatusCode` y `satMessage` en la solicitud de descarga: código y mensaje de la última respuesta del SAT.
 
 ### Corregido
 
